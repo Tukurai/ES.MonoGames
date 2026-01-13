@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ES.MonoGames/ES.MonoGames.csproj" />
+  <Project Path="PocketCardLeague/PocketCardLeague.csproj" />
+</Solution>
