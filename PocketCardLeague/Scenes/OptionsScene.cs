@@ -1,4 +1,4 @@
-﻿using Components;
+using Components;
 using Helpers;
 using Microsoft.Xna.Framework;
 using PocketCardLeague.Enums;
@@ -11,72 +11,127 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
     {
         BackgroundColor = Color.Black;
 
-        var title = new Label("title", "Settings", ContentHelper.LoadFont("TitleFont"), new Anchor(new Vector2(0, 80), null), true, 800)
-        {
-            Border = new Border(2, Color.Black),
-        };
-
-        // Player name input field example
-        var nameLabel = new Label("name_label", "Player Name:", ContentHelper.LoadFont("DefaultFont"), new Anchor(new Vector2(200, 180), null))
-        {
-            Border = new Border(1, Color.Black),
-        };
-
-        var nameInput = new InputField(
-            name: "name_input",
-            placeholderText: "Enter your name...",
-            font: ContentHelper.LoadFont("DefaultFont"),
-            position: new Anchor(new Vector2(350, 175)),
-            size: new Vector2(250, 32))
-        {
-            Background = new Color(40, 40, 40),
-            Border = new Border(1, Color.Gray),
-            FocusedBorder = new Border(2, Color.CornflowerBlue),
-            TextColor = Color.White,
-            PlaceholderColor = Color.DarkGray
-        };
-
-        nameInput.OnTextChanged += (text) => System.Diagnostics.Debug.WriteLine($"Name changed: {text}");
-        nameInput.OnSubmit += () => System.Diagnostics.Debug.WriteLine($"Name submitted: {nameInput.Text}");
-
-        // ScrollPanel example
-        var scrollPanel = new ScrollPanel("scroll_example")
-        {
-            Position = new Anchor(new Vector2(50, 220)),
-            Size = new Vector2(250, 200),
-            ContentSize = new Vector2(250, 500), // Content is taller than view
-            Background = new Color(30, 30, 30),
-            Border = new Border(1, Color.Gray),
-            ScrollbarThumb = Color.CornflowerBlue
-        };
-
-        // Add items to the scroll panel
+        // Virtual resolution is 1536x864 (3x of 512x288)
         var font = ContentHelper.LoadFont("DefaultFont");
-        for (int i = 0; i < 12; i++)
-        {
-            var itemLabel = new Label(
-                $"scroll_item_{i}",
-                $"Scroll Item {i + 1}",
-                font,
-                new Anchor(new Vector2(60, 230 + i * 40)))
-            {
-                Color = Color.White
-            };
-            itemLabel.OnHoveredEnter += () => itemLabel.Color = Color.Yellow;
-            itemLabel.OnHoveredExit += () => itemLabel.Color = Color.White;
-            scrollPanel.Children.Add(itemLabel);
-        }
 
-        var scrollLabel = new Label("scroll_label", "Scroll Panel Demo:", font, new Anchor(new Vector2(50, 195)))
+        var title = new Label("title", "Settings", ContentHelper.LoadFont("TitleFont"), new Anchor(new Vector2(0, 30), null), true, 1536)
+        {
+            Border = new Border(3, Color.Black),
+        };
+
+        // Graphics settings
+        var graphicsLabel = new Label("graphics_label", "Graphics", font, new Anchor(new Vector2(72, 150)))
         {
             Color = Color.Gray
         };
 
-        var button = new Button("back_button", "Back", ContentHelper.LoadFont("DefaultFont"), new Anchor(new Vector2(340, 400), null), new Vector2(120, 40), true)
+        // Window scale dropdown - bound to SettingsManager
+        var scaleDropdown = new Dropdown("scale_dropdown", new Anchor(new Vector2(72, 210)), new Vector2(360, 72))
+        {
+            Font = font,
+            Placeholder = "Scale...",
+            MaxVisibleItems = 4,
+            Padding = 12
+        };
+        foreach (var scale in SettingsManager.AvailableScales)
+        {
+            scaleDropdown.Items.Add(scale.Label);
+        }
+        scaleDropdown.SelectedIndex = SettingsManager.GetCurrentScaleIndex();
+        scaleDropdown.OnSelectionChanged += (index) =>
+        {
+            if (index >= 0 && index < SettingsManager.AvailableScales.Length)
+            {
+                SettingsManager.SetWindowScale(SettingsManager.AvailableScales[index].Scale);
+            }
+        };
+
+        // Fullscreen checkbox - bound to SettingsManager
+        var fullscreenCheckbox = new Checkbox("fullscreen_checkbox", new Anchor(new Vector2(72, 330)))
+        {
+            Label = "Fullscreen",
+            Font = font,
+            LabelColor = Color.White,
+            IsChecked = SettingsManager.Current.Fullscreen,
+            BoxBackground = new Color(60, 60, 60),
+            CheckmarkColor = Color.LimeGreen,
+            BoxSize = 48,
+            LabelSpacing = 24
+        };
+        fullscreenCheckbox.OnCheckedChanged += () =>
+        {
+            SettingsManager.SetFullscreen(fullscreenCheckbox.IsChecked);
+        };
+
+        // Audio settings
+        var audioLabel = new Label("audio_label", "Audio", font, new Anchor(new Vector2(840, 150)))
+        {
+            Color = Color.Gray
+        };
+
+        // Master volume slider
+        var masterLabel = new Label("master_label", "Master", font, new Anchor(new Vector2(840, 240)))
+        {
+            Color = Color.White
+        };
+        var masterSlider = new Slider("master_volume", new Anchor(new Vector2(1050, 240)), new Vector2(390, 48))
+        {
+            MinValue = 0,
+            MaxValue = 100,
+            Value = SettingsManager.Current.MasterVolume,
+            Font = font,
+            ShowValue = false,
+            TrackFillColor = Color.CornflowerBlue,
+            TrackHeight = 18,
+            ThumbWidth = 36,
+            ThumbHeight = 48
+        };
+        masterSlider.OnValueChanged += (value) => SettingsManager.SetMasterVolume(value);
+
+        // Music volume slider
+        var musicLabel = new Label("music_label", "Music", font, new Anchor(new Vector2(840, 330)))
+        {
+            Color = Color.White
+        };
+        var musicSlider = new Slider("music_volume", new Anchor(new Vector2(1050, 330)), new Vector2(390, 48))
+        {
+            MinValue = 0,
+            MaxValue = 100,
+            Value = SettingsManager.Current.MusicVolume,
+            Font = font,
+            ShowValue = false,
+            TrackFillColor = Color.Orange,
+            TrackHeight = 18,
+            ThumbWidth = 36,
+            ThumbHeight = 48
+        };
+        musicSlider.OnValueChanged += (value) => SettingsManager.SetMusicVolume(value);
+
+        // SFX volume slider
+        var sfxLabel = new Label("sfx_label", "SFX", font, new Anchor(new Vector2(840, 420)))
+        {
+            Color = Color.White
+        };
+        var sfxSlider = new Slider("sfx_volume", new Anchor(new Vector2(1050, 420)), new Vector2(390, 48))
+        {
+            MinValue = 0,
+            MaxValue = 100,
+            Value = SettingsManager.Current.SfxVolume,
+            Font = font,
+            ShowValue = false,
+            TrackFillColor = Color.LimeGreen,
+            TrackHeight = 18,
+            ThumbWidth = 36,
+            ThumbHeight = 48
+        };
+        sfxSlider.OnValueChanged += (value) => SettingsManager.SetSfxVolume(value);
+
+        // Back button
+        var button = new Button("back_button", "Back", font, new Anchor(new Vector2(588, 750), null), new Vector2(360, 90), true)
         {
             Background = Color.Green,
-            Border = new Border(2, Color.Black),
-            TextBorder = new Border(2, Color.Black)
+            Border = new Border(3, Color.Black),
+            TextBorder = new Border(3, Color.Black)
         };
 
         button.OnHoveredEnter += () => button.Background = Color.LightGreen;
@@ -84,10 +139,16 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
         button.OnClicked += () => SceneManager.SetActiveScene(SceneType.Title);
 
         AddComponent(title);
-        AddComponent(nameLabel);
-        AddComponent(nameInput);
-        AddComponent(scrollLabel);
-        AddComponent(scrollPanel);
+        AddComponent(graphicsLabel);
+        AddComponent(scaleDropdown);
+        AddComponent(fullscreenCheckbox);
+        AddComponent(audioLabel);
+        AddComponent(masterLabel);
+        AddComponent(masterSlider);
+        AddComponent(musicLabel);
+        AddComponent(musicSlider);
+        AddComponent(sfxLabel);
+        AddComponent(sfxSlider);
         AddComponent(button);
 
         base.Initialize();

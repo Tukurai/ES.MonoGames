@@ -22,6 +22,7 @@ public static class SceneManager
     public static void AddScene(IScene scene) => Instance.AddScene(scene);
     public static void RemoveScene(IScene scene) => Instance.RemoveScene(scene);
     public static void SetActiveScene(Enum scene) => Instance.SetActiveScene(scene);
+    public static void ReinitializeActiveScene() => Instance.ReinitializeActiveScene();
     public static IScene? ActiveScene => Instance.ActiveScene;
 }
 
@@ -30,6 +31,7 @@ internal interface ISceneManager
     void AddScene(IScene scene);
     void RemoveScene(IScene scene);
     void SetActiveScene(Enum scene);
+    void ReinitializeActiveScene();
     IScene? ActiveScene { get; }
 }
 
@@ -55,5 +57,10 @@ internal sealed class SceneManagerImpl<T> : ISceneManager where T : Enum
         ActiveScene?.Stop();
         ActiveScene = scene;
         ActiveScene.Start();
+    }
+
+    public void ReinitializeActiveScene()
+    {
+        ActiveScene?.Reinitialize();
     }
 }

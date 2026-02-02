@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Components;
 using Helpers;
 using PocketCardLeague.Enums;
@@ -12,48 +12,53 @@ public class TitleScene() : Scene<SceneType>(SceneType.Title)
     {
         BackgroundColor = Color.Black;
 
-        var title = new Label("title", "Pocket Card League", ContentHelper.LoadFont("TitleFont"), new Anchor(new Vector2(0, 80), null), true, 800)
+        // Virtual resolution is 1536x864 (3x of 512x288)
+        var font = ContentHelper.LoadFont("DefaultFont");
+
+        var title = new Label("title", "Pocket Card League", ContentHelper.LoadFont("TitleFont"), new Anchor(new Vector2(0, 60), null), true, 1536)
         {
-            Border = new Border(2, Color.Black)
+            Border = new Border(3, Color.Black)
         };
 
         // Pokemon sprite examples
         var pokemonAtlas = new PokemonSpriteAtlas();
 
-        // Display some starter Pokemon sprites (Bulbasaur line, Charmander line, Squirtle line)
-        var pokemonSprites = new[]
+        // Animated sprite example - cycling through Pokemon
+        var animatedPokemon = new AnimatedSprite("animated_pokemon", new Anchor(new Vector2(672, 240)))
         {
-            ("0001_000_mf_n_00000000_n", 150f),  // Bulbasaur
-            ("0002_000_mf_n_00000000_n", 230f),  // Ivysaur
-            ("0003_000_mf_n_00000000_n", 310f),  // Venusaur
-            ("0004_000_mf_n_00000000_n", 410f),  // Charmander
-            ("0005_000_mf_n_00000000_n", 490f),  // Charmeleon
-            ("0006_000_mf_n_00000000_n", 570f),  // Charizard
-            ("0025_000_mf_n_00000000_n", 670f),  // Pikachu
+            FrameDelayMs = 500f,
+            Loop = true,
+            Scale = new Vector2(6f, 6f)
         };
 
-        for (int i = 0; i < pokemonSprites.Length; i++)
+        var animationFrames = new[]
         {
-            var (spriteName, xPos) = pokemonSprites[i];
-            var sprite = new Sprite($"pokemon_{i}", new Anchor(new Vector2(xPos, 180)));
-            sprite.SetFromAtlas(pokemonAtlas.GetTextureFromAtlas(spriteName));
-            sprite.Scale = new Vector2(2f, 2f); // Scale up for visibility
-            AddComponent(sprite);
+            "0001_000_mf_n_00000000_n",  // Bulbasaur
+            "0004_000_mf_n_00000000_n",  // Charmander
+            "0007_000_mf_n_00000000_n",  // Squirtle
+            "0025_000_mf_n_00000000_n",  // Pikachu
+        };
+
+        foreach (var frameName in animationFrames)
+        {
+            animatedPokemon.AddFrame(pokemonAtlas.GetTextureFromAtlas(frameName));
         }
 
-        var continueAction = new Label("continue", "Press SPACE to continue!", ContentHelper.LoadFont("DefaultFont"), new Anchor(new Vector2(0, 320), null), true, 800)
+        animatedPokemon.Play();
+
+        var continueAction = new Label("continue", "Press SPACE", font, new Anchor(new Vector2(0, 660), null), true, 1536)
         {
-            Border = new Border(2, Color.Black)
+            Border = new Border(3, Color.Black)
         };
 
         continueAction.OnHoveredEnter += () => continueAction.Color = Color.Yellow;
         continueAction.OnHoveredExit += () => continueAction.Color = Color.White;
 
-        var button = new Button("button", "Options", ContentHelper.LoadFont("DefaultFont"), new Anchor(new Vector2(340, 400), null), new Vector2(120, 40), true)
+        var button = new Button("button", "Options", font, new Anchor(new Vector2(588, 750), null), new Vector2(360, 90), true)
         {
             Background = Color.Green,
-            Border = new Border(2, Color.Black),
-            TextBorder = new Border(2, Color.Black)
+            Border = new Border(3, Color.Black),
+            TextBorder = new Border(3, Color.Black)
         };
 
         button.OnHoveredEnter += () => button.Background = Color.LightGreen;
@@ -61,6 +66,7 @@ public class TitleScene() : Scene<SceneType>(SceneType.Title)
         button.OnClicked += () => SceneManager.SetActiveScene(SceneType.Options);
 
         AddComponent(title);
+        AddComponent(animatedPokemon);
         AddComponent(continueAction);
         AddComponent(button);
 

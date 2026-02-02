@@ -73,8 +73,10 @@ public class ScrollPanel(string? name = null) : Panel(name)
     public override void Update(GameTime gameTime)
     {
         var pos = Position.GetVector2();
-        var mousePos = ControlState.GetMousePosition();
-        var mouseInPanel = ControlState.MouseInArea(new Rectangle(pos.ToPoint(), Size.ToPoint()));
+        // Use raw mouse position for ScrollPanel's own logic (screen space)
+        var mousePos = ControlState.GetRawMousePosition();
+        var panelRect = new Rectangle(pos.ToPoint(), Size.ToPoint());
+        var mouseInPanel = panelRect.Contains(mousePos);
         var mouseDelta = ControlState.GetMouseDelta();
 
         // Calculate scrollbar rectangles
@@ -112,11 +114,12 @@ public class ScrollPanel(string? name = null) : Panel(name)
         {
             if (ControlState.GetHeldMouseButtons().Length > 0)
             {
-                var trackHeight = verticalTrack.Height - verticalThumb.Height;
-                if (trackHeight > 0)
+                // Account for padding at top and bottom
+                var usableTrackHeight = verticalTrack.Height - ScrollbarPadding * 2 - verticalThumb.Height;
+                if (usableTrackHeight > 0)
                 {
-                    var thumbY = mousePos.Y - _thumbDragOffset - verticalTrack.Y;
-                    var scrollRatio = Math.Clamp(thumbY / trackHeight, 0f, 1f);
+                    var thumbY = mousePos.Y - _thumbDragOffset - verticalTrack.Y - ScrollbarPadding;
+                    var scrollRatio = Math.Clamp(thumbY / usableTrackHeight, 0f, 1f);
                     _scrollOffset.Y = scrollRatio * MaxScrollY;
                 }
             }
@@ -130,11 +133,12 @@ public class ScrollPanel(string? name = null) : Panel(name)
         {
             if (ControlState.GetHeldMouseButtons().Length > 0)
             {
-                var trackWidth = horizontalTrack.Width - horizontalThumb.Width;
-                if (trackWidth > 0)
+                // Account for padding at left and right
+                var usableTrackWidth = horizontalTrack.Width - ScrollbarPadding * 2 - horizontalThumb.Width;
+                if (usableTrackWidth > 0)
                 {
-                    var thumbX = mousePos.X - _thumbDragOffset - horizontalTrack.X;
-                    var scrollRatio = Math.Clamp(thumbX / trackWidth, 0f, 1f);
+                    var thumbX = mousePos.X - _thumbDragOffset - horizontalTrack.X - ScrollbarPadding;
+                    var scrollRatio = Math.Clamp(thumbX / usableTrackWidth, 0f, 1f);
                     _scrollOffset.X = scrollRatio * MaxScrollX;
                 }
             }
@@ -185,12 +189,18 @@ public class ScrollPanel(string? name = null) : Panel(name)
 
     private void UpdateChildrenWithOffset(GameTime gameTime)
     {
-        // Children are updated relative to scroll offset
-        // The offset is applied during drawing, but we still need to update hover/click detection
+        // Set mouse offset so children's hit detection accounts for scroll position
+        // The offset transforms screen-space mouse to content-space coordinates
+        var previousOffset = ControlState.MouseOffset;
+        ControlState.MouseOffset = _scrollOffset;
+
         foreach (var child in Children)
         {
             child.Update(gameTime);
         }
+
+        // Restore previous offset
+        ControlState.MouseOffset = previousOffset;
     }
 
     private void ClampScrollOffset()
@@ -203,20 +213,24 @@ public class ScrollPanel(string? name = null) : Panel(name)
     {
         var pos = Position.GetVector2();
         var showHorizontal = CanScrollHorizontally && ShowScrollbars && (!AutoHideScrollbars || ContentSize.X > Size.X);
+        var borderThickness = Border?.Thickness ?? 0;
 
-        var trackX = (int)(pos.X + Size.X - ScrollbarWidth);
-        var trackY = (int)pos.Y;
-        var trackHeight = (int)Size.Y - (showHorizontal ? ScrollbarWidth : 0);
+        // Position scrollbar inside the border
+        var trackX = (int)(pos.X + Size.X - ScrollbarWidth - borderThickness);
+        var trackY = (int)pos.Y + borderThickness;
+        var trackHeight = (int)Size.Y - (showHorizontal ? ScrollbarWidth : 0) - borderThickness * 2;
 
         var track = new Rectangle(trackX, trackY, ScrollbarWidth, trackHeight);
 
         if (!CanScrollVertically || MaxScrollY <= 0)
             return (track, Rectangle.Empty);
 
+        // Account for padding at top and bottom of track for thumb movement
+        var usableTrackHeight = trackHeight - ScrollbarPadding * 2;
         var viewRatio = Size.Y / ContentSize.Y;
-        var thumbHeight = Math.Max(20, (int)(trackHeight * viewRatio));
+        var thumbHeight = Math.Max(20, (int)(usableTrackHeight * viewRatio));
         var scrollRatio = _scrollOffset.Y / MaxScrollY;
-        var thumbY = trackY + (int)((trackHeight - thumbHeight) * scrollRatio);
+        var thumbY = trackY + ScrollbarPadding + (int)((usableTrackHeight - thumbHeight) * scrollRatio);
 
         var thumb = new Rectangle(
             trackX + ScrollbarPadding,
@@ -232,20 +246,24 @@ public class ScrollPanel(string? name = null) : Panel(name)
     {
         var pos = Position.GetVector2();
         var showVertical = CanScrollVertically && ShowScrollbars && (!AutoHideScrollbars || ContentSize.Y > Size.Y);
+        var borderThickness = Border?.Thickness ?? 0;
 
-        var trackX = (int)pos.X;
-        var trackY = (int)(pos.Y + Size.Y - ScrollbarWidth);
-        var trackWidth = (int)Size.X - (showVertical ? ScrollbarWidth : 0);
+        // Position scrollbar inside the border
+        var trackX = (int)pos.X + borderThickness;
+        var trackY = (int)(pos.Y + Size.Y - ScrollbarWidth - borderThickness);
+        var trackWidth = (int)Size.X - (showVertical ? ScrollbarWidth : 0) - borderThickness * 2;
 
         var track = new Rectangle(trackX, trackY, trackWidth, ScrollbarWidth);
 
         if (!CanScrollHorizontally || MaxScrollX <= 0)
             return (track, Rectangle.Empty);
 
+        // Account for padding at left and right of track for thumb movement
+        var usableTrackWidth = trackWidth - ScrollbarPadding * 2;
         var viewRatio = Size.X / ContentSize.X;
-        var thumbWidth = Math.Max(20, (int)(trackWidth * viewRatio));
+        var thumbWidth = Math.Max(20, (int)(usableTrackWidth * viewRatio));
         var scrollRatio = _scrollOffset.X / MaxScrollX;
-        var thumbX = trackX + (int)((trackWidth - thumbWidth) * scrollRatio);
+        var thumbX = trackX + ScrollbarPadding + (int)((usableTrackWidth - thumbWidth) * scrollRatio);
 
         var thumb = new Rectangle(
             thumbX,
@@ -275,20 +293,21 @@ public class ScrollPanel(string? name = null) : Panel(name)
         // Draw border
         RendererHelper.Draw(spriteBatch, Border, pos, Size, Scale);
 
-        // Calculate content area (excluding scrollbars)
+        // Calculate content area (excluding scrollbars and border)
         var showVerticalScrollbar = CanScrollVertically && ShowScrollbars && (!AutoHideScrollbars || ContentSize.Y > Size.Y);
         var showHorizontalScrollbar = CanScrollHorizontally && ShowScrollbars && (!AutoHideScrollbars || ContentSize.X > Size.X);
+        var borderThickness = Border?.Thickness ?? 0;
 
-        var contentWidth = Size.X - (showVerticalScrollbar ? ScrollbarWidth : 0);
-        var contentHeight = Size.Y - (showHorizontalScrollbar ? ScrollbarWidth : 0);
+        var contentWidth = Size.X - (showVerticalScrollbar ? ScrollbarWidth : 0) - borderThickness * 2;
+        var contentHeight = Size.Y - (showHorizontalScrollbar ? ScrollbarWidth : 0) - borderThickness * 2;
 
         // End current batch to apply scissor clipping for content
         spriteBatch.End();
 
         var previousScissor = graphicsDevice.ScissorRectangle;
         graphicsDevice.ScissorRectangle = new Rectangle(
-            (int)pos.X,
-            (int)pos.Y,
+            (int)pos.X + borderThickness,
+            (int)pos.Y + borderThickness,
             (int)contentWidth,
             (int)contentHeight
         );
@@ -329,8 +348,8 @@ public class ScrollPanel(string? name = null) : Panel(name)
         if (showVerticalScrollbar && showHorizontalScrollbar)
         {
             var cornerRect = new Rectangle(
-                (int)(pos.X + Size.X - ScrollbarWidth),
-                (int)(pos.Y + Size.Y - ScrollbarWidth),
+                (int)(pos.X + Size.X - ScrollbarWidth - borderThickness),
+                (int)(pos.Y + Size.Y - ScrollbarWidth - borderThickness),
                 ScrollbarWidth,
                 ScrollbarWidth
             );

@@ -1,4 +1,5 @@
 ﻿using Components;
+using Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -26,6 +27,7 @@ public interface IScene
     void Draw(SpriteBatch spriteBatch);
     void Pause();
     void RemoveComponent(BaseComponent component);
+    void Reinitialize();
     void Reset();
     void Resume();
     void Start();
@@ -39,6 +41,7 @@ public abstract class Scene<T> : IScene where T : Enum
     public SceneState State { get; set; } = SceneState.None;
     public Color BackgroundColor { get; set; } = Color.CornflowerBlue;
 
+    private bool _pendingReinitialize = false;
 
     public event Action? OnSceneInitialized;
     public event Action? OnSceneUpdated;
@@ -94,6 +97,24 @@ public abstract class Scene<T> : IScene where T : Enum
         OnSceneReset?.Invoke();
     }
 
+    /// <summary>
+    /// Schedules the scene to reinitialize on the next frame.
+    /// This is deferred to avoid modifying the component collection during iteration.
+    /// </summary>
+    public virtual void Reinitialize()
+    {
+        _pendingReinitialize = true;
+    }
+
+    /// <summary>
+    /// Performs the actual reinitialization (clears components and re-runs Initialize).
+    /// </summary>
+    private void PerformReinitialize()
+    {
+        Components.Clear();
+        Initialize();
+    }
+
     public virtual void Start()
     {
         State = SceneState.Started;
@@ -102,6 +123,17 @@ public abstract class Scene<T> : IScene where T : Enum
 
     public virtual void Update(GameTime gameTime)
     {
+        // Handle deferred reinitialization
+        if (_pendingReinitialize)
+        {
+            _pendingReinitialize = false;
+            PerformReinitialize();
+            return; // Skip this frame's update after reinitializing
+        }
+
+        // Clear overlay registrations from previous frame
+        OverlayManager.Clear();
+
         Components.ForEach(c => c.Update(gameTime));
         OnSceneUpdated?.Invoke();
     }
@@ -111,6 +143,10 @@ public abstract class Scene<T> : IScene where T : Enum
         spriteBatch.GraphicsDevice.Clear(BackgroundColor);
 
         Components.ForEach(c => c.Draw(spriteBatch));
+
+        // Draw overlays (dropdowns, popups, tooltips) on top of everything
+        OverlayManager.DrawOverlays(spriteBatch);
+
         OnSceneDrawn?.Invoke();
     }
 }

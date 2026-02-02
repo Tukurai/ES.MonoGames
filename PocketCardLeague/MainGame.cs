@@ -21,14 +21,23 @@ public class MainGame : Game
         IsMouseVisible = true;
     }
 
+    // Virtual resolution - the internal resolution the game is designed for (3x of 512x288)
+    private const int VirtualWidth = 1536;
+    private const int VirtualHeight = 864;
+    private const float DefaultScale = 1f;
+
     /// <summary>
     /// Initialize method called once per game.
-    /// Initializes content helper, renderer helper, and scene manager.
+    /// Initializes content helper, renderer helper, scale manager, settings, and scene manager.
     /// </summary>
     protected override void Initialize()
     {
         ContentHelper.Initialize(new PocketCardLeagueConfig(), Content);
         RendererHelper.Initialize(GraphicsDevice);
+        SettingsManager.Initialize(); // Load settings first
+        // Use saved scale, or default if no saved setting
+        var initialScale = SettingsManager.Current.WindowScale > 0 ? SettingsManager.Current.WindowScale : DefaultScale;
+        ScaleManager.Initialize(_graphics, VirtualWidth, VirtualHeight, initialScale);
         SceneManager.Initialize<SceneType>();
         base.Initialize();
     }
@@ -73,20 +82,25 @@ public class MainGame : Game
     /// <summary>
     /// Draws the current game scene and user interface elements to the screen.
     /// </summary>
-    /// <remarks>This method is typically called once per frame by the game loop. It renders the active scene
-    /// and overlays any control or UI elements. Override this method to customize rendering behavior, but ensure that
-    /// base. Draw(gameTime) is called to maintain proper rendering order.</remarks>
-    /// <param name="gameTime">Provides a snapshot of timing values for the current frame, including elapsed game time and total game time
-    /// since the start of the game.</param>
+    /// <remarks>
+    /// Renders to a virtual resolution render target, then scales it to the window.
+    /// This ensures consistent positioning regardless of window/fullscreen size.
+    /// </remarks>
     protected override void Draw(GameTime gameTime)
     {
-        _spriteBatch.Begin(); 
+        // Begin rendering to the virtual resolution render target
+        ScaleManager.BeginRender(GraphicsDevice);
+
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
         SceneManager.ActiveScene?.Draw(_spriteBatch);
 
         ControlState.Draw(_spriteBatch);
 
         _spriteBatch.End();
+
+        // End render target and draw scaled to screen
+        ScaleManager.EndRender(GraphicsDevice, _spriteBatch);
 
         base.Draw(gameTime);
     }

@@ -139,8 +139,13 @@ public abstract class BaseComponent
 
     public virtual void Update(GameTime gameTime)
     {
+        // Check if mouse is blocked by an overlay (dropdown, popup, etc.)
+        var mousePos = ControlState.GetMousePosition();
+        var isBlockedByOverlay = OverlayManager.IsPointBlocked(mousePos);
+
         // determine on click area and fire events
-        if (ControlState.MouseInArea(new Rectangle(Position.GetVector2().ToPoint(), Size.ToPoint())))
+        var componentArea = new Rectangle(Position.GetVector2().ToPoint(), Size.ToPoint());
+        if (!isBlockedByOverlay && ControlState.MouseInArea(componentArea))
         {
             if (!Hovered)
             {

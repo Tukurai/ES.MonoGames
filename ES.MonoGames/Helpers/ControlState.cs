@@ -35,6 +35,12 @@ public static class ControlState
 
     private static CursorType Cursor { get; set; } = CursorType.Arrow;
 
+    /// <summary>
+    /// Offset applied to mouse position for hit detection.
+    /// Used by ScrollPanel to adjust child component hit detection.
+    /// </summary>
+    public static Vector2 MouseOffset { get; set; } = Vector2.Zero;
+
     public static void Update(GameTime gameTime)
     {
         if (!_initialized)
@@ -85,14 +91,15 @@ public static class ControlState
 
     public static bool MouseInArea(Rectangle area)
     {
-        var mousePos = new Point(_currentMouse.X, _currentMouse.Y);
+        var mousePos = GetMousePosition();
         return area.Contains(mousePos);
     }
 
     public static (Point Previous, Point Current) GetMouseDelta()
     {
-        var previousPos = new Point(_previousMouse.X, _previousMouse.Y);
-        var currentPos = new Point(_currentMouse.X, _currentMouse.Y);
+        // Transform both positions through ScaleManager
+        var previousPos = ScaleManager.ScreenToVirtual(new Point(_previousMouse.X, _previousMouse.Y));
+        var currentPos = ScaleManager.ScreenToVirtual(new Point(_currentMouse.X, _currentMouse.Y));
         return (previousPos, currentPos);
     }
 
@@ -149,7 +156,32 @@ public static class ControlState
         return _currentMouse.ScrollWheelValue - _previousMouse.ScrollWheelValue;
     }
 
+    /// <summary>
+    /// Gets mouse position transformed to virtual coordinates with offset applied.
+    /// </summary>
     public static Point GetMousePosition()
+    {
+        // Transform screen coordinates to virtual coordinates
+        var virtualPos = ScaleManager.ScreenToVirtual(new Point(_currentMouse.X, _currentMouse.Y));
+        return new Point(
+            virtualPos.X + (int)MouseOffset.X,
+            virtualPos.Y + (int)MouseOffset.Y
+        );
+    }
+
+    /// <summary>
+    /// Gets mouse position in virtual coordinates without any offset applied.
+    /// Use this for components that handle their own offset (like ScrollPanel).
+    /// </summary>
+    public static Point GetRawMousePosition()
+    {
+        return ScaleManager.ScreenToVirtual(new Point(_currentMouse.X, _currentMouse.Y));
+    }
+
+    /// <summary>
+    /// Gets the actual screen mouse position (not transformed).
+    /// </summary>
+    public static Point GetScreenMousePosition()
     {
         return new Point(_currentMouse.X, _currentMouse.Y);
     }
