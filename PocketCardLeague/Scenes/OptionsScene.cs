@@ -16,6 +16,29 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
             Border = new Border(2, Color.Black),
         };
 
+        // Player name input field example
+        var nameLabel = new Label("name_label", "Player Name:", ContentHelper.LoadFont("DefaultFont"), new Anchor(new Vector2(200, 180), null))
+        {
+            Border = new Border(1, Color.Black),
+        };
+
+        var nameInput = new InputField(
+            name: "name_input",
+            placeholderText: "Enter your name...",
+            font: ContentHelper.LoadFont("DefaultFont"),
+            position: new Anchor(new Vector2(350, 175)),
+            size: new Vector2(250, 32))
+        {
+            Background = new Color(40, 40, 40),
+            Border = new Border(1, Color.Gray),
+            FocusedBorder = new Border(2, Color.CornflowerBlue),
+            TextColor = Color.White,
+            PlaceholderColor = Color.DarkGray
+        };
+
+        nameInput.OnTextChanged += (text) => System.Diagnostics.Debug.WriteLine($"Name changed: {text}");
+        nameInput.OnSubmit += () => System.Diagnostics.Debug.WriteLine($"Name submitted: {nameInput.Text}");
+
         var settingsContinue = new Label("text_label", "Fiddle diddle!", ContentHelper.LoadFont("DefaultFont"), new Anchor(new Vector2(0, 320), null), true, 800)
         {
             Border = new Border(2, Color.Black),
@@ -36,6 +59,8 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
         button.OnClicked += () => SceneManager.SetActiveScene(SceneType.Title);
 
         AddComponent(title);
+        AddComponent(nameLabel);
+        AddComponent(nameInput);
         AddComponent(settingsContinue);
         AddComponent(button);
 

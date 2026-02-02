@@ -7,7 +7,7 @@ public class PocketCardLeagueConfig : BaseConfig
     public PocketCardLeagueConfig()
     {
         FontsRoot = "fonts/";
-        TexturesRoot = "textures/";
+        TexturesRoot = "spritesheets/";
         EffectsRoot = "effects/";
         TracksRoot = "tracks/";
     }
