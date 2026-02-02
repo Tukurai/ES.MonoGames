@@ -144,6 +144,16 @@ public static class ControlState
         return [.. released];
     }
 
+    public static int GetScrollWheelDelta()
+    {
+        return _currentMouse.ScrollWheelValue - _previousMouse.ScrollWheelValue;
+    }
+
+    public static Point GetMousePosition()
+    {
+        return new Point(_currentMouse.X, _currentMouse.Y);
+    }
+
     public static Texture2D? CursorTexture { get; set; } = null;
 
     public static void Draw(SpriteBatch spriteBatch)

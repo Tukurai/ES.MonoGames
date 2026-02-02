@@ -39,13 +39,38 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
         nameInput.OnTextChanged += (text) => System.Diagnostics.Debug.WriteLine($"Name changed: {text}");
         nameInput.OnSubmit += () => System.Diagnostics.Debug.WriteLine($"Name submitted: {nameInput.Text}");
 
-        var settingsContinue = new Label("text_label", "Fiddle diddle!", ContentHelper.LoadFont("DefaultFont"), new Anchor(new Vector2(0, 320), null), true, 800)
+        // ScrollPanel example
+        var scrollPanel = new ScrollPanel("scroll_example")
         {
-            Border = new Border(2, Color.Black),
+            Position = new Anchor(new Vector2(50, 220)),
+            Size = new Vector2(250, 200),
+            ContentSize = new Vector2(250, 500), // Content is taller than view
+            Background = new Color(30, 30, 30),
+            Border = new Border(1, Color.Gray),
+            ScrollbarThumb = Color.CornflowerBlue
         };
 
-        settingsContinue.OnHoveredEnter += () => settingsContinue.Color = Color.Yellow;
-        settingsContinue.OnHoveredExit += () => settingsContinue.Color = Color.White;
+        // Add items to the scroll panel
+        var font = ContentHelper.LoadFont("DefaultFont");
+        for (int i = 0; i < 12; i++)
+        {
+            var itemLabel = new Label(
+                $"scroll_item_{i}",
+                $"Scroll Item {i + 1}",
+                font,
+                new Anchor(new Vector2(60, 230 + i * 40)))
+            {
+                Color = Color.White
+            };
+            itemLabel.OnHoveredEnter += () => itemLabel.Color = Color.Yellow;
+            itemLabel.OnHoveredExit += () => itemLabel.Color = Color.White;
+            scrollPanel.Children.Add(itemLabel);
+        }
+
+        var scrollLabel = new Label("scroll_label", "Scroll Panel Demo:", font, new Anchor(new Vector2(50, 195)))
+        {
+            Color = Color.Gray
+        };
 
         var button = new Button("back_button", "Back", ContentHelper.LoadFont("DefaultFont"), new Anchor(new Vector2(340, 400), null), new Vector2(120, 40), true)
         {
@@ -61,7 +86,8 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
         AddComponent(title);
         AddComponent(nameLabel);
         AddComponent(nameInput);
-        AddComponent(settingsContinue);
+        AddComponent(scrollLabel);
+        AddComponent(scrollPanel);
         AddComponent(button);
 
         base.Initialize();

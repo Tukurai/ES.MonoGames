@@ -1,0 +1,408 @@
+using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Helpers;
+
+namespace Components;
+
+/// <summary>
+/// A scrollable panel that can contain components larger than its visible area.
+/// Supports mouse wheel scrolling, drag-to-scroll, and displays scrollbars.
+/// </summary>
+public class ScrollPanel(string? name = null) : Panel(name)
+{
+    // Content size - the total scrollable area
+    private Vector2 _contentSize = Vector2.Zero;
+    public Vector2 ContentSize
+    {
+        get => _contentSize;
+        set
+        {
+            _contentSize = value;
+            ClampScrollOffset();
+        }
+    }
+
+    // Scroll offset
+    private Vector2 _scrollOffset = Vector2.Zero;
+    public Vector2 ScrollOffset
+    {
+        get => _scrollOffset;
+        set
+        {
+            _scrollOffset = value;
+            ClampScrollOffset();
+        }
+    }
+
+    // Scrollbar appearance
+    public Color ScrollbarBackground { get; set; } = new Color(40, 40, 40, 200);
+    public Color ScrollbarThumb { get; set; } = new Color(100, 100, 100, 220);
+    public Color ScrollbarThumbHovered { get; set; } = new Color(140, 140, 140, 255);
+    public int ScrollbarWidth { get; set; } = 12;
+    public int ScrollbarPadding { get; set; } = 2;
+
+    // Scroll behavior
+    public float ScrollSpeed { get; set; } = 40f; // Pixels per scroll wheel notch
+    public bool EnableHorizontalScroll { get; set; } = true;
+    public bool EnableVerticalScroll { get; set; } = true;
+    public bool ShowScrollbars { get; set; } = true;
+    public bool AutoHideScrollbars { get; set; } = true; // Only show when content exceeds view
+
+    // Drag state
+    private bool _isDragging = false;
+    private Point _dragStart;
+    private Vector2 _scrollOffsetAtDragStart;
+
+    // Scrollbar hover state
+    private bool _verticalThumbHovered = false;
+    private bool _horizontalThumbHovered = false;
+    private bool _isDraggingVerticalThumb = false;
+    private bool _isDraggingHorizontalThumb = false;
+    private float _thumbDragOffset = 0f;
+
+    // Scissor state for clipping
+    private static readonly RasterizerState _scissorRasterizer = new() { ScissorTestEnable = true };
+
+    // Computed properties
+    public bool CanScrollVertically => ContentSize.Y > Size.Y;
+    public bool CanScrollHorizontally => ContentSize.X > Size.X;
+    public float MaxScrollX => Math.Max(0, ContentSize.X - Size.X + (CanScrollVertically && ShowScrollbars ? ScrollbarWidth : 0));
+    public float MaxScrollY => Math.Max(0, ContentSize.Y - Size.Y + (CanScrollHorizontally && ShowScrollbars ? ScrollbarWidth : 0));
+
+    public override void Update(GameTime gameTime)
+    {
+        var pos = Position.GetVector2();
+        var mousePos = ControlState.GetMousePosition();
+        var mouseInPanel = ControlState.MouseInArea(new Rectangle(pos.ToPoint(), Size.ToPoint()));
+        var mouseDelta = ControlState.GetMouseDelta();
+
+        // Calculate scrollbar rectangles
+        var (verticalTrack, verticalThumb) = GetVerticalScrollbarRects();
+        var (horizontalTrack, horizontalThumb) = GetHorizontalScrollbarRects();
+
+        // Update hover state
+        _verticalThumbHovered = verticalThumb.Contains(mousePos);
+        _horizontalThumbHovered = horizontalThumb.Contains(mousePos);
+
+        // Handle scrollbar thumb dragging
+        if (ControlState.GetPressedMouseButtons().Length > 0)
+        {
+            if (_verticalThumbHovered && CanScrollVertically)
+            {
+                _isDraggingVerticalThumb = true;
+                _thumbDragOffset = mousePos.Y - verticalThumb.Y;
+            }
+            else if (_horizontalThumbHovered && CanScrollHorizontally)
+            {
+                _isDraggingHorizontalThumb = true;
+                _thumbDragOffset = mousePos.X - horizontalThumb.X;
+            }
+            else if (mouseInPanel && !verticalTrack.Contains(mousePos) && !horizontalTrack.Contains(mousePos))
+            {
+                // Start drag-to-scroll
+                _isDragging = true;
+                _dragStart = mousePos;
+                _scrollOffsetAtDragStart = _scrollOffset;
+            }
+        }
+
+        // Handle thumb dragging
+        if (_isDraggingVerticalThumb)
+        {
+            if (ControlState.GetHeldMouseButtons().Length > 0)
+            {
+                var trackHeight = verticalTrack.Height - verticalThumb.Height;
+                if (trackHeight > 0)
+                {
+                    var thumbY = mousePos.Y - _thumbDragOffset - verticalTrack.Y;
+                    var scrollRatio = Math.Clamp(thumbY / trackHeight, 0f, 1f);
+                    _scrollOffset.Y = scrollRatio * MaxScrollY;
+                }
+            }
+            else
+            {
+                _isDraggingVerticalThumb = false;
+            }
+        }
+
+        if (_isDraggingHorizontalThumb)
+        {
+            if (ControlState.GetHeldMouseButtons().Length > 0)
+            {
+                var trackWidth = horizontalTrack.Width - horizontalThumb.Width;
+                if (trackWidth > 0)
+                {
+                    var thumbX = mousePos.X - _thumbDragOffset - horizontalTrack.X;
+                    var scrollRatio = Math.Clamp(thumbX / trackWidth, 0f, 1f);
+                    _scrollOffset.X = scrollRatio * MaxScrollX;
+                }
+            }
+            else
+            {
+                _isDraggingHorizontalThumb = false;
+            }
+        }
+
+        // Handle drag-to-scroll
+        if (_isDragging)
+        {
+            if (ControlState.GetHeldMouseButtons().Length > 0)
+            {
+                var delta = new Vector2(
+                    _dragStart.X - mousePos.X,
+                    _dragStart.Y - mousePos.Y
+                );
+
+                if (EnableHorizontalScroll)
+                    _scrollOffset.X = _scrollOffsetAtDragStart.X + delta.X;
+                if (EnableVerticalScroll)
+                    _scrollOffset.Y = _scrollOffsetAtDragStart.Y + delta.Y;
+
+                ClampScrollOffset();
+            }
+            else
+            {
+                _isDragging = false;
+            }
+        }
+
+        // Handle mouse wheel scrolling
+        if (mouseInPanel)
+        {
+            var wheelDelta = ControlState.GetScrollWheelDelta();
+            if (wheelDelta != 0 && EnableVerticalScroll)
+            {
+                _scrollOffset.Y -= wheelDelta / 120f * ScrollSpeed;
+                ClampScrollOffset();
+            }
+        }
+
+        // Update children with offset position
+        // Note: We don't call base.Update() here because we need to offset child positions
+        UpdateChildrenWithOffset(gameTime);
+    }
+
+    private void UpdateChildrenWithOffset(GameTime gameTime)
+    {
+        // Children are updated relative to scroll offset
+        // The offset is applied during drawing, but we still need to update hover/click detection
+        foreach (var child in Children)
+        {
+            child.Update(gameTime);
+        }
+    }
+
+    private void ClampScrollOffset()
+    {
+        _scrollOffset.X = Math.Clamp(_scrollOffset.X, 0, MaxScrollX);
+        _scrollOffset.Y = Math.Clamp(_scrollOffset.Y, 0, MaxScrollY);
+    }
+
+    private (Rectangle track, Rectangle thumb) GetVerticalScrollbarRects()
+    {
+        var pos = Position.GetVector2();
+        var showHorizontal = CanScrollHorizontally && ShowScrollbars && (!AutoHideScrollbars || ContentSize.X > Size.X);
+
+        var trackX = (int)(pos.X + Size.X - ScrollbarWidth);
+        var trackY = (int)pos.Y;
+        var trackHeight = (int)Size.Y - (showHorizontal ? ScrollbarWidth : 0);
+
+        var track = new Rectangle(trackX, trackY, ScrollbarWidth, trackHeight);
+
+        if (!CanScrollVertically || MaxScrollY <= 0)
+            return (track, Rectangle.Empty);
+
+        var viewRatio = Size.Y / ContentSize.Y;
+        var thumbHeight = Math.Max(20, (int)(trackHeight * viewRatio));
+        var scrollRatio = _scrollOffset.Y / MaxScrollY;
+        var thumbY = trackY + (int)((trackHeight - thumbHeight) * scrollRatio);
+
+        var thumb = new Rectangle(
+            trackX + ScrollbarPadding,
+            thumbY,
+            ScrollbarWidth - ScrollbarPadding * 2,
+            thumbHeight
+        );
+
+        return (track, thumb);
+    }
+
+    private (Rectangle track, Rectangle thumb) GetHorizontalScrollbarRects()
+    {
+        var pos = Position.GetVector2();
+        var showVertical = CanScrollVertically && ShowScrollbars && (!AutoHideScrollbars || ContentSize.Y > Size.Y);
+
+        var trackX = (int)pos.X;
+        var trackY = (int)(pos.Y + Size.Y - ScrollbarWidth);
+        var trackWidth = (int)Size.X - (showVertical ? ScrollbarWidth : 0);
+
+        var track = new Rectangle(trackX, trackY, trackWidth, ScrollbarWidth);
+
+        if (!CanScrollHorizontally || MaxScrollX <= 0)
+            return (track, Rectangle.Empty);
+
+        var viewRatio = Size.X / ContentSize.X;
+        var thumbWidth = Math.Max(20, (int)(trackWidth * viewRatio));
+        var scrollRatio = _scrollOffset.X / MaxScrollX;
+        var thumbX = trackX + (int)((trackWidth - thumbWidth) * scrollRatio);
+
+        var thumb = new Rectangle(
+            thumbX,
+            trackY + ScrollbarPadding,
+            thumbWidth,
+            ScrollbarWidth - ScrollbarPadding * 2
+        );
+
+        return (track, thumb);
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        var pos = Position.GetVector2();
+        var graphicsDevice = spriteBatch.GraphicsDevice;
+
+        // Draw panel background
+        if (Background.A > 0)
+        {
+            spriteBatch.Draw(
+                RendererHelper.WhitePixel,
+                new Rectangle((int)pos.X, (int)pos.Y, (int)Size.X, (int)Size.Y),
+                Background
+            );
+        }
+
+        // Draw border
+        RendererHelper.Draw(spriteBatch, Border, pos, Size, Scale);
+
+        // Calculate content area (excluding scrollbars)
+        var showVerticalScrollbar = CanScrollVertically && ShowScrollbars && (!AutoHideScrollbars || ContentSize.Y > Size.Y);
+        var showHorizontalScrollbar = CanScrollHorizontally && ShowScrollbars && (!AutoHideScrollbars || ContentSize.X > Size.X);
+
+        var contentWidth = Size.X - (showVerticalScrollbar ? ScrollbarWidth : 0);
+        var contentHeight = Size.Y - (showHorizontalScrollbar ? ScrollbarWidth : 0);
+
+        // End current batch to apply scissor clipping for content
+        spriteBatch.End();
+
+        var previousScissor = graphicsDevice.ScissorRectangle;
+        graphicsDevice.ScissorRectangle = new Rectangle(
+            (int)pos.X,
+            (int)pos.Y,
+            (int)contentWidth,
+            (int)contentHeight
+        );
+
+        // Create transform matrix for scroll offset
+        var scrollTransform = Matrix.CreateTranslation(-_scrollOffset.X, -_scrollOffset.Y, 0);
+
+        spriteBatch.Begin(
+            rasterizerState: _scissorRasterizer,
+            transformMatrix: scrollTransform
+        );
+
+        // Draw children - the transform matrix handles the offset
+        foreach (var child in Children)
+        {
+            child.Draw(spriteBatch);
+        }
+
+        // End clipped batch
+        spriteBatch.End();
+        graphicsDevice.ScissorRectangle = previousScissor;
+
+        // Resume normal drawing for scrollbars
+        spriteBatch.Begin();
+
+        // Draw scrollbars
+        if (showVerticalScrollbar)
+        {
+            DrawVerticalScrollbar(spriteBatch);
+        }
+
+        if (showHorizontalScrollbar)
+        {
+            DrawHorizontalScrollbar(spriteBatch);
+        }
+
+        // Draw corner if both scrollbars are visible
+        if (showVerticalScrollbar && showHorizontalScrollbar)
+        {
+            var cornerRect = new Rectangle(
+                (int)(pos.X + Size.X - ScrollbarWidth),
+                (int)(pos.Y + Size.Y - ScrollbarWidth),
+                ScrollbarWidth,
+                ScrollbarWidth
+            );
+            spriteBatch.Draw(RendererHelper.WhitePixel, cornerRect, ScrollbarBackground);
+        }
+    }
+
+    private void DrawVerticalScrollbar(SpriteBatch spriteBatch)
+    {
+        var (track, thumb) = GetVerticalScrollbarRects();
+
+        // Draw track
+        spriteBatch.Draw(RendererHelper.WhitePixel, track, ScrollbarBackground);
+
+        // Draw thumb
+        if (thumb != Rectangle.Empty)
+        {
+            var thumbColor = (_verticalThumbHovered || _isDraggingVerticalThumb)
+                ? ScrollbarThumbHovered
+                : ScrollbarThumb;
+            spriteBatch.Draw(RendererHelper.WhitePixel, thumb, thumbColor);
+        }
+    }
+
+    private void DrawHorizontalScrollbar(SpriteBatch spriteBatch)
+    {
+        var (track, thumb) = GetHorizontalScrollbarRects();
+
+        // Draw track
+        spriteBatch.Draw(RendererHelper.WhitePixel, track, ScrollbarBackground);
+
+        // Draw thumb
+        if (thumb != Rectangle.Empty)
+        {
+            var thumbColor = (_horizontalThumbHovered || _isDraggingHorizontalThumb)
+                ? ScrollbarThumbHovered
+                : ScrollbarThumb;
+            spriteBatch.Draw(RendererHelper.WhitePixel, thumb, thumbColor);
+        }
+    }
+
+    /// <summary>
+    /// Scrolls to ensure the specified rectangle is visible
+    /// </summary>
+    public void ScrollToView(Rectangle rect)
+    {
+        if (rect.X < _scrollOffset.X)
+            _scrollOffset.X = rect.X;
+        else if (rect.Right > _scrollOffset.X + Size.X)
+            _scrollOffset.X = rect.Right - Size.X;
+
+        if (rect.Y < _scrollOffset.Y)
+            _scrollOffset.Y = rect.Y;
+        else if (rect.Bottom > _scrollOffset.Y + Size.Y)
+            _scrollOffset.Y = rect.Bottom - Size.Y;
+
+        ClampScrollOffset();
+    }
+
+    /// <summary>
+    /// Scrolls to the top-left corner
+    /// </summary>
+    public void ScrollToTop()
+    {
+        _scrollOffset = Vector2.Zero;
+    }
+
+    /// <summary>
+    /// Scrolls to the bottom
+    /// </summary>
+    public void ScrollToBottom()
+    {
+        _scrollOffset.Y = MaxScrollY;
+    }
+}
