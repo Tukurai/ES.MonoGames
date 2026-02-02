@@ -6,10 +6,10 @@ public class ButtonsSpriteAtlas : SpriteAtlas
 {
     public ButtonsSpriteAtlas() : base()
     {
-        Atlas = [new("Buttons.png")
+        Atlas = [new("Buttons")
         {
             Name = "Buttons",
-            SmartUpdateKey = "$TexturePacker:SmartUpdate:7ba2b1506aff2b75934f7eba36e5389e:0f0d23db5230666f73b410b7d1e30e65:a68c7291fd959d506666c9fd9a7121a4$",
+            SmartUpdateKey = "$TexturePacker:SmartUpdate:bde47748d35b10bbb86ae8b12d255cb1:0f0d23db5230666f73b410b7d1e30e65:a68c7291fd959d506666c9fd9a7121a4$",
             SpriteAtlas =
             {
                 new("arrow_down", false, 0, 621, 14, 9, 14, 14, 0.5f, 0.7777777777777778f),

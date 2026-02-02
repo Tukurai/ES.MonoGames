@@ -24,14 +24,8 @@
     <None Remove="Content\source\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="SpriteMaps\Pokemon.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.*" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SpriteMaps\Pokemon.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ES.MonoGames\ES.MonoGames.csproj" />

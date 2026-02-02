@@ -6,10 +6,10 @@ public class PokemonSpriteAtlas : SpriteAtlas
 {
     public PokemonSpriteAtlas() : base()
     {
-        Atlas = [new("Pokemon.png")
+        Atlas = [new("Pokemon")
         {
             Name = "Pokemon",
-            SmartUpdateKey = "$TexturePacker:SmartUpdate:d8b522abdeaf6809ba69c9d2852a89b5:5b4f9edba062707101f0f5596a9a1164:db6a07a7382ed12fe4ace6304f96a602$",
+            SmartUpdateKey = "$TexturePacker:SmartUpdate:ab830bfe39d9af1048d05288b8610543:5b4f9edba062707101f0f5596a9a1164:db6a07a7382ed12fe4ace6304f96a602$",
             SpriteAtlas =
             {
                 new("0000_000_mf_n_00000000_n", false, 0, 0, 68, 56, 68, 56, 0.5f, 0.5f),

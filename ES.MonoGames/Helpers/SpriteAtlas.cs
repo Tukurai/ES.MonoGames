@@ -44,7 +44,7 @@ public abstract class SpriteAtlas()
     /// <remarks>Searches through all mapped texture atlases for the specified texture name.</remarks>
     /// <param name="name">The name of the texture to retrieve.</param>
     /// <returns>A TextureResult containing the texture and its atlas entry, or null if not found.</returns>
-    protected TextureResult? GetTextureFromAtlas(string name)
+    public TextureResult? GetTextureFromAtlas(string name)
     {
         foreach (var mappedAtlas in Atlas)
         {
