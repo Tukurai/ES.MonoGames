@@ -11,27 +11,33 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
     {
         BackgroundColor = Color.Black;
 
-        // Virtual resolution is 512x288 (default window scale 3x = 1536x864)
+        // Virtual resolution is 2048x1152, downscaled to window
         var font = ContentHelper.LoadFont("DefaultFont");
 
-        var title = new Label("title", "Settings", ContentHelper.LoadFont("TitleFont"), new Anchor(new Vector2(0, 10), null), true, 512)
+        var title = new Label("title", "Settings", ContentHelper.LoadFont("TitleFont"), new Anchor(new Vector2(0, 40), null), true, 2048)
         {
-            Border = new Border(1, Color.Black),
+            Border = new Border(4, Color.Black),
         };
 
         // Graphics settings
-        var graphicsLabel = new Label("graphics_label", "Graphics", font, new Anchor(new Vector2(24, 50)))
+        var graphicsLabel = new Label("graphics_label", "Graphics", font, new Anchor(new Vector2(96, 200)))
         {
             Color = Color.Gray
         };
 
         // Window scale dropdown - bound to SettingsManager
-        var scaleDropdown = new Dropdown("scale_dropdown", new Anchor(new Vector2(24, 70)), new Vector2(120, 24))
+        var scaleDropdown = new Dropdown("scale_dropdown", new Anchor(new Vector2(96, 280)), new Vector2(480, 96))
         {
             Font = font,
             Placeholder = "Scale...",
             MaxVisibleItems = 4,
-            Padding = 4
+            Padding = 16,
+            ArrowWidth = 64,
+            ArrowSize = 24,
+            ScrollbarWidth = 12,
+            Border = new Border(4, Color.Gray),
+            FocusedBorder = new Border(4, Color.CornflowerBlue),
+            ListBorder = new Border(4, Color.Gray)
         };
         foreach (var scale in SettingsManager.AvailableScales)
         {
@@ -42,21 +48,23 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
         {
             if (index >= 0 && index < SettingsManager.AvailableScales.Length)
             {
-                SettingsManager.SetWindowScale(SettingsManager.AvailableScales[index].Scale);
+                SettingsManager.SetWindowScale(index);
             }
         };
 
         // Fullscreen checkbox - bound to SettingsManager
-        var fullscreenCheckbox = new Checkbox("fullscreen_checkbox", new Anchor(new Vector2(24, 110)))
+        var fullscreenCheckbox = new Checkbox("fullscreen_checkbox", new Anchor(new Vector2(96, 440)))
         {
             Label = "Fullscreen",
             Font = font,
             LabelColor = Color.White,
             IsChecked = SettingsManager.Current.Fullscreen,
             BoxBackground = new Color(60, 60, 60),
+            BoxBorderColor = Color.Gray,
             CheckmarkColor = Color.LimeGreen,
-            BoxSize = 16,
-            LabelSpacing = 8
+            BoxSize = 64,
+            BoxBorderThickness = 4,
+            LabelSpacing = 32
         };
         fullscreenCheckbox.OnCheckedChanged += () =>
         {
@@ -64,17 +72,17 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
         };
 
         // Audio settings
-        var audioLabel = new Label("audio_label", "Audio", font, new Anchor(new Vector2(280, 50)))
+        var audioLabel = new Label("audio_label", "Audio", font, new Anchor(new Vector2(1120, 200)))
         {
             Color = Color.Gray
         };
 
         // Master volume slider
-        var masterLabel = new Label("master_label", "Master", font, new Anchor(new Vector2(280, 80)))
+        var masterLabel = new Label("master_label", "Master", font, new Anchor(new Vector2(1120, 320)))
         {
             Color = Color.White
         };
-        var masterSlider = new Slider("master_volume", new Anchor(new Vector2(350, 80)), new Vector2(130, 16))
+        var masterSlider = new Slider("master_volume", new Anchor(new Vector2(1400, 320)), new Vector2(520, 64))
         {
             MinValue = 0,
             MaxValue = 100,
@@ -82,18 +90,20 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
             Font = font,
             ShowValue = false,
             TrackFillColor = Color.CornflowerBlue,
-            TrackHeight = 6,
-            ThumbWidth = 12,
-            ThumbHeight = 16
+            TrackHeight = 24,
+            ThumbWidth = 48,
+            ThumbHeight = 64,
+            TrackBorder = new Border(4, Color.Gray),
+            ThumbBorder = new Border(4, Color.Black)
         };
         masterSlider.OnValueChanged += (value) => SettingsManager.SetMasterVolume(value);
 
         // Music volume slider
-        var musicLabel = new Label("music_label", "Music", font, new Anchor(new Vector2(280, 110)))
+        var musicLabel = new Label("music_label", "Music", font, new Anchor(new Vector2(1120, 440)))
         {
             Color = Color.White
         };
-        var musicSlider = new Slider("music_volume", new Anchor(new Vector2(350, 110)), new Vector2(130, 16))
+        var musicSlider = new Slider("music_volume", new Anchor(new Vector2(1400, 440)), new Vector2(520, 64))
         {
             MinValue = 0,
             MaxValue = 100,
@@ -101,18 +111,20 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
             Font = font,
             ShowValue = false,
             TrackFillColor = Color.Orange,
-            TrackHeight = 6,
-            ThumbWidth = 12,
-            ThumbHeight = 16
+            TrackHeight = 24,
+            ThumbWidth = 48,
+            ThumbHeight = 64,
+            TrackBorder = new Border(4, Color.Gray),
+            ThumbBorder = new Border(4, Color.Black)
         };
         musicSlider.OnValueChanged += (value) => SettingsManager.SetMusicVolume(value);
 
         // SFX volume slider
-        var sfxLabel = new Label("sfx_label", "SFX", font, new Anchor(new Vector2(280, 140)))
+        var sfxLabel = new Label("sfx_label", "SFX", font, new Anchor(new Vector2(1120, 560)))
         {
             Color = Color.White
         };
-        var sfxSlider = new Slider("sfx_volume", new Anchor(new Vector2(350, 140)), new Vector2(130, 16))
+        var sfxSlider = new Slider("sfx_volume", new Anchor(new Vector2(1400, 560)), new Vector2(520, 64))
         {
             MinValue = 0,
             MaxValue = 100,
@@ -120,18 +132,20 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
             Font = font,
             ShowValue = false,
             TrackFillColor = Color.LimeGreen,
-            TrackHeight = 6,
-            ThumbWidth = 12,
-            ThumbHeight = 16
+            TrackHeight = 24,
+            ThumbWidth = 48,
+            ThumbHeight = 64,
+            TrackBorder = new Border(4, Color.Gray),
+            ThumbBorder = new Border(4, Color.Black)
         };
         sfxSlider.OnValueChanged += (value) => SettingsManager.SetSfxVolume(value);
 
         // Back button
-        var button = new Button("back_button", "Back", font, new Anchor(new Vector2(196, 250), null), new Vector2(120, 30), true)
+        var button = new Button("back_button", "Back", font, new Anchor(new Vector2(784, 1000), null), new Vector2(480, 120), true)
         {
             Background = Color.Green,
-            Border = new Border(1, Color.Black),
-            TextBorder = new Border(1, Color.Black)
+            Border = new Border(4, Color.Black),
+            TextBorder = new Border(4, Color.Black)
         };
 
         button.OnHoveredEnter += () => button.Background = Color.LightGreen;
@@ -142,14 +156,16 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
             name: "name_input",
             placeholderText: "Enter your name...",
             font: ContentHelper.LoadFont("DefaultFont"),
-            position: new Anchor(new Vector2(150, 175)),
-            size: new Vector2(250, 32))
+            position: new Anchor(new Vector2(600, 700)),
+            size: new Vector2(1000, 128))
         {
             Background = new Color(40, 40, 40),
-            Border = new Border(1, Color.Gray),
-            FocusedBorder = new Border(2, Color.CornflowerBlue),
+            Border = new Border(4, Color.Gray),
+            FocusedBorder = new Border(8, Color.CornflowerBlue),
             TextColor = Color.White,
-            PlaceholderColor = Color.DarkGray
+            PlaceholderColor = Color.DarkGray,
+            Padding = 24,
+            CursorWidth = 4
         };
 
         nameInput.OnTextChanged += (text) => System.Diagnostics.Debug.WriteLine($"Name changed: {text}");

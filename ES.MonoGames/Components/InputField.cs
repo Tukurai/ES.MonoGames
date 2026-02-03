@@ -142,6 +142,7 @@ public class InputField(
     private bool _cursorVisible = true;
     private const float CursorBlinkRate = 0.5f;
     public Color CursorColor { get; set; } = Color.White;
+    public int CursorWidth { get; set; } = 2;
 
     // Selection state
     private int _selectionStart = -1;
@@ -895,7 +896,7 @@ public class InputField(
 
                         spriteBatch.Draw(
                             RendererHelper.WhitePixel,
-                            new Rectangle((int)cursorX, (int)cursorY, 2, lineHeight),
+                            new Rectangle((int)cursorX, (int)cursorY, CursorWidth, lineHeight),
                             CursorColor
                         );
                     }
@@ -940,7 +941,7 @@ public class InputField(
 
                     spriteBatch.Draw(
                         RendererHelper.WhitePixel,
-                        new Rectangle((int)cursorX, (int)textPos.Y, 2, lineHeight),
+                        new Rectangle((int)cursorX, (int)textPos.Y, CursorWidth, lineHeight),
                         CursorColor
                     );
                 }

@@ -135,9 +135,19 @@ public class Dropdown : BaseComponent
     public int ArrowWidth { get; set; } = 24;
 
     /// <summary>
+    /// Size of the arrow triangle.
+    /// </summary>
+    public int ArrowSize { get; set; } = 6;
+
+    /// <summary>
     /// Color of the arrow indicator.
     /// </summary>
     public Color ArrowColor { get; set; } = Color.White;
+
+    /// <summary>
+    /// Width of the scrollbar for long lists.
+    /// </summary>
+    public int ScrollbarWidth { get; set; } = 4;
 
     // Scroll state for long lists
     private int _scrollOffset = 0;
@@ -363,27 +373,26 @@ public class Dropdown : BaseComponent
     private void DrawArrow(SpriteBatch spriteBatch, Vector2 pos)
     {
         var arrowColor = IsEnabled ? ArrowColor : DisabledTint;
-        var arrowX = pos.X + Size.X - ArrowWidth / 2 - 4;
+        var arrowX = pos.X + Size.X - ArrowWidth / 2;
         var arrowY = pos.Y + Size.Y / 2;
-
-        // Draw simple triangle arrow
-        var arrowSize = 6;
+        var offset = ArrowSize / 3;
 
         if (_isExpanded)
         {
             // Arrow pointing up
-            DrawTriangle(spriteBatch, arrowX, arrowY + 2, arrowSize, true, arrowColor);
+            DrawTriangle(spriteBatch, arrowX, arrowY + offset, ArrowSize, true, arrowColor);
         }
         else
         {
             // Arrow pointing down
-            DrawTriangle(spriteBatch, arrowX, arrowY - 2, arrowSize, false, arrowColor);
+            DrawTriangle(spriteBatch, arrowX, arrowY - offset, ArrowSize, false, arrowColor);
         }
     }
 
     private void DrawTriangle(SpriteBatch spriteBatch, float centerX, float centerY, int size, bool pointingUp, Color color)
     {
-        // Simple arrow using small rectangles (approximation)
+        // Draw a filled triangle using horizontal rows
+        // size controls the half-width of the base; height = halfSize + 1 rows
         var halfSize = size / 2;
 
         if (pointingUp)
@@ -477,18 +486,18 @@ public class Dropdown : BaseComponent
 
     private void DrawScrollIndicator(SpriteBatch spriteBatch, Rectangle listRect, int visibleCount)
     {
-        var scrollbarWidth = 4;
+        var margin = Math.Max(2, ScrollbarWidth / 2);
         var maxScroll = Items.Count - visibleCount;
         var scrollRatio = maxScroll > 0 ? (float)_scrollOffset / maxScroll : 0f;
 
-        var trackHeight = listRect.Height - 4;
-        var thumbHeight = Math.Max(20, trackHeight * visibleCount / Items.Count);
-        var thumbY = listRect.Y + 2 + (int)((trackHeight - thumbHeight) * scrollRatio);
+        var trackHeight = listRect.Height - margin * 2;
+        var thumbHeight = Math.Max(ScrollbarWidth * 5, trackHeight * visibleCount / Items.Count);
+        var thumbY = listRect.Y + margin + (int)((trackHeight - thumbHeight) * scrollRatio);
 
         var thumbRect = new Rectangle(
-            listRect.Right - scrollbarWidth - 2,
+            listRect.Right - ScrollbarWidth - margin,
             thumbY,
-            scrollbarWidth,
+            ScrollbarWidth,
             thumbHeight
         );
 

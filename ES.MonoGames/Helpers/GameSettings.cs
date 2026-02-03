@@ -12,9 +12,9 @@ namespace Helpers;
 public class GameSettings
 {
     /// <summary>
-    /// Window scale multiplier. The game renders at virtual resolution (512x288) * scale.
+    /// Index into AvailableScales for the current window size.
     /// </summary>
-    public int WindowScale { get; set; } = 3;
+    public int WindowScale { get; set; } = 2;
 
     /// <summary>
     /// Whether the game runs in fullscreen mode.
@@ -66,14 +66,15 @@ public static class SettingsManager
     public static GameSettings Current => _current;
 
     /// <summary>
-    /// Available window scale options.
+    /// Available window scale options. Scale is a float multiplier on virtual resolution.
+    /// Sorted from smallest to largest window.
     /// </summary>
-    public static readonly (int Scale, string Label)[] AvailableScales =
+    public static readonly (float Scale, string Label)[] AvailableScales =
     [
-        (1, "1x (512x288)"),
-        (2, "2x (1024x576)"),
-        (3, "3x (1536x864)"),
-        (4, "4x (2048x1152)"),
+        (0.25f, "512x288"),
+        (0.50f, "1024x576"),
+        (0.75f, "1536x864"),
+        (1.00f, "2048x1152"),
     ];
 
     /// <summary>
@@ -152,29 +153,31 @@ public static class SettingsManager
     }
 
     /// <summary>
-    /// Sets the window scale and applies it immediately.
+    /// Sets the window scale by index into AvailableScales and applies it immediately.
     /// </summary>
-    public static void SetWindowScale(int scale)
+    public static void SetWindowScale(int index)
     {
-        _current.WindowScale = Math.Clamp(scale, 1, 4);
-        ScaleManager.SetScale(_current.WindowScale);
+        _current.WindowScale = Math.Clamp(index, 0, AvailableScales.Length - 1);
+        ScaleManager.SetScale(AvailableScales[_current.WindowScale].Scale);
         Save();
         OnSettingsChanged?.Invoke();
     }
 
     /// <summary>
-    /// Gets the current scale index from AvailableScales, or -1 if not found.
+    /// Gets the current scale index.
     /// </summary>
     public static int GetCurrentScaleIndex()
     {
-        for (int i = 0; i < AvailableScales.Length; i++)
-        {
-            if (AvailableScales[i].Scale == _current.WindowScale)
-            {
-                return i;
-            }
-        }
-        return -1;
+        return Math.Clamp(_current.WindowScale, 0, AvailableScales.Length - 1);
+    }
+
+    /// <summary>
+    /// Gets the current float scale value.
+    /// </summary>
+    public static float GetCurrentScale()
+    {
+        var index = GetCurrentScaleIndex();
+        return AvailableScales[index].Scale;
     }
 
     /// <summary>

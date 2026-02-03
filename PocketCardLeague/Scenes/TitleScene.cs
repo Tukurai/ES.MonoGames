@@ -12,23 +12,23 @@ public class TitleScene() : Scene<SceneType>(SceneType.Title)
     {
         BackgroundColor = Color.Black;
 
-        // Virtual resolution is 512x288 (default window scale 3x = 1536x864)
+        // Virtual resolution is 2048x1152, downscaled to window
         var font = ContentHelper.LoadFont("DefaultFont");
 
-        var title = new Label("title", "Pocket Card League", ContentHelper.LoadFont("TitleFont"), new Anchor(new Vector2(0, 20), null), true, 512)
+        var title = new Label("title", "Pocket Card League", ContentHelper.LoadFont("TitleFont"), new Anchor(new Vector2(0, 80), null), true, 2048)
         {
-            Border = new Border(1, Color.Black)
+            Border = new Border(4, Color.Black)
         };
 
         // Pokemon sprite examples
         var pokemonAtlas = new PokemonSpriteAtlas();
 
         // Animated sprite example - cycling through Pokemon
-        var animatedPokemon = new AnimatedSprite("animated_pokemon", new Anchor(new Vector2(224, 80)))
+        var animatedPokemon = new AnimatedSprite("animated_pokemon", new Anchor(new Vector2(896, 320)))
         {
             FrameDelayMs = 500f,
             Loop = true,
-            Scale = new Vector2(2f, 2f)
+            Scale = new Vector2(8f, 8f)
         };
 
         var animationFrames = new[]
@@ -46,19 +46,19 @@ public class TitleScene() : Scene<SceneType>(SceneType.Title)
 
         animatedPokemon.Play();
 
-        var continueAction = new Label("continue", "Press SPACE", font, new Anchor(new Vector2(0, 220), null), true, 512)
+        var continueAction = new Label("continue", "Press SPACE", font, new Anchor(new Vector2(0, 880), null), true, 2048)
         {
-            Border = new Border(1, Color.Black)
+            Border = new Border(4, Color.Black)
         };
 
         continueAction.OnHoveredEnter += () => continueAction.Color = Color.Yellow;
         continueAction.OnHoveredExit += () => continueAction.Color = Color.White;
 
-        var button = new Button("button", "Options", font, new Anchor(new Vector2(196, 250), null), new Vector2(120, 30), true)
+        var button = new Button("button", "Options", font, new Anchor(new Vector2(784, 1000), null), new Vector2(480, 120), true)
         {
             Background = Color.Green,
-            Border = new Border(1, Color.Black),
-            TextBorder = new Border(1, Color.Black)
+            Border = new Border(4, Color.Black),
+            TextBorder = new Border(4, Color.Black)
         };
 
         button.OnHoveredEnter += () => button.Background = Color.LightGreen;

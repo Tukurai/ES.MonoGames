@@ -21,10 +21,10 @@ public class MainGame : Game
         IsMouseVisible = true;
     }
 
-    // Virtual resolution - the internal resolution the game is designed for
-    private const int VirtualWidth = 512;
-    private const int VirtualHeight = 288;
-    private const float DefaultScale = 3f;
+    // Virtual resolution - designed at 4x (2048x1152), downscaled to window size
+    private const int VirtualWidth = 2048;
+    private const int VirtualHeight = 1152;
+    private const float DefaultScale = 1f;
 
     /// <summary>
     /// Initialize method called once per game.
@@ -35,9 +35,7 @@ public class MainGame : Game
         ContentHelper.Initialize(new PocketCardLeagueConfig(), Content);
         RendererHelper.Initialize(GraphicsDevice);
         SettingsManager.Initialize(); // Load settings first
-        // Use saved scale, or default if no saved setting
-        var initialScale = SettingsManager.Current.WindowScale > 0 ? SettingsManager.Current.WindowScale : DefaultScale;
-        ScaleManager.Initialize(_graphics, VirtualWidth, VirtualHeight, initialScale);
+        ScaleManager.Initialize(_graphics, VirtualWidth, VirtualHeight, SettingsManager.GetCurrentScale());
         SceneManager.Initialize<SceneType>();
         base.Initialize();
     }

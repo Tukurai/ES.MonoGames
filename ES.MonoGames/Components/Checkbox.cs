@@ -424,7 +424,8 @@ public class Checkbox : BaseComponent
     private void DrawCheckmark(SpriteBatch spriteBatch, Vector2 pos)
     {
         var color = IsEnabled ? CheckmarkColor : DisabledTint;
-        var padding = 4;
+        var padding = Math.Max(2, BoxSize / 5);
+        var thickness = Math.Max(2, BoxSize / 8);
 
         // Draw a simple checkmark using two thick lines
         // Line 1: from bottom-left area going up-right to center-bottom
@@ -434,19 +435,16 @@ public class Checkbox : BaseComponent
         var startY = (int)pos.Y + BoxSize / 2;
 
         var midX = (int)pos.X + BoxSize / 3 + padding;
-        var midY = (int)pos.Y + BoxSize - padding - 2;
+        var midY = (int)pos.Y + BoxSize - padding - thickness;
 
         var endX = (int)pos.X + BoxSize - padding;
-        var endY = (int)pos.Y + padding + 2;
-
-        // Draw checkmark as filled rectangles (simplified approach)
-        // For a better checkmark, you'd use line drawing or a texture
+        var endY = (int)pos.Y + padding + thickness;
 
         // Short leg of checkmark (going down-right)
-        DrawThickLine(spriteBatch, startX, startY, midX, midY, 3, color);
+        DrawThickLine(spriteBatch, startX, startY, midX, midY, thickness, color);
 
         // Long leg of checkmark (going up-right)
-        DrawThickLine(spriteBatch, midX, midY, endX, endY, 3, color);
+        DrawThickLine(spriteBatch, midX, midY, endX, endY, thickness, color);
     }
 
     private void DrawThickLine(SpriteBatch spriteBatch, int x1, int y1, int x2, int y2, int thickness, Color color)
@@ -464,7 +462,7 @@ public class Checkbox : BaseComponent
             null,
             color,
             angle,
-            new Vector2(0, thickness / 2f),
+            new Vector2(0, 0.5f),
             new Vector2(length, thickness),
             SpriteEffects.None,
             0
