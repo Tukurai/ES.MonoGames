@@ -24,19 +24,52 @@ public class TitleScene() : Scene<SceneType>(SceneType.Title)
         var pokemonAtlas = new PokemonSpriteAtlas();
 
         // Animated sprite example - cycling through Pokemon
-        var animatedPokemon = new AnimatedSprite("animated_pokemon", new Anchor(new Vector2(896, 320)))
+        var animatedPokemon = new AnimatedSprite("animated_pokemon", new Anchor(new Vector2(448, 8)))
         {
             FrameDelayMs = 500f,
             Loop = true,
-            Scale = new Vector2(8f, 8f)
+            Scale = new Vector2(16f, 16f)
         };
 
         var animationFrames = new[]
         {
             "0001_000_mf_n_00000000_n",  // Bulbasaur
+            "0002_000_mf_n_00000000_n",  // Bulbasaur
+            "0003_000_mf_n_00000000_n",  // Bulbasaur
+
             "0004_000_mf_n_00000000_n",  // Charmander
+            "0005_000_mf_n_00000000_n",  // Charmander
+            "0006_000_mf_n_00000000_n",  // Charmander
+            
             "0007_000_mf_n_00000000_n",  // Squirtle
+            "0008_000_mf_n_00000000_n",  // Squirtle
+            "0009_000_mf_n_00000000_n",  // Squirtle
+            
+            "0010_000_mf_n_00000000_n",  // Squirtle
+            "0011_000_mf_n_00000000_n",  // Squirtle
+            "0012_000_mf_n_00000000_n",  // Squirtle
+            
+            "0013_000_mf_n_00000000_n",  // Squirtle
+            "0014_000_mf_n_00000000_n",  // Squirtle
+            "0015_000_mf_n_00000000_n",  // Squirtle
+            
+            "0016_000_mf_n_00000000_n",  // Squirtle
+            "0017_000_mf_n_00000000_n",  // Squirtle
+            "0018_000_mf_n_00000000_n",  // Squirtle
+            
+            "0019_000_mf_n_00000000_n",  // Squirtle
+            "0020_000_mf_n_00000000_n",  // Squirtle
+            "0021_000_mf_n_00000000_n",  // Squirtle
+            
+            "0022_000_mf_n_00000000_n",  // Squirtle
+            "0023_000_mf_n_00000000_n",  // Squirtle
+            "0024_000_mf_n_00000000_n",  // Squirtle
+
             "0025_000_mf_n_00000000_n",  // Pikachu
+            "0026_000_mf_n_00000000_n",  // Pikachu
+            
+            "0150_000_mf_n_00000000_n",  // Pikachu
+            "0151_000_mf_n_00000000_n",  // Pikachu
         };
 
         foreach (var frameName in animationFrames)

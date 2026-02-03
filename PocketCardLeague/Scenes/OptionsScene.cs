@@ -157,7 +157,7 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
             placeholderText: "Enter your name...",
             font: ContentHelper.LoadFont("DefaultFont"),
             position: new Anchor(new Vector2(600, 700)),
-            size: new Vector2(1000, 128))
+            size: new Vector2(600, 100))
         {
             Background = new Color(40, 40, 40),
             Border = new Border(4, Color.Gray),
