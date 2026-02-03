@@ -21,10 +21,10 @@ public class MainGame : Game
         IsMouseVisible = true;
     }
 
-    // Virtual resolution - the internal resolution the game is designed for (3x of 512x288)
-    private const int VirtualWidth = 1536;
-    private const int VirtualHeight = 864;
-    private const float DefaultScale = 1f;
+    // Virtual resolution - the internal resolution the game is designed for
+    private const int VirtualWidth = 512;
+    private const int VirtualHeight = 288;
+    private const float DefaultScale = 3f;
 
     /// <summary>
     /// Initialize method called once per game.

@@ -12,9 +12,9 @@ namespace Helpers;
 public class GameSettings
 {
     /// <summary>
-    /// Window scale multiplier. The game renders at virtual resolution * scale.
+    /// Window scale multiplier. The game renders at virtual resolution (512x288) * scale.
     /// </summary>
-    public int WindowScale { get; set; } = 1;
+    public int WindowScale { get; set; } = 3;
 
     /// <summary>
     /// Whether the game runs in fullscreen mode.
@@ -70,8 +70,10 @@ public static class SettingsManager
     /// </summary>
     public static readonly (int Scale, string Label)[] AvailableScales =
     [
-        (1, "1x (1536x864)"),
-        (2, "2x (3072x1728)"),
+        (1, "1x (512x288)"),
+        (2, "2x (1024x576)"),
+        (3, "3x (1536x864)"),
+        (4, "4x (2048x1152)"),
     ];
 
     /// <summary>
