@@ -38,6 +38,11 @@ public class MainGame : Game
         ScaleManager.Initialize(_graphics, VirtualWidth, VirtualHeight, SettingsManager.GetCurrentScale());
         SceneManager.Initialize<SceneType>();
         base.Initialize();
+
+        // Apply saved settings now that the graphics device is fully initialized
+        ScaleManager.SetScale(SettingsManager.GetCurrentScale());
+        if (SettingsManager.Current.Fullscreen)
+            ScaleManager.SetFullscreen(true);
     }
 
     /// <summary>

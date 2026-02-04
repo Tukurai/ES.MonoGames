@@ -58,7 +58,10 @@ public class GameSettings
 public static class SettingsManager
 {
     private static GameSettings _current = new();
-    private static string _settingsPath = "settings.json";
+    private static string _settingsPath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "PocketCardLeague",
+        "settings.json");
 
     /// <summary>
     /// The current game settings.
@@ -114,6 +117,8 @@ public static class SettingsManager
                 WriteIndented = true
             };
             var json = JsonSerializer.Serialize(_current, options);
+            var dir = Path.GetDirectoryName(_settingsPath);
+            if (dir != null) Directory.CreateDirectory(dir);
             File.WriteAllText(_settingsPath, json);
             return true;
         }

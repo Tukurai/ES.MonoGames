@@ -26,7 +26,7 @@ public class TitleScene() : Scene<SceneType>(SceneType.Title)
         // Animated sprite example - cycling through Pokemon
         var animatedPokemon = new AnimatedSprite("animated_pokemon", new Anchor(new Vector2(448, 8)))
         {
-            FrameDelayMs = 500f,
+            FrameDelayMs = 250f,
             Loop = true,
             Scale = new Vector2(16f, 16f)
         };
