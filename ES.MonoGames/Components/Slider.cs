@@ -11,7 +11,6 @@ namespace Components;
 /// </summary>
 public class Slider : BaseComponent
 {
-    private int _value;
     private bool _isDragging = false;
 
     /// <summary>
@@ -29,14 +28,14 @@ public class Slider : BaseComponent
     /// </summary>
     public int Value
     {
-        get => _value;
+        get;
         set
         {
             var clamped = Math.Clamp(value, MinValue, MaxValue);
-            if (_value != clamped)
+            if (field != clamped)
             {
-                _value = clamped;
-                OnValueChanged?.Invoke(_value);
+                field = clamped;
+                OnValueChanged?.Invoke(field);
             }
         }
     }
@@ -246,7 +245,7 @@ public class Slider : BaseComponent
 
         // Calculate thumb position based on value
         var range = MaxValue - MinValue;
-        var ratio = range > 0 ? (float)(_value - MinValue) / range : 0f;
+        var ratio = range > 0 ? (float)(Value - MinValue) / range : 0f;
         var thumbX = trackRect.X + (int)(ratio * trackRect.Width) - ThumbWidth / 2;
         var thumbY = (int)(pos.Y + (Size.Y - ThumbHeight) / 2);
 
@@ -264,10 +263,10 @@ public class Slider : BaseComponent
         spriteBatch.Draw(RendererHelper.WhitePixel, trackRect, trackColor);
 
         // Draw filled portion of track
-        if (_value > MinValue)
+        if (Value > MinValue)
         {
             var range = MaxValue - MinValue;
-            var ratio = range > 0 ? (float)(_value - MinValue) / range : 0f;
+            var ratio = range > 0 ? (float)(Value - MinValue) / range : 0f;
             var fillWidth = (int)(trackRect.Width * ratio);
 
             var fillRect = new Rectangle(trackRect.X, trackRect.Y, fillWidth, trackRect.Height);
@@ -305,7 +304,7 @@ public class Slider : BaseComponent
         // Draw value text
         if (ShowValue && Font != null)
         {
-            var valueText = string.Format(ValueFormat, _value);
+            var valueText = string.Format(ValueFormat, Value);
             var textSize = Font.MeasureString(valueText);
             var textX = pos.X + Size.X + LabelSpacing;
             var textY = pos.Y + (Size.Y - textSize.Y) / 2;

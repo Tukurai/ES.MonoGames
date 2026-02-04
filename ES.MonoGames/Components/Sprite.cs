@@ -9,44 +9,20 @@ namespace Components;
 /// </summary>
 public class Sprite(string? name = null, Anchor? position = null) : BaseComponent(name, position)
 {
-    private Texture2D? _texture;
-    private Rectangle? _sourceRectangle;
-    private Vector2 _origin = Vector2.Zero;
-
     /// <summary>
     /// The texture to render. If using a sprite atlas, this is the sprite sheet.
     /// </summary>
-    public Texture2D? Texture
-    {
-        get => _texture;
-        set
-        {
-            _texture = value;
-            UpdateSize();
-        }
-    }
+    public Texture2D? Texture { get; set { field = value; UpdateSize(); } }
 
     /// <summary>
     /// The source rectangle within the texture. If null, the entire texture is used.
     /// </summary>
-    public Rectangle? SourceRectangle
-    {
-        get => _sourceRectangle;
-        set
-        {
-            _sourceRectangle = value;
-            UpdateSize();
-        }
-    }
+    public Rectangle? SourceRectangle { get; set { field = value; UpdateSize(); } }
 
     /// <summary>
     /// The origin point for rotation and scaling. Default is top-left (0,0).
     /// </summary>
-    public Vector2 Origin
-    {
-        get => _origin;
-        set => _origin = value;
-    }
+    public Vector2 Origin { get; set; } = Vector2.Zero;
 
     /// <summary>
     /// Tint color applied to the sprite. Default is White (no tint).
@@ -68,7 +44,7 @@ public class Sprite(string? name = null, Anchor? position = null) : BaseComponen
     /// </summary>
     public void SetFromAtlas(TextureResult? result)
     {
-        if (result == null)
+        if (result is null)
         {
             Texture = null;
             SourceRectangle = null;
@@ -84,7 +60,7 @@ public class Sprite(string? name = null, Anchor? position = null) : BaseComponen
         );
 
         // Set origin based on pivot
-        _origin = new Vector2(
+        Origin = new Vector2(
             result.AtlasEntry.FrameWidth * result.AtlasEntry.PivotX,
             result.AtlasEntry.FrameHeight * result.AtlasEntry.PivotY
         );
@@ -95,31 +71,23 @@ public class Sprite(string? name = null, Anchor? position = null) : BaseComponen
     /// </summary>
     public void CenterOrigin()
     {
-        if (_sourceRectangle.HasValue)
-        {
-            _origin = new Vector2(_sourceRectangle.Value.Width / 2f, _sourceRectangle.Value.Height / 2f);
-        }
-        else if (_texture != null)
-        {
-            _origin = new Vector2(_texture.Width / 2f, _texture.Height / 2f);
-        }
+        if (SourceRectangle.HasValue)
+            Origin = new Vector2(SourceRectangle.Value.Width / 2f, SourceRectangle.Value.Height / 2f);
+        else if (Texture is not null)
+            Origin = new Vector2(Texture.Width / 2f, Texture.Height / 2f);
     }
 
     private void UpdateSize()
     {
-        if (_sourceRectangle.HasValue)
-        {
-            Size = new Vector2(_sourceRectangle.Value.Width, _sourceRectangle.Value.Height);
-        }
-        else if (_texture != null)
-        {
-            Size = new Vector2(_texture.Width, _texture.Height);
-        }
+        if (SourceRectangle.HasValue)
+            Size = new Vector2(SourceRectangle.Value.Width, SourceRectangle.Value.Height);
+        else if (Texture is not null)
+            Size = new Vector2(Texture.Width, Texture.Height);
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        if (Texture != null)
+        if (Texture is not null)
         {
             var pos = Position.GetVector2();
 
@@ -129,7 +97,7 @@ public class Sprite(string? name = null, Anchor? position = null) : BaseComponen
                 SourceRectangle,
                 Tint,
                 Rotation,
-                _origin,
+                Origin,
                 Scale,
                 Effects,
                 LayerDepth

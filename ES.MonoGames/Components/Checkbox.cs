@@ -11,15 +11,6 @@ namespace Components;
 /// </summary>
 public class Checkbox : BaseComponent
 {
-    // Checked state sprites
-    private Texture2D? _checkedTexture;
-    private Rectangle? _checkedSourceRect;
-
-    // Unchecked state sprites
-    private Texture2D? _uncheckedTexture;
-    private Rectangle? _uncheckedSourceRect;
-
-
     /// <summary>
     /// Whether the checkbox is checked.
     /// </summary>
@@ -33,42 +24,26 @@ public class Checkbox : BaseComponent
     // Sprite properties
     public Texture2D? CheckedTexture
     {
-        get => _checkedTexture;
-        set
-        {
-            _checkedTexture = value;
-            UpdateSizeFromSprite();
-        }
+        get;
+        set { field = value; UpdateSizeFromSprite(); }
     }
 
     public Rectangle? CheckedSourceRect
     {
-        get => _checkedSourceRect;
-        set
-        {
-            _checkedSourceRect = value;
-            UpdateSizeFromSprite();
-        }
+        get;
+        set { field = value; UpdateSizeFromSprite(); }
     }
 
     public Texture2D? UncheckedTexture
     {
-        get => _uncheckedTexture;
-        set
-        {
-            _uncheckedTexture = value;
-            UpdateSizeFromSprite();
-        }
+        get;
+        set { field = value; UpdateSizeFromSprite(); }
     }
 
     public Rectangle? UncheckedSourceRect
     {
-        get => _uncheckedSourceRect;
-        set
-        {
-            _uncheckedSourceRect = value;
-            UpdateSizeFromSprite();
-        }
+        get;
+        set { field = value; UpdateSizeFromSprite(); }
     }
 
     public Texture2D? CheckedDisabledTexture { get; set; } = null;
@@ -175,7 +150,7 @@ public class Checkbox : BaseComponent
     /// </summary>
     public void SetCheckedSprite(TextureResult? result)
     {
-        if (result == null)
+        if (result is null)
         {
             CheckedTexture = null;
             CheckedSourceRect = null;
@@ -196,7 +171,7 @@ public class Checkbox : BaseComponent
     /// </summary>
     public void SetUncheckedSprite(TextureResult? result)
     {
-        if (result == null)
+        if (result is null)
         {
             UncheckedTexture = null;
             UncheckedSourceRect = null;
@@ -217,7 +192,7 @@ public class Checkbox : BaseComponent
     /// </summary>
     public void SetCheckedDisabledSprite(TextureResult? result)
     {
-        if (result == null)
+        if (result is null)
         {
             CheckedDisabledTexture = null;
             CheckedDisabledSourceRect = null;
@@ -238,7 +213,7 @@ public class Checkbox : BaseComponent
     /// </summary>
     public void SetUncheckedDisabledSprite(TextureResult? result)
     {
-        if (result == null)
+        if (result is null)
         {
             UncheckedDisabledTexture = null;
             UncheckedDisabledSourceRect = null;
@@ -273,27 +248,27 @@ public class Checkbox : BaseComponent
     private void UpdateSizeFromSprite()
     {
         // Prefer unchecked sprite for size, fall back to checked
-        if (_uncheckedSourceRect.HasValue)
+        if (UncheckedSourceRect.HasValue)
         {
-            Size = new Vector2(_uncheckedSourceRect.Value.Width, _uncheckedSourceRect.Value.Height);
+            Size = new Vector2(UncheckedSourceRect.Value.Width, UncheckedSourceRect.Value.Height);
         }
-        else if (_uncheckedTexture != null)
+        else if (UncheckedTexture is not null)
         {
-            Size = new Vector2(_uncheckedTexture.Width, _uncheckedTexture.Height);
+            Size = new Vector2(UncheckedTexture.Width, UncheckedTexture.Height);
         }
-        else if (_checkedSourceRect.HasValue)
+        else if (CheckedSourceRect.HasValue)
         {
-            Size = new Vector2(_checkedSourceRect.Value.Width, _checkedSourceRect.Value.Height);
+            Size = new Vector2(CheckedSourceRect.Value.Width, CheckedSourceRect.Value.Height);
         }
-        else if (_checkedTexture != null)
+        else if (CheckedTexture is not null)
         {
-            Size = new Vector2(_checkedTexture.Width, _checkedTexture.Height);
+            Size = new Vector2(CheckedTexture.Width, CheckedTexture.Height);
         }
     }
 
     private bool HasSprites()
     {
-        return _checkedTexture != null || _uncheckedTexture != null;
+        return CheckedTexture is not null || UncheckedTexture is not null;
     }
 
     public override void Update(GameTime gameTime)
@@ -307,9 +282,7 @@ public class Checkbox : BaseComponent
 
         // Update size for box mode (in case BoxSize changed)
         if (!HasSprites())
-        {
             Size = new Vector2(BoxSize, BoxSize);
-        }
 
         base.Update(gameTime);
     }
@@ -319,16 +292,12 @@ public class Checkbox : BaseComponent
         var pos = Position.GetVector2();
 
         if (HasSprites())
-        {
             DrawSpriteMode(spriteBatch, pos);
-        }
         else
-        {
             DrawBoxMode(spriteBatch, pos);
-        }
 
         // Draw label if set
-        if (Label != null && Font != null)
+        if (Label is not null && Font is not null)
         {
             var checkboxWidth = HasSprites() ? Size.X : BoxSize;
             var checkboxHeight = HasSprites() ? Size.Y : BoxSize;
@@ -351,7 +320,7 @@ public class Checkbox : BaseComponent
     {
         var (texture, sourceRect, tint) = GetCurrentSprite();
 
-        if (texture != null)
+        if (texture is not null)
         {
             spriteBatch.Draw(
                 texture,
@@ -374,28 +343,28 @@ public class Checkbox : BaseComponent
             if (IsChecked)
             {
                 return (
-                    CheckedDisabledTexture ?? _checkedTexture,
-                    CheckedDisabledSourceRect ?? _checkedSourceRect,
-                    CheckedDisabledTexture != null ? Tint : DisabledTint
+                    CheckedDisabledTexture ?? CheckedTexture,
+                    CheckedDisabledSourceRect ?? CheckedSourceRect,
+                    CheckedDisabledTexture is not null ? Tint : DisabledTint
                 );
             }
             else
             {
                 return (
-                    UncheckedDisabledTexture ?? _uncheckedTexture,
-                    UncheckedDisabledSourceRect ?? _uncheckedSourceRect,
-                    UncheckedDisabledTexture != null ? Tint : DisabledTint
+                    UncheckedDisabledTexture ?? UncheckedTexture,
+                    UncheckedDisabledSourceRect ?? UncheckedSourceRect,
+                    UncheckedDisabledTexture is not null ? Tint : DisabledTint
                 );
             }
         }
 
         if (IsChecked)
         {
-            return (_checkedTexture, _checkedSourceRect, Tint);
+            return (CheckedTexture, CheckedSourceRect, Tint);
         }
         else
         {
-            return (_uncheckedTexture, _uncheckedSourceRect, Tint);
+            return (UncheckedTexture, UncheckedSourceRect, Tint);
         }
     }
 
@@ -447,7 +416,7 @@ public class Checkbox : BaseComponent
         DrawThickLine(spriteBatch, midX, midY, endX, endY, thickness, color);
     }
 
-    private void DrawThickLine(SpriteBatch spriteBatch, int x1, int y1, int x2, int y2, int thickness, Color color)
+    private static void DrawThickLine(SpriteBatch spriteBatch, int x1, int y1, int x2, int y2, int thickness, Color color)
     {
         // Calculate line properties
         var dx = x2 - x1;

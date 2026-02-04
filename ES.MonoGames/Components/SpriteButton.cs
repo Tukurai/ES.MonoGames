@@ -10,101 +10,44 @@ namespace Components;
 /// </summary>
 public class SpriteButton(string? name = null, Anchor? position = null, Vector2? size = null) : BaseComponent(name, position, size)
 {
-    // Normal state sprite
-    private Texture2D? _normalTexture;
-    private Rectangle? _normalSourceRect;
-
-    // Hovered state sprite
-    private Texture2D? _hoveredTexture;
-    private Rectangle? _hoveredSourceRect;
-
-    // Pressed state sprite
-    private Texture2D? _pressedTexture;
-    private Rectangle? _pressedSourceRect;
-
-    // Disabled state sprite
-    private Texture2D? _disabledTexture;
-    private Rectangle? _disabledSourceRect;
-
     /// <summary>
     /// The texture to display in normal state.
     /// </summary>
-    public Texture2D? NormalTexture
-    {
-        get => _normalTexture;
-        set
-        {
-            _normalTexture = value;
-            UpdateSizeFromSprite();
-        }
-    }
+    public Texture2D? NormalTexture { get; set { field = value; UpdateSizeFromSprite(); } }
 
     /// <summary>
     /// Source rectangle for normal state sprite (for atlas usage).
     /// </summary>
-    public Rectangle? NormalSourceRect
-    {
-        get => _normalSourceRect;
-        set
-        {
-            _normalSourceRect = value;
-            UpdateSizeFromSprite();
-        }
-    }
+    public Rectangle? NormalSourceRect { get; set { field = value; UpdateSizeFromSprite(); } }
 
     /// <summary>
     /// The texture to display when hovered.
     /// </summary>
-    public Texture2D? HoveredTexture
-    {
-        get => _hoveredTexture;
-        set => _hoveredTexture = value;
-    }
+    public Texture2D? HoveredTexture { get; set; }
 
     /// <summary>
     /// Source rectangle for hovered state sprite.
     /// </summary>
-    public Rectangle? HoveredSourceRect
-    {
-        get => _hoveredSourceRect;
-        set => _hoveredSourceRect = value;
-    }
+    public Rectangle? HoveredSourceRect { get; set; }
 
     /// <summary>
     /// The texture to display when pressed.
     /// </summary>
-    public Texture2D? PressedTexture
-    {
-        get => _pressedTexture;
-        set => _pressedTexture = value;
-    }
-
+    public Texture2D? PressedTexture { get; set; }
     /// <summary>
     /// Source rectangle for pressed state sprite.
     /// </summary>
-    public Rectangle? PressedSourceRect
-    {
-        get => _pressedSourceRect;
-        set => _pressedSourceRect = value;
-    }
+    public Rectangle? PressedSourceRect { get; set; }
 
     /// <summary>
     /// The texture to display when disabled.
     /// </summary>
-    public Texture2D? DisabledTexture
-    {
-        get => _disabledTexture;
-        set => _disabledTexture = value;
-    }
+    public Texture2D? DisabledTexture { get; set; }
 
     /// <summary>
     /// Source rectangle for disabled state sprite.
     /// </summary>
-    public Rectangle? DisabledSourceRect
-    {
-        get => _disabledSourceRect;
-        set => _disabledSourceRect = value;
-    }
+    public Rectangle? DisabledSourceRect { get; set; }
 
     /// <summary>
     /// Whether the button is enabled and can be interacted with.
@@ -156,7 +99,7 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
     /// </summary>
     public void SetNormalSprite(TextureResult? result)
     {
-        if (result == null)
+        if (result is null)
         {
             NormalTexture = null;
             NormalSourceRect = null;
@@ -177,7 +120,7 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
     /// </summary>
     public void SetHoveredSprite(TextureResult? result)
     {
-        if (result == null)
+        if (result is null)
         {
             HoveredTexture = null;
             HoveredSourceRect = null;
@@ -198,7 +141,7 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
     /// </summary>
     public void SetPressedSprite(TextureResult? result)
     {
-        if (result == null)
+        if (result is null)
         {
             PressedTexture = null;
             PressedSourceRect = null;
@@ -219,7 +162,7 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
     /// </summary>
     public void SetDisabledSprite(TextureResult? result)
     {
-        if (result == null)
+        if (result is null)
         {
             DisabledTexture = null;
             DisabledSourceRect = null;
@@ -237,14 +180,10 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
 
     private void UpdateSizeFromSprite()
     {
-        if (_normalSourceRect.HasValue)
-        {
-            Size = new Vector2(_normalSourceRect.Value.Width, _normalSourceRect.Value.Height);
-        }
-        else if (_normalTexture != null)
-        {
-            Size = new Vector2(_normalTexture.Width, _normalTexture.Height);
-        }
+        if (NormalSourceRect.HasValue)
+            Size = new Vector2(NormalSourceRect.Value.Width, NormalSourceRect.Value.Height);
+        else if (NormalTexture is not null)
+            Size = new Vector2(NormalTexture.Width, NormalTexture.Height);
     }
 
     public override void Update(GameTime gameTime)
@@ -264,7 +203,7 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
     {
         var (texture, sourceRect, tint) = GetCurrentSprite();
 
-        if (texture != null)
+        if (texture is not null)
         {
             var pos = Position.GetVector2();
 
@@ -282,10 +221,8 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
         }
 
         // Draw text overlay if configured
-        if (Text != null && Font != null)
-        {
+        if (Text is not null && Font is not null)
             DrawTextOverlay(spriteBatch);
-        }
 
         base.Draw(spriteBatch);
     }
@@ -296,8 +233,8 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
         {
             // Disabled state: use disabled sprite or fall back to normal with disabled tint
             return (
-                _disabledTexture ?? _normalTexture,
-                _disabledSourceRect ?? _normalSourceRect,
+                DisabledTexture ?? NormalTexture,
+                DisabledSourceRect ?? NormalSourceRect,
                 DisabledTint
             );
         }
@@ -305,28 +242,28 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
         if (Pressed)
         {
             // Pressed state: pressed -> hovered -> normal
-            if (_pressedTexture != null)
-                return (_pressedTexture, _pressedSourceRect, Tint);
-            if (_hoveredTexture != null)
-                return (_hoveredTexture, _hoveredSourceRect, Tint);
-            return (_normalTexture, _normalSourceRect, Tint);
+            if (PressedTexture is not null)
+                return (PressedTexture, PressedSourceRect, Tint);
+            if (HoveredTexture is not null)
+                return (HoveredTexture, HoveredSourceRect, Tint);
+            return (NormalTexture, NormalSourceRect, Tint);
         }
 
         if (Hovered)
         {
             // Hovered state: hovered -> normal
-            if (_hoveredTexture != null)
-                return (_hoveredTexture, _hoveredSourceRect, Tint);
-            return (_normalTexture, _normalSourceRect, Tint);
+            if (HoveredTexture is not null)
+                return (HoveredTexture, HoveredSourceRect, Tint);
+            return (NormalTexture, NormalSourceRect, Tint);
         }
 
         // Normal state
-        return (_normalTexture, _normalSourceRect, Tint);
+        return (NormalTexture, NormalSourceRect, Tint);
     }
 
     private void DrawTextOverlay(SpriteBatch spriteBatch)
     {
-        if (Text == null || Font == null) return;
+        if (Text is null || Font is null) return;
 
         var pos = Position.GetVector2();
         var textSize = Font.MeasureString(Text);
@@ -339,13 +276,9 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
 
         var textColor = IsEnabled ? TextColor : DisabledTint;
 
-        if (TextBorder != null && TextBorder.Thickness > 0)
-        {
+        if (TextBorder is not null && TextBorder.Thickness > 0)
             RendererHelper.DrawOutlinedString(spriteBatch, Font, Text, textPos, textColor, TextBorder);
-        }
         else
-        {
             spriteBatch.DrawString(Font, Text, textPos, textColor);
-        }
     }
 }

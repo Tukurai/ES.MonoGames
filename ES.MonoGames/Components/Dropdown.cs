@@ -11,8 +11,6 @@ namespace Components;
 /// </summary>
 public class Dropdown : BaseComponent
 {
-    private bool _isExpanded = false;
-    private int _selectedIndex = -1;
     private int _hoveredIndex = -1;
 
     /// <summary>
@@ -25,13 +23,13 @@ public class Dropdown : BaseComponent
     /// </summary>
     public int SelectedIndex
     {
-        get => _selectedIndex;
+        get;
         set
         {
-            if (value >= -1 && value < Items.Count && _selectedIndex != value)
+            if (value >= -1 && value < Items.Count && SelectedIndex != value)
             {
-                _selectedIndex = value;
-                OnSelectionChanged?.Invoke(_selectedIndex);
+                field = value;
+                OnSelectionChanged?.Invoke(SelectedIndex);
             }
         }
     }
@@ -39,7 +37,7 @@ public class Dropdown : BaseComponent
     /// <summary>
     /// The currently selected item, or null if nothing is selected.
     /// </summary>
-    public string? SelectedItem => _selectedIndex >= 0 && _selectedIndex < Items.Count ? Items[_selectedIndex] : null;
+    public string? SelectedItem => SelectedIndex >= 0 && SelectedIndex < Items.Count ? Items[SelectedIndex] : null;
 
     /// <summary>
     /// Whether the dropdown is enabled and can be interacted with.
@@ -49,7 +47,7 @@ public class Dropdown : BaseComponent
     /// <summary>
     /// Whether the dropdown list is currently expanded.
     /// </summary>
-    public bool IsExpanded => _isExpanded;
+    public bool IsExpanded { get; private set; } = false;
 
     /// <summary>
     /// Font for rendering text.
@@ -178,7 +176,7 @@ public class Dropdown : BaseComponent
         {
             Hovered = false;
             Pressed = false;
-            _isExpanded = false;
+            IsExpanded = false;
             _hoveredIndex = -1;
             return;
         }
@@ -192,14 +190,12 @@ public class Dropdown : BaseComponent
 
         // Dropdown list area (if expanded)
         var listRect = GetListRect();
-        var mouseInList = _isExpanded && listRect.Contains(mousePos);
+        var mouseInList = IsExpanded && listRect.Contains(mousePos);
 
         // Register the list area as an input blocker when expanded
         // This prevents other components from receiving input in this area
-        if (_isExpanded)
-        {
+        if (IsExpanded)
             OverlayManager.RegisterInputBlocker(listRect);
-        }
 
         // Update hovered item index
         _hoveredIndex = -1;
@@ -221,15 +217,15 @@ public class Dropdown : BaseComponent
             if (mouseInButton)
             {
                 // Toggle expanded state
-                _isExpanded = !_isExpanded;
-                if (_isExpanded)
+                IsExpanded = !IsExpanded;
+                if (IsExpanded)
                 {
                     // Reset scroll when opening
                     _scrollOffset = 0;
                     // Scroll to show selected item if possible
-                    if (_selectedIndex >= 0)
+                    if (SelectedIndex >= 0)
                     {
-                        EnsureItemVisible(_selectedIndex);
+                        EnsureItemVisible(SelectedIndex);
                     }
                 }
             }
@@ -237,17 +233,17 @@ public class Dropdown : BaseComponent
             {
                 // Select the clicked item
                 SelectedIndex = _hoveredIndex;
-                _isExpanded = false;
+                IsExpanded = false;
             }
-            else if (_isExpanded)
+            else if (IsExpanded)
             {
                 // Click outside - close dropdown
-                _isExpanded = false;
+                IsExpanded = false;
             }
         }
 
         // Handle scroll wheel when list is expanded and mouse is over it
-        if (_isExpanded && mouseInList)
+        if (IsExpanded && mouseInList)
         {
             var scrollDelta = ControlState.GetScrollWheelDelta();
             if (scrollDelta != 0)
@@ -311,7 +307,7 @@ public class Dropdown : BaseComponent
         DrawButton(spriteBatch, pos);
 
         // Register dropdown list to be drawn as an overlay (on top of everything)
-        if (_isExpanded)
+        if (IsExpanded)
         {
             // Capture pos for the lambda
             var capturedPos = pos;
@@ -329,7 +325,7 @@ public class Dropdown : BaseComponent
         Color bgColor;
         if (!IsEnabled)
             bgColor = DisabledTint;
-        else if (Hovered || _isExpanded)
+        else if (Hovered || IsExpanded)
             bgColor = BackgroundHovered;
         else
             bgColor = Background;
@@ -337,7 +333,7 @@ public class Dropdown : BaseComponent
         spriteBatch.Draw(RendererHelper.WhitePixel, buttonRect, bgColor);
 
         // Border
-        var border = _isExpanded ? FocusedBorder : Border;
+        var border = IsExpanded ? FocusedBorder : Border;
         if (border != null)
         {
             RendererHelper.Draw(spriteBatch, border, pos, Size, Vector2.One);
@@ -382,16 +378,10 @@ public class Dropdown : BaseComponent
         var arrowY = pos.Y + Size.Y / 2;
         var offset = ArrowSize / 3;
 
-        if (_isExpanded)
-        {
-            // Arrow pointing up
+        if (IsExpanded)
             DrawTriangle(spriteBatch, arrowX, arrowY + offset, ArrowSize, true, arrowColor);
-        }
         else
-        {
-            // Arrow pointing down
             DrawTriangle(spriteBatch, arrowX, arrowY - offset, ArrowSize, false, arrowColor);
-        }
     }
 
     private void DrawTriangle(SpriteBatch spriteBatch, float centerX, float centerY, int size, bool pointingUp, Color color)
@@ -454,7 +444,7 @@ public class Dropdown : BaseComponent
             Color itemBg;
             if (itemIndex == _hoveredIndex)
                 itemBg = ItemHoveredBackground;
-            else if (itemIndex == _selectedIndex)
+            else if (itemIndex == SelectedIndex)
                 itemBg = ItemSelectedBackground;
             else
                 itemBg = ListBackground;

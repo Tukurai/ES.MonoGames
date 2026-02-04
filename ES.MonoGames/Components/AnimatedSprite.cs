@@ -20,22 +20,20 @@ public enum AnimationState
 /// A sprite component that displays a sequence of frames with configurable timing.
 /// Supports automatic playback, manual stepping, and various playback controls.
 /// </summary>
-public class AnimatedSprite : BaseComponent
+public class AnimatedSprite(string? name = null, Anchor? position = null) : BaseComponent(name, position)
 {
     private readonly List<(Texture2D texture, Rectangle? sourceRect)> _frames = [];
-    private int _currentFrameIndex = 0;
     private float _frameTimer = 0f;
-    private AnimationState _state = AnimationState.Stopped;
 
     /// <summary>
     /// The current animation state.
     /// </summary>
-    public AnimationState State => _state;
+    public AnimationState State { get; private set; } = AnimationState.Stopped;
 
     /// <summary>
     /// The current frame index.
     /// </summary>
-    public int CurrentFrameIndex => _currentFrameIndex;
+    public int CurrentFrameIndex { get; private set; }
 
     /// <summary>
     /// Total number of frames in the animation.
@@ -98,10 +96,6 @@ public class AnimatedSprite : BaseComponent
     /// </summary>
     public event Action? OnAnimationLoop;
 
-    public AnimatedSprite(string? name = null, Anchor? position = null) : base(name, position)
-    {
-    }
-
     /// <summary>
     /// Adds a frame from a texture.
     /// </summary>
@@ -111,9 +105,7 @@ public class AnimatedSprite : BaseComponent
         UpdateSizeFromCurrentFrame();
 
         if (AutoStart && _frames.Count == 1)
-        {
             Play();
-        }
     }
 
     /// <summary>
@@ -139,9 +131,7 @@ public class AnimatedSprite : BaseComponent
     public void AddFrames(params TextureResult?[] results)
     {
         foreach (var result in results)
-        {
             AddFrame(result);
-        }
     }
 
     /// <summary>
@@ -150,9 +140,7 @@ public class AnimatedSprite : BaseComponent
     public void AddFrames(params Texture2D[] textures)
     {
         foreach (var texture in textures)
-        {
             AddFrame(texture);
-        }
     }
 
     /// <summary>
@@ -161,9 +149,9 @@ public class AnimatedSprite : BaseComponent
     public void ClearFrames()
     {
         _frames.Clear();
-        _currentFrameIndex = 0;
+        CurrentFrameIndex = 0;
         _frameTimer = 0f;
-        _state = AnimationState.Stopped;
+        State = AnimationState.Stopped;
     }
 
     /// <summary>
@@ -172,7 +160,7 @@ public class AnimatedSprite : BaseComponent
     public void Play()
     {
         if (_frames.Count == 0) return;
-        _state = AnimationState.Playing;
+        State = AnimationState.Playing;
     }
 
     /// <summary>
@@ -180,10 +168,8 @@ public class AnimatedSprite : BaseComponent
     /// </summary>
     public void Pause()
     {
-        if (_state == AnimationState.Playing)
-        {
-            _state = AnimationState.Paused;
-        }
+        if (State == AnimationState.Playing)
+            State = AnimationState.Paused;
     }
 
     /// <summary>
@@ -191,10 +177,10 @@ public class AnimatedSprite : BaseComponent
     /// </summary>
     public void Stop()
     {
-        _state = AnimationState.Stopped;
-        _currentFrameIndex = Reverse ? _frames.Count - 1 : 0;
+        State = AnimationState.Stopped;
+        CurrentFrameIndex = Reverse ? _frames.Count - 1 : 0;
         _frameTimer = 0f;
-        OnFrameChanged?.Invoke(_currentFrameIndex);
+        OnFrameChanged?.Invoke(CurrentFrameIndex);
     }
 
     /// <summary>
@@ -202,9 +188,9 @@ public class AnimatedSprite : BaseComponent
     /// </summary>
     public void Reset()
     {
-        _currentFrameIndex = Reverse ? _frames.Count - 1 : 0;
+        CurrentFrameIndex = Reverse ? _frames.Count - 1 : 0;
         _frameTimer = 0f;
-        OnFrameChanged?.Invoke(_currentFrameIndex);
+        OnFrameChanged?.Invoke(CurrentFrameIndex);
     }
 
     /// <summary>
@@ -214,46 +200,46 @@ public class AnimatedSprite : BaseComponent
     {
         if (_frames.Count == 0) return;
 
-        var previousIndex = _currentFrameIndex;
+        var previousIndex = CurrentFrameIndex;
 
         if (Reverse)
         {
-            _currentFrameIndex--;
-            if (_currentFrameIndex < 0)
+            CurrentFrameIndex--;
+            if (CurrentFrameIndex < 0)
             {
                 if (Loop)
                 {
-                    _currentFrameIndex = _frames.Count - 1;
+                    CurrentFrameIndex = _frames.Count - 1;
                     OnAnimationLoop?.Invoke();
                 }
                 else
                 {
-                    _currentFrameIndex = 0;
+                    CurrentFrameIndex = 0;
                     OnAnimationComplete?.Invoke();
                 }
             }
         }
         else
         {
-            _currentFrameIndex++;
-            if (_currentFrameIndex >= _frames.Count)
+            CurrentFrameIndex++;
+            if (CurrentFrameIndex >= _frames.Count)
             {
                 if (Loop)
                 {
-                    _currentFrameIndex = 0;
+                    CurrentFrameIndex = 0;
                     OnAnimationLoop?.Invoke();
                 }
                 else
                 {
-                    _currentFrameIndex = _frames.Count - 1;
+                    CurrentFrameIndex = _frames.Count - 1;
                     OnAnimationComplete?.Invoke();
                 }
             }
         }
 
-        if (previousIndex != _currentFrameIndex)
+        if (previousIndex != CurrentFrameIndex)
         {
-            OnFrameChanged?.Invoke(_currentFrameIndex);
+            OnFrameChanged?.Invoke(CurrentFrameIndex);
         }
 
         _frameTimer = 0f;
@@ -266,44 +252,44 @@ public class AnimatedSprite : BaseComponent
     {
         if (_frames.Count == 0) return;
 
-        var previousIndex = _currentFrameIndex;
+        var previousIndex = CurrentFrameIndex;
 
         if (Reverse)
         {
-            _currentFrameIndex++;
-            if (_currentFrameIndex >= _frames.Count)
+            CurrentFrameIndex++;
+            if (CurrentFrameIndex >= _frames.Count)
             {
                 if (Loop)
                 {
-                    _currentFrameIndex = 0;
+                    CurrentFrameIndex = 0;
                     OnAnimationLoop?.Invoke();
                 }
                 else
                 {
-                    _currentFrameIndex = _frames.Count - 1;
+                    CurrentFrameIndex = _frames.Count - 1;
                 }
             }
         }
         else
         {
-            _currentFrameIndex--;
-            if (_currentFrameIndex < 0)
+            CurrentFrameIndex--;
+            if (CurrentFrameIndex < 0)
             {
                 if (Loop)
                 {
-                    _currentFrameIndex = _frames.Count - 1;
+                    CurrentFrameIndex = _frames.Count - 1;
                     OnAnimationLoop?.Invoke();
                 }
                 else
                 {
-                    _currentFrameIndex = 0;
+                    CurrentFrameIndex = 0;
                 }
             }
         }
 
-        if (previousIndex != _currentFrameIndex)
+        if (previousIndex != CurrentFrameIndex)
         {
-            OnFrameChanged?.Invoke(_currentFrameIndex);
+            OnFrameChanged?.Invoke(CurrentFrameIndex);
         }
 
         _frameTimer = 0f;
@@ -317,11 +303,11 @@ public class AnimatedSprite : BaseComponent
         if (_frames.Count == 0) return;
 
         var clampedIndex = Math.Clamp(frameIndex, 0, _frames.Count - 1);
-        if (_currentFrameIndex != clampedIndex)
+        if (CurrentFrameIndex != clampedIndex)
         {
-            _currentFrameIndex = clampedIndex;
+            CurrentFrameIndex = clampedIndex;
             _frameTimer = 0f;
-            OnFrameChanged?.Invoke(_currentFrameIndex);
+            OnFrameChanged?.Invoke(CurrentFrameIndex);
         }
     }
 
@@ -329,22 +315,18 @@ public class AnimatedSprite : BaseComponent
     {
         if (_frames.Count == 0) return;
 
-        var (texture, sourceRect) = _frames[_currentFrameIndex];
+        var (texture, sourceRect) = _frames[CurrentFrameIndex];
         if (sourceRect.HasValue)
-        {
             Size = new Vector2(sourceRect.Value.Width, sourceRect.Value.Height);
-        }
         else
-        {
             Size = new Vector2(texture.Width, texture.Height);
-        }
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
 
-        if (_state != AnimationState.Playing || _frames.Count <= 1)
+        if (State != AnimationState.Playing || _frames.Count <= 1)
             return;
 
         _frameTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -360,7 +342,7 @@ public class AnimatedSprite : BaseComponent
     {
         if (_frames.Count == 0) return;
 
-        var (texture, sourceRect) = _frames[_currentFrameIndex];
+        var (texture, sourceRect) = _frames[CurrentFrameIndex];
         var pos = Position.GetVector2();
 
         spriteBatch.Draw(

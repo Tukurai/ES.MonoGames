@@ -132,9 +132,7 @@ public abstract class BaseComponent
     public virtual void Initialize()
     {
         foreach (var child in Children)
-        {
             child.Initialize();
-        }
     }
 
     public virtual void Update(GameTime gameTime)
@@ -206,9 +204,7 @@ public abstract class BaseComponent
         }
 
         foreach (var child in Children)
-        {
             child.Update(gameTime);
-        }
 
         OnComponentUpdated?.Invoke();
     }
@@ -216,9 +212,7 @@ public abstract class BaseComponent
     public virtual void Draw(SpriteBatch spriteBatch)
     {
         foreach (var child in Children)
-        {
             child.Draw(spriteBatch);
-        }
     }
 
     public override string ToString()

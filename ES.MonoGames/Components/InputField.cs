@@ -365,174 +365,189 @@ public class InputField(
             return;
         }
 
-        if (key == Keys.Escape)
+        switch (key)
         {
-            _focusedField = null;
-            ClearSelection();
-            OnFocusLost?.Invoke();
-        }
-        else if (key == Keys.Enter)
-        {
-            if (Multiline)
-            {
-                InsertTextAtCursor("\n");
-            }
-            else
-            {
-                OnSubmit?.Invoke();
-            }
-        }
-        else if (key == Keys.Back)
-        {
-            if (HasSelection)
-            {
-                DeleteSelection();
-            }
-            else if (_cursorPosition > 0)
-            {
-                Text = Text.Remove(_cursorPosition - 1, 1);
-                _cursorPosition--;
-                OnTextChanged?.Invoke(Text);
-            }
-        }
-        else if (key == Keys.Delete)
-        {
-            if (HasSelection)
-            {
-                DeleteSelection();
-            }
-            else if (_cursorPosition < Text.Length)
-            {
-                Text = Text.Remove(_cursorPosition, 1);
-                OnTextChanged?.Invoke(Text);
-            }
-        }
-        else if (key == Keys.Left)
-        {
-            if (ctrlHeld)
-            {
-                // Word jump
-                var newPos = FindPreviousWordBoundary(_cursorPosition);
-                if (shiftHeld)
+            case Keys.Escape:
+                _focusedField = null;
+                ClearSelection();
+                OnFocusLost?.Invoke();
+                break;
+            case Keys.Enter:
+                if (Multiline)
                 {
-                    if (!HasSelection) _selectionStart = _cursorPosition;
-                    _selectionEnd = newPos;
+                    InsertTextAtCursor("\n");
                 }
-                else ClearSelection();
-                _cursorPosition = newPos;
-            }
-            else if (shiftHeld)
-            {
-                // Extend selection
-                if (!HasSelection) _selectionStart = _cursorPosition;
-                if (_cursorPosition > 0) _cursorPosition--;
-                _selectionEnd = _cursorPosition;
-            }
-            else
-            {
-                // Normal movement
+                else
+                {
+                    OnSubmit?.Invoke();
+                }
+                break;
+            case Keys.Back:
                 if (HasSelection)
                 {
-                    _cursorPosition = SelectionMin;
-                    ClearSelection();
+                    DeleteSelection();
                 }
                 else if (_cursorPosition > 0)
-                    _cursorPosition--;
-            }
-        }
-        else if (key == Keys.Right)
-        {
-            if (ctrlHeld)
-            {
-                // Word jump
-                var newPos = FindNextWordBoundary(_cursorPosition);
-                if (shiftHeld)
                 {
-                    if (!HasSelection) _selectionStart = _cursorPosition;
-                    _selectionEnd = newPos;
+                    Text = Text.Remove(_cursorPosition - 1, 1);
+                    _cursorPosition--;
+                    OnTextChanged?.Invoke(Text);
                 }
-                else ClearSelection();
-                _cursorPosition = newPos;
-            }
-            else if (shiftHeld)
-            {
-                // Extend selection
-                if (!HasSelection) _selectionStart = _cursorPosition;
-                if (_cursorPosition < Text.Length) _cursorPosition++;
-                _selectionEnd = _cursorPosition;
-            }
-            else
-            {
-                // Normal movement
+                break;
+            case Keys.Delete:
                 if (HasSelection)
                 {
-                    _cursorPosition = SelectionMax;
-                    ClearSelection();
+                    DeleteSelection();
                 }
                 else if (_cursorPosition < Text.Length)
-                    _cursorPosition++;
-            }
-        }
-        else if (key == Keys.Home)
-        {
-            if (shiftHeld)
-            {
-                if (!HasSelection) _selectionStart = _cursorPosition;
-                _selectionEnd = 0;
-            }
-            else ClearSelection();
-            _cursorPosition = 0;
-        }
-        else if (key == Keys.End)
-        {
-            if (shiftHeld)
-            {
-                if (!HasSelection) _selectionStart = _cursorPosition;
-                _selectionEnd = Text.Length;
-            }
-            else ClearSelection();
-            _cursorPosition = Text.Length;
-        }
-        else if (key == Keys.Up && Multiline)
-        {
-            int currentLine = GetLineFromPosition(_cursorPosition);
-            if (currentLine > 0)
-            {
-                int column = GetColumnFromPosition(_cursorPosition);
-                int newPos = GetPositionFromLineColumn(currentLine - 1, column);
+                {
+                    Text = Text.Remove(_cursorPosition, 1);
+                    OnTextChanged?.Invoke(Text);
+                }
+                break;
+            case Keys.Left:
+                {
+                    if (ctrlHeld)
+                    {
+                        // Word jump
+                        var newPos = FindPreviousWordBoundary(_cursorPosition);
+                        if (shiftHeld)
+                        {
+                            if (!HasSelection) _selectionStart = _cursorPosition;
+                            _selectionEnd = newPos;
+                        }
+                        else ClearSelection();
+                        _cursorPosition = newPos;
+                    }
+                    else if (shiftHeld)
+                    {
+                        // Extend selection
+                        if (!HasSelection) _selectionStart = _cursorPosition;
+                        if (_cursorPosition > 0) _cursorPosition--;
+                        _selectionEnd = _cursorPosition;
+                    }
+                    else
+                    {
+                        // Normal movement
+                        if (HasSelection)
+                        {
+                            _cursorPosition = SelectionMin;
+                            ClearSelection();
+                        }
+                        else if (_cursorPosition > 0)
+                            _cursorPosition--;
+                    }
+
+                    break;
+                }
+
+            case Keys.Right:
+                {
+                    if (ctrlHeld)
+                    {
+                        // Word jump
+                        var newPos = FindNextWordBoundary(_cursorPosition);
+                        if (shiftHeld)
+                        {
+                            if (!HasSelection) _selectionStart = _cursorPosition;
+                            _selectionEnd = newPos;
+                        }
+                        else ClearSelection();
+                        _cursorPosition = newPos;
+                    }
+                    else if (shiftHeld)
+                    {
+                        // Extend selection
+                        if (!HasSelection) _selectionStart = _cursorPosition;
+                        if (_cursorPosition < Text.Length) _cursorPosition++;
+                        _selectionEnd = _cursorPosition;
+                    }
+                    else
+                    {
+                        // Normal movement
+                        if (HasSelection)
+                        {
+                            _cursorPosition = SelectionMax;
+                            ClearSelection();
+                        }
+                        else if (_cursorPosition < Text.Length)
+                            _cursorPosition++;
+                    }
+
+                    break;
+                }
+
+            case Keys.Home:
                 if (shiftHeld)
                 {
-                    if (!HasSelection) _selectionStart = _cursorPosition;
-                    _selectionEnd = newPos;
+                    if (!HasSelection) 
+                        _selectionStart = _cursorPosition;
+                    _selectionEnd = 0;
                 }
                 else ClearSelection();
-                _cursorPosition = newPos;
-            }
-        }
-        else if (key == Keys.Down && Multiline)
-        {
-            int currentLine = GetLineFromPosition(_cursorPosition);
-            int lineCount = GetLineCount();
-            if (currentLine < lineCount - 1)
-            {
-                int column = GetColumnFromPosition(_cursorPosition);
-                int newPos = GetPositionFromLineColumn(currentLine + 1, column);
+                _cursorPosition = 0;
+                break;
+            case Keys.End:
                 if (shiftHeld)
                 {
-                    if (!HasSelection) _selectionStart = _cursorPosition;
-                    _selectionEnd = newPos;
+                    if (!HasSelection) 
+                        _selectionStart = _cursorPosition;
+                    _selectionEnd = Text.Length;
                 }
                 else ClearSelection();
-                _cursorPosition = newPos;
-            }
-        }
-        else
-        {
-            var c = KeyToChar(key, shiftHeld);
-            if (c.HasValue)
-            {
-                InsertTextAtCursor(c.Value.ToString());
-            }
+                _cursorPosition = Text.Length;
+                break;
+            case Keys.Up when Multiline:
+                {
+                    int currentLine = GetLineFromPosition(_cursorPosition);
+                    if (currentLine > 0)
+                    {
+                        int column = GetColumnFromPosition(_cursorPosition);
+                        int newPos = GetPositionFromLineColumn(currentLine - 1, column);
+                        if (shiftHeld)
+                        {
+                            if (!HasSelection) 
+                                _selectionStart = _cursorPosition;
+                            _selectionEnd = newPos;
+                        }
+                        else ClearSelection();
+                        _cursorPosition = newPos;
+                    }
+
+                    break;
+                }
+
+            case Keys.Down when Multiline:
+                {
+                    int currentLine = GetLineFromPosition(_cursorPosition);
+                    int lineCount = GetLineCount();
+                    if (currentLine < lineCount - 1)
+                    {
+                        int column = GetColumnFromPosition(_cursorPosition);
+                        int newPos = GetPositionFromLineColumn(currentLine + 1, column);
+                        if (shiftHeld)
+                        {
+                            if (!HasSelection) 
+                                _selectionStart = _cursorPosition;
+                            _selectionEnd = newPos;
+                        }
+                        else ClearSelection();
+                        _cursorPosition = newPos;
+                    }
+
+                    break;
+                }
+
+            default:
+                {
+                    var c = KeyToChar(key, shiftHeld);
+                    if (c.HasValue)
+                    {
+                        InsertTextAtCursor(c.Value.ToString());
+                    }
+
+                    break;
+                }
         }
     }
 
