@@ -145,6 +145,11 @@ public class Dropdown : BaseComponent
     public Color ArrowColor { get; set; } = Color.White;
 
     /// <summary>
+    /// Pixel size for the arrow triangle. Higher values make a chunkier, pixel-art style triangle.
+    /// </summary>
+    public int TrianglePixelSize { get; set; } = 1;
+
+    /// <summary>
     /// Width of the scrollbar for long lists.
     /// </summary>
     public int ScrollbarWidth { get; set; } = 4;
@@ -391,34 +396,34 @@ public class Dropdown : BaseComponent
 
     private void DrawTriangle(SpriteBatch spriteBatch, float centerX, float centerY, int size, bool pointingUp, Color color)
     {
-        // Draw a filled triangle using horizontal rows
-        // size controls the half-width of the base; height = halfSize + 1 rows
+        var px = Math.Max(1, TrianglePixelSize);
         var halfSize = size / 2;
+        var steps = halfSize / px;
 
         if (pointingUp)
         {
-            for (int i = 0; i <= halfSize; i++)
+            for (int i = 0; i <= steps; i++)
             {
-                var width = (halfSize - i) * 2 + 1;
+                var width = (steps - i) * 2 * px + px;
                 var rect = new Rectangle(
                     (int)(centerX - width / 2),
-                    (int)(centerY - halfSize + i),
+                    (int)(centerY - halfSize + i * px),
                     width,
-                    1
+                    px
                 );
                 spriteBatch.Draw(RendererHelper.WhitePixel, rect, color);
             }
         }
         else
         {
-            for (int i = 0; i <= halfSize; i++)
+            for (int i = 0; i <= steps; i++)
             {
-                var width = (halfSize - i) * 2 + 1;
+                var width = (steps - i) * 2 * px + px;
                 var rect = new Rectangle(
                     (int)(centerX - width / 2),
-                    (int)(centerY + halfSize - i),
+                    (int)(centerY + halfSize - i * px),
                     width,
-                    1
+                    px
                 );
                 spriteBatch.Draw(RendererHelper.WhitePixel, rect, color);
             }

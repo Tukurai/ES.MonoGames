@@ -13,7 +13,7 @@ namespace PocketCardLeague.Scenes;
 public class DebugScene() : Scene<SceneType>(SceneType.Debug)
 {
     private int _currentPage = 0;
-    private const int TotalPages = 4;
+    private const int TotalPages = 5;
 
     public override void Initialize()
     {
@@ -39,6 +39,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             case 1: BuildPage2(font); break;
             case 2: BuildPage3(font); break;
             case 3: BuildPage4(font); break;
+            case 4: BuildPage5(font); break;
         }
 
         // Navigation footer
@@ -205,14 +206,15 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(buttonDesc);
 
         var button = new Button("p2_button", "Click Me", font,
-            new Anchor(new Vector2(96, 266)), new Vector2(400, 96))
+            new Anchor(new Vector2(96, 266)), new Vector2(400, 96), true)
         {
-            Background = Color.DarkSlateGray,
+            Background = new Color(50, 60, 80),
             Border = new Border(4, Color.Gray),
-            TextBorder = new Border(4, Color.Black)
+            TextBorder = new Border(4, Color.Black),
+            PressDepth = 4
         };
-        button.OnHoveredEnter += () => button.Background = Color.SlateGray;
-        button.OnHoveredExit += () => button.Background = Color.DarkSlateGray;
+        button.OnHoveredEnter += () => button.Background = new Color(70, 85, 110);
+        button.OnHoveredExit += () => button.Background = new Color(50, 60, 80);
         AddComponent(button);
 
         // SpriteButton
@@ -268,6 +270,24 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         };
         AddComponent(cbUnchecked);
 
+        // Sprite Checkboxes (toggles)
+        var sprCbDesc = new Label("p2_sprcb_desc", "Sprite Checkbox (toggle)", font,
+            new Anchor(new Vector2(600, 520)))
+        { Color = Color.DarkGray };
+        AddComponent(sprCbDesc);
+
+        var toggleNames = new[] { "atk", "def", "dex", "innate", "level" };
+        for (int i = 0; i < toggleNames.Length; i++)
+        {
+            var toggle = new Checkbox($"p2_toggle_{toggleNames[i]}",
+                new Anchor(new Vector2(600 + i * 110, 576)));
+            toggle.SetUncheckedSprite(buttonsAtlas.GetTextureFromAtlas($"toggle_{toggleNames[i]}_off"));
+            toggle.SetCheckedSprite(buttonsAtlas.GetTextureFromAtlas($"toggle_{toggleNames[i]}_on"));
+            toggle.Scale = new Vector2(6, 6);
+            toggle.IsChecked = i % 2 == 0;
+            AddComponent(toggle);
+        }
+
         // InputField
         var inputDesc = new Label("p2_input_desc", "InputField", font,
             new Anchor(new Vector2(96, 580)))
@@ -279,7 +299,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             placeholderText: "Type something...",
             font: font,
             position: new Anchor(new Vector2(96, 636)),
-            size: new Vector2(800, 100))
+            size: new Vector2(400, 100))
         {
             Background = new Color(40, 40, 40),
             Border = new Border(4, Color.Gray),
@@ -363,6 +383,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             Padding = 16,
             ArrowWidth = 64,
             ArrowSize = 24,
+            TrianglePixelSize = 4,
             ScrollbarWidth = 12,
             Border = new Border(4, Color.Gray),
             FocusedBorder = new Border(4, Color.CornflowerBlue),
@@ -392,13 +413,13 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(spriteDesc);
 
         var sprite = new Sprite("p4_sprite",
-            new Anchor(new Vector2(96, 276)));
+            new Anchor(new Vector2(144, 276)));
         sprite.SetFromAtlas(pokemonAtlas.GetTextureFromAtlas("0025_000_mf_n_00000000_n"));
         sprite.Scale = new Vector2(8, 8);
         AddComponent(sprite);
 
         // AnimatedSprite
-        var animDesc = new Label("p4_anim_desc", "AnimatedSprite", font,
+        var animDesc = new Label("p4_anim_desc", "Sprite (Animated)", font,
             new Anchor(new Vector2(800, 210)))
         { Color = Color.DarkGray };
         AddComponent(animDesc);
@@ -424,5 +445,214 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
 
         animSprite.Play();
         AddComponent(animSprite);
+    }
+
+    private void BuildPage5(SpriteFont font)
+    {
+        var sectionLabel = new Label("p5_section", "Panels", font,
+            new Anchor(new Vector2(96, 140)))
+        { Color = Color.Gray };
+        AddComponent(sectionLabel);
+
+        // ─── Regular Panel ───
+        var panelDesc = new Label("p5_panel_desc", "Panel", font,
+            new Anchor(new Vector2(96, 210)))
+        { Color = Color.DarkGray };
+        AddComponent(panelDesc);
+
+        var panel = new Panel("p5_panel")
+        {
+            Position = new Anchor(new Vector2(96, 276)),
+            Size = new Vector2(500, 300),
+            Background = new Color(40, 45, 55),
+            Border = new Border(4, Color.Gray)
+        };
+
+        var panelLabel1 = new Label("p5_panel_label1", "Inside a Panel", font,
+            new Anchor(new Vector2(120, 296)))
+        { Color = Color.White };
+        panel.Children.Add(panelLabel1);
+
+        var panelLabel2 = new Label("p5_panel_label2", "Panels are containers", font,
+            new Anchor(new Vector2(120, 356)))
+        { Color = Color.CornflowerBlue };
+        panel.Children.Add(panelLabel2);
+
+        var panelBtn = new Button("p5_panel_btn", "Panel Button", font,
+            new Anchor(new Vector2(120, 430)), new Vector2(340, 80), true)
+        {
+            Background = new Color(60, 70, 90),
+            Border = new Border(4, Color.Gray),
+            TextBorder = new Border(4, Color.Black),
+            PressDepth = 4
+        };
+        panelBtn.OnHoveredEnter += () => panelBtn.Background = new Color(80, 95, 120);
+        panelBtn.OnHoveredExit += () => panelBtn.Background = new Color(60, 70, 90);
+        panel.Children.Add(panelBtn);
+
+        AddComponent(panel);
+
+        // ─── ScrollPanel ───
+        var scrollDesc = new Label("p5_scroll_desc", "ScrollPanel", font,
+            new Anchor(new Vector2(700, 210)))
+        { Color = Color.DarkGray };
+        AddComponent(scrollDesc);
+
+        var scrollPanel = new ScrollPanel("p5_scroll")
+        {
+            Position = new Anchor(new Vector2(700, 276)),
+            Size = new Vector2(600, 700),
+            ContentSize = new Vector2(600, 1600),
+            Background = new Color(35, 40, 50),
+            Border = new Border(4, Color.Gray),
+            ScrollbarWidth = 16,
+            ScrollbarPadding = 4,
+            ScrollSpeed = 60f,
+            EnableHorizontalScroll = false
+        };
+
+        // Fill scroll panel with varied components
+        float y = 290;
+
+        var scrollLabel1 = new Label("p5_sl1", "Scrollable Content", font,
+            new Anchor(new Vector2(724, y)))
+        { Color = Color.White };
+        scrollPanel.Children.Add(scrollLabel1);
+        y += 80;
+
+        var scrollBtn1 = new Button("p5_sb1", "Button A", font,
+            new Anchor(new Vector2(724, y)), new Vector2(300, 80), true)
+        {
+            Background = new Color(60, 70, 90),
+            Border = new Border(4, Color.Gray),
+            TextBorder = new Border(4, Color.Black),
+            PressDepth = 4
+        };
+        scrollBtn1.OnHoveredEnter += () => scrollBtn1.Background = new Color(80, 95, 120);
+        scrollBtn1.OnHoveredExit += () => scrollBtn1.Background = new Color(60, 70, 90);
+        scrollPanel.Children.Add(scrollBtn1);
+        y += 120;
+
+        var scrollCb1 = new Checkbox("p5_scb1",
+            new Anchor(new Vector2(724, y)))
+        {
+            Label = "Option 1",
+            Font = font,
+            LabelColor = Color.White,
+            IsChecked = true,
+            BoxBackground = new Color(60, 60, 60),
+            BoxBorderColor = Color.Gray,
+            CheckmarkColor = Color.LimeGreen,
+            BoxSize = 64,
+            BoxBorderThickness = 4,
+            LabelSpacing = 32
+        };
+        scrollPanel.Children.Add(scrollCb1);
+        y += 100;
+
+        var scrollCb2 = new Checkbox("p5_scb2",
+            new Anchor(new Vector2(724, y)))
+        {
+            Label = "Option 2",
+            Font = font,
+            LabelColor = Color.White,
+            IsChecked = false,
+            BoxBackground = new Color(60, 60, 60),
+            BoxBorderColor = Color.Gray,
+            CheckmarkColor = Color.LimeGreen,
+            BoxSize = 64,
+            BoxBorderThickness = 4,
+            LabelSpacing = 32
+        };
+        scrollPanel.Children.Add(scrollCb2);
+        y += 120;
+
+        var scrollSlider = new Slider("p5_ss1",
+            new Anchor(new Vector2(724, y)),
+            new Vector2(500, 64))
+        {
+            MinValue = 0,
+            MaxValue = 100,
+            Value = 65,
+            Font = font,
+            ShowValue = true,
+            TrackFillColor = Color.CornflowerBlue,
+            TrackHeight = 24,
+            ThumbWidth = 48,
+            ThumbHeight = 64,
+            TrackBorder = new Border(4, Color.Gray),
+            ThumbBorder = new Border(4, Color.Black)
+        };
+        scrollPanel.Children.Add(scrollSlider);
+        y += 120;
+
+        var scrollBtn2 = new Button("p5_sb2", "Button B", font,
+            new Anchor(new Vector2(724, y)), new Vector2(300, 80), true)
+        {
+            Background = new Color(80, 50, 50),
+            Border = new Border(4, Color.Gray),
+            TextBorder = new Border(4, Color.Black),
+            PressDepth = 4
+        };
+        scrollBtn2.OnHoveredEnter += () => scrollBtn2.Background = new Color(110, 70, 70);
+        scrollBtn2.OnHoveredExit += () => scrollBtn2.Background = new Color(80, 50, 50);
+        scrollPanel.Children.Add(scrollBtn2);
+        y += 120;
+
+        var scrollLabel2 = new Label("p5_sl2", "More content below...", font,
+            new Anchor(new Vector2(724, y)))
+        { Color = Color.Gray };
+        scrollPanel.Children.Add(scrollLabel2);
+        y += 80;
+
+        var scrollSlider2 = new Slider("p5_ss2",
+            new Anchor(new Vector2(724, y)),
+            new Vector2(500, 64))
+        {
+            MinValue = 0,
+            MaxValue = 255,
+            Value = 180,
+            Font = font,
+            ShowValue = true,
+            TrackFillColor = Color.Orange,
+            TrackHeight = 24,
+            ThumbWidth = 48,
+            ThumbHeight = 64,
+            TrackBorder = new Border(4, Color.Gray),
+            ThumbBorder = new Border(4, Color.Black)
+        };
+        scrollPanel.Children.Add(scrollSlider2);
+        y += 120;
+
+        var scrollCb3 = new Checkbox("p5_scb3",
+            new Anchor(new Vector2(724, y)))
+        {
+            Label = "Option 3",
+            Font = font,
+            LabelColor = Color.White,
+            IsChecked = true,
+            BoxBackground = new Color(60, 60, 60),
+            BoxBorderColor = Color.Gray,
+            CheckmarkColor = Color.Gold,
+            BoxSize = 64,
+            BoxBorderThickness = 4,
+            LabelSpacing = 32
+        };
+        scrollPanel.Children.Add(scrollCb3);
+        y += 100;
+
+        var scrollBtn3 = new Button("p5_sb3", "Button C", font,
+            new Anchor(new Vector2(724, y)), new Vector2(300, 80), true)
+        {
+            Background = new Color(50, 70, 50),
+            Border = new Border(4, Color.Gray),
+            TextBorder = new Border(4, Color.Black),
+            PressDepth = 4
+        };
+        scrollBtn3.OnHoveredEnter += () => scrollBtn3.Background = new Color(70, 100, 70);
+        scrollBtn3.OnHoveredExit += () => scrollBtn3.Background = new Color(50, 70, 50);
+        scrollPanel.Children.Add(scrollBtn3);
+
+        AddComponent(scrollPanel);
     }
 }

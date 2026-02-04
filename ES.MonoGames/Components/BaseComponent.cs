@@ -144,7 +144,8 @@ public abstract class BaseComponent
         var isBlockedByOverlay = OverlayManager.IsPointBlocked(mousePos);
 
         // determine on click area and fire events
-        var componentArea = new Rectangle(Position.GetVector2().ToPoint(), Size.ToPoint());
+        var scaledSize = new Vector2(Size.X * Scale.X, Size.Y * Scale.Y);
+        var componentArea = new Rectangle(Position.GetVector2().ToPoint(), scaledSize.ToPoint());
         if (!isBlockedByOverlay && ControlState.MouseInArea(componentArea))
         {
             if (!Hovered)

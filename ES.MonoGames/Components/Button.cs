@@ -14,6 +14,7 @@ public class Button(string? name = null, string text = "Button", SpriteFont? fon
     public int Padding { get; set; } = 10;
     public bool Centered { get; set; } = centered;
     public bool QuickDraw { get; set; } = false;
+    public int PressDepth { get; set; } = 0;
 
     private SpriteFont? Font { get; set; } = font;
 
@@ -72,10 +73,16 @@ public class Button(string? name = null, string text = "Button", SpriteFont? fon
         RendererHelper.Draw(spriteBatch, Border, Position.GetVector2(), Size, Scale);
 
         if (Font is not null)
+        {
+            var textPos = Pressed && PressDepth > 0
+                ? _textPositionCache + new Vector2(0, PressDepth)
+                : _textPositionCache;
+
             if (QuickDraw)
-                RendererHelper.DrawOutlinedStringFast(spriteBatch, Font, Text, _textPositionCache, TextColor, TextBorder);
+                RendererHelper.DrawOutlinedStringFast(spriteBatch, Font, Text, textPos, TextColor, TextBorder);
             else
-                RendererHelper.DrawOutlinedString(spriteBatch, Font, Text, _textPositionCache, TextColor, TextBorder);
+                RendererHelper.DrawOutlinedString(spriteBatch, Font, Text, textPos, TextColor, TextBorder);
+        }
 
         base.Draw(spriteBatch);
     }

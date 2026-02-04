@@ -34,6 +34,7 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
             Padding = 16,
             ArrowWidth = 64,
             ArrowSize = 24,
+            TrianglePixelSize = 4,
             ScrollbarWidth = 12,
             Border = new Border(4, Color.Gray),
             FocusedBorder = new Border(4, Color.CornflowerBlue),
