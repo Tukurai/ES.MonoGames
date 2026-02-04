@@ -182,6 +182,12 @@ public class ScrollPanel(string? name = null) : Panel(name)
             }
         }
 
+        // Request cursor type
+        if (_isDragging || _isDraggingVerticalThumb || _isDraggingHorizontalThumb)
+            ControlState.RequestCursor(CursorType.Grab);
+        else if (_verticalThumbHovered || _horizontalThumbHovered)
+            ControlState.RequestCursor(CursorType.Pointer);
+
         // Update children with offset position
         // Note: We don't call base.Update() here because we need to offset child positions
         UpdateChildrenWithOffset(gameTime);

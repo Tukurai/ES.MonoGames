@@ -1,10 +1,12 @@
-﻿using Helpers;
+﻿using Components;
+using Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PocketCardLeague.Config;
 using PocketCardLeague.Enums;
 using PocketCardLeague.Scenes;
+using PocketCardLeague.SpriteMaps;
 using System.Linq;
 
 namespace PocketCardLeague;
@@ -54,6 +56,20 @@ public class MainGame : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+        // Register pixel cursors
+        var cursors = new PixelCursorsSpriteAtlas();
+        ControlState.RegisterCursors(
+            cursors.GetTextureFromAtlas(PixelCursorsSpriteAtlas.Arrow)!,
+            cursors.GetTextureFromAtlas(PixelCursorsSpriteAtlas.Pointer)!,
+            cursors.GetTextureFromAtlas(PixelCursorsSpriteAtlas.Grabber)!,
+            arrowOrigin: new Vector2(1, 1),
+            pointerOrigin: new Vector2(3, 1),
+            grabOrigin: new Vector2(3, 1));
+
+        // Set default scene background
+        var locations = new LocationsSpriteAtlas();
+        Scene<SceneType>.DefaultBackground = locations.GetTextureFromAtlas(LocationsSpriteAtlas.Border);
+
         SceneManager.AddScene(new TitleScene());
         SceneManager.AddScene(new OptionsScene());
         SceneManager.AddScene(new DebugScene());
@@ -91,7 +107,7 @@ public class MainGame : Game
 
         base.Update(gameTime);
 
-        IsMouseVisible = ControlState.CursorTexture is null; 
+        IsMouseVisible = !ControlState.HasCustomCursor && ControlState.CursorTexture is null;
     }
 
     /// <summary>
@@ -116,6 +132,14 @@ public class MainGame : Game
 
         // End render target and draw scaled to screen
         ScaleManager.EndRender(GraphicsDevice, _spriteBatch);
+
+        // Draw custom cursor at screen resolution (crisp, no render target scaling)
+        if (ControlState.HasCustomCursor)
+        {
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            ControlState.DrawScreenCursor(_spriteBatch);
+            _spriteBatch.End();
+        }
 
         base.Draw(gameTime);
     }

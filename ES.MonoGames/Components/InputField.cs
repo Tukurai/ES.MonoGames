@@ -186,6 +186,9 @@ public class InputField(
         base.Update(gameTime);
 
         var mouseInArea = ControlState.MouseInArea(new Rectangle(Position.GetVector2().ToPoint(), Size.ToPoint()));
+
+        if (mouseInArea)
+            ControlState.RequestCursor(CursorType.Pointer);
         var mouseDelta = ControlState.GetMouseDelta();
 
         // Handle mouse input

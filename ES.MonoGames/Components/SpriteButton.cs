@@ -197,6 +197,9 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
         }
 
         base.Update(gameTime);
+
+        if (Hovered)
+            ControlState.RequestCursor(CursorType.Pointer);
     }
 
     public override void Draw(SpriteBatch spriteBatch)

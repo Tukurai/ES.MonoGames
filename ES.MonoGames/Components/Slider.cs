@@ -206,6 +206,12 @@ public class Slider : BaseComponent
         // Update hover state for the whole component
         Hovered = mouseInSlider || _thumbHovered;
 
+        // Request cursor type
+        if (_isDragging)
+            ControlState.RequestCursor(CursorType.Grab);
+        else if (Hovered)
+            ControlState.RequestCursor(CursorType.Pointer);
+
         // Don't call base.Update() to avoid default click handling
     }
 

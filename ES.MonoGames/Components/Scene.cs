@@ -1,4 +1,4 @@
-﻿using Components;
+using Components;
 using Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,12 +17,21 @@ public enum SceneState
     Active
 }
 
+public enum SceneBackgroundMode
+{
+    Default,
+    Color,
+    Sprite
+}
+
 public interface IScene
 {
     string Name { get; }
     string? SceneTrack { get; }
     SceneState State { get; set; }
+    SceneBackgroundMode BackgroundMode { get; set; }
     Color BackgroundColor { get; set; }
+    TextureResult? BackgroundSprite { get; set; }
 
     void AddComponent(BaseComponent component);
     void Draw(SpriteBatch spriteBatch);
@@ -38,10 +47,32 @@ public interface IScene
 
 public abstract class Scene<T> : IScene where T : Enum
 {
+    /// <summary>
+    /// The default background sprite used when BackgroundMode is Default.
+    /// Set this once at startup from the game project.
+    /// </summary>
+    public static TextureResult? DefaultBackground { get; set; }
+
     public string Name { get; set; }
     public virtual string? SceneTrack { get; set; }
     public SceneState State { get; set; } = SceneState.None;
-    public Color BackgroundColor { get; set; } = Color.CornflowerBlue;
+    public SceneBackgroundMode BackgroundMode { get; set; } = SceneBackgroundMode.Color;
+
+    public Color BackgroundColor
+    {
+        get;
+        set { field = value; BackgroundMode = SceneBackgroundMode.Color; }
+    } = Color.CornflowerBlue;
+
+    public TextureResult? BackgroundSprite
+    {
+        get;
+        set
+        {
+            field = value;
+            BackgroundMode = value is not null ? SceneBackgroundMode.Sprite : SceneBackgroundMode.Default;
+        }
+    }
 
     private bool _pendingReinitialize = false;
 
@@ -142,7 +173,7 @@ public abstract class Scene<T> : IScene where T : Enum
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.GraphicsDevice.Clear(BackgroundColor);
+        DrawBackground(spriteBatch);
 
         Components.ForEach(c => c.Draw(spriteBatch));
 
@@ -150,5 +181,38 @@ public abstract class Scene<T> : IScene where T : Enum
         OverlayManager.DrawOverlays(spriteBatch);
 
         OnSceneDrawn?.Invoke();
+    }
+
+    private void DrawBackground(SpriteBatch spriteBatch)
+    {
+        var dest = new Rectangle(0, 0, ScaleManager.VirtualWidth, ScaleManager.VirtualHeight);
+
+        switch (BackgroundMode)
+        {
+            case SceneBackgroundMode.Sprite when BackgroundSprite is not null:
+                spriteBatch.GraphicsDevice.Clear(Color.Black);
+                DrawTextureResult(spriteBatch, BackgroundSprite, dest);
+                break;
+
+            case SceneBackgroundMode.Default when DefaultBackground is not null:
+                spriteBatch.GraphicsDevice.Clear(Color.Black);
+                DrawTextureResult(spriteBatch, DefaultBackground, dest);
+                break;
+
+            default:
+                spriteBatch.GraphicsDevice.Clear(BackgroundColor);
+                break;
+        }
+    }
+
+    private static void DrawTextureResult(SpriteBatch spriteBatch, TextureResult texture, Rectangle dest)
+    {
+        var sourceRect = new Rectangle(
+            texture.AtlasEntry.FrameX,
+            texture.AtlasEntry.FrameY,
+            texture.AtlasEntry.FrameWidth,
+            texture.AtlasEntry.FrameHeight);
+
+        spriteBatch.Draw(texture.Texture, dest, sourceRect, Color.White);
     }
 }

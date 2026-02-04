@@ -203,6 +203,12 @@ public abstract class BaseComponent
             }
         }
 
+        // Request cursor type based on component state
+        if (Dragging)
+            ControlState.RequestCursor(CursorType.Grab);
+        else if (Hovered && (OnClicked is not null || OnHoveredEnter is not null || OnPressed is not null))
+            ControlState.RequestCursor(CursorType.Pointer);
+
         foreach (var child in Children)
             child.Update(gameTime);
 

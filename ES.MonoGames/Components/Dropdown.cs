@@ -255,6 +255,10 @@ public class Dropdown : BaseComponent
 
         Hovered = mouseInButton || mouseInList;
 
+        // Request cursor type
+        if (Hovered)
+            ControlState.RequestCursor(CursorType.Pointer);
+
         // Don't call base.Update() to avoid default click handling
     }
 
