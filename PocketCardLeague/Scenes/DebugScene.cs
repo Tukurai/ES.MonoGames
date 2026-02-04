@@ -224,12 +224,12 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         { Color = Color.DarkGray };
         AddComponent(buttonDesc2);
 
-        var buttonsAtlas = new ButtonsSpriteAtlas();
+        var arrowsSpriteAtlas = new ArrowsSpriteAtlas();
         var spriteBtn = new SpriteButton("p2_sprite_button",
             new Anchor(new Vector2(96, 456)));
-        spriteBtn.SetNormalSprite(buttonsAtlas.GetTextureFromAtlas("arrow_right"));
-        spriteBtn.SetHoveredSprite(buttonsAtlas.GetTextureFromAtlas("arrow_right_hover"));
-        spriteBtn.SetPressedSprite(buttonsAtlas.GetTextureFromAtlas("arrow_right_active"));
+        spriteBtn.SetNormalSprite(arrowsSpriteAtlas.GetTextureFromAtlas("arrow_right"));
+        spriteBtn.SetHoveredSprite(arrowsSpriteAtlas.GetTextureFromAtlas("arrow_right_hover"));
+        spriteBtn.SetPressedSprite(arrowsSpriteAtlas.GetTextureFromAtlas("arrow_right_active"));
         spriteBtn.Scale = new Vector2(6, 6);
         AddComponent(spriteBtn);
 
@@ -277,6 +277,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         { Color = Color.DarkGray };
         AddComponent(sprCbDesc);
 
+        var buttonsAtlas = new ButtonsSpriteAtlas();
         var toggleNames = new[] { "atk", "def", "dex", "innate", "level" };
         for (int i = 0; i < toggleNames.Length; i++)
         {

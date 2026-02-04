@@ -2,6 +2,7 @@ using Components;
 using Helpers;
 using Microsoft.Xna.Framework;
 using PocketCardLeague.Enums;
+using PocketCardLeague.SpriteMaps;
 
 namespace PocketCardLeague.Scenes;
 
@@ -9,15 +10,30 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
 {
     public override void Initialize()
     {
-        BackgroundColor = Color.Black;
+        var locations = new LocationsSpriteAtlas();
+
+        BackgroundMode = SceneBackgroundMode.Sprite;
+        BackgroundSprite = locations.GetTextureFromAtlas(LocationsSpriteAtlas.Cave_11);
 
         // Virtual resolution is 2048x1152, downscaled to window
         var font = ContentHelper.LoadFont("DefaultFont");
+        var arrowsAtlas = new ArrowsSpriteAtlas();
 
-        var title = new Label("title", "Settings", ContentHelper.LoadFont("TitleFont"), new Anchor(new Vector2(0, 40), null), true, 2048)
-        {
-            Border = new Border(4, Color.Black),
-        };
+        var btnRight = new SpriteButton("button_to_main",
+            new Anchor(new Vector2(1852, 508)));
+        btnRight.SetNormalSprite(arrowsAtlas.GetTextureFromAtlas("arrow_right"));
+        btnRight.SetHoveredSprite(arrowsAtlas.GetTextureFromAtlas("arrow_right_hover"));
+        btnRight.SetPressedSprite(arrowsAtlas.GetTextureFromAtlas("arrow_right_active"));
+        btnRight.Scale = new Vector2(4, 4);
+        btnRight.Bob = BobDirection.Right;
+        AddComponent(btnRight);
+
+        btnRight.OnClicked += () => SceneManager.SetActiveScene(SceneType.Main, new SlideTransition(SlideDirection.Left));
+
+        var rightLabel = new Label("main_label", "Main", font,
+            new Anchor(new Vector2(14, 60), btnRight.Position), true)
+        { Border = new Border(4, Color.Black) };
+        AddComponent(rightLabel);
 
         // Graphics settings
         var graphicsLabel = new Label("graphics_label", "Graphics", font, new Anchor(new Vector2(96, 200)))
@@ -151,7 +167,7 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
 
         button.OnHoveredEnter += () => button.Background = Color.LightGreen;
         button.OnHoveredExit += () => button.Background = Color.Green;
-        button.OnClicked += () => SceneManager.SetActiveScene(SceneType.Title, new FadeTransition());
+        button.OnClicked += () => SceneManager.SetActiveScene(SceneType.Main, new SlideTransition(SlideDirection.Left));
 
         var nameInput = new InputField(
             name: "name_input",
@@ -173,7 +189,6 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
         nameInput.OnSubmit += () => System.Diagnostics.Debug.WriteLine($"Name submitted: {nameInput.Text}");
 
 
-        AddComponent(title);
         AddComponent(graphicsLabel);
         AddComponent(scaleDropdown);
         AddComponent(fullscreenCheckbox);

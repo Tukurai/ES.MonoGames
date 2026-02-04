@@ -6,6 +6,14 @@ using System.Collections.Generic;
 
 namespace Components;
 
+public enum BobDirection
+{
+    Left,
+    Right,
+    Up,
+    Down
+}
+
 public abstract class BaseComponent
 {
     /// <summary>
@@ -61,6 +69,24 @@ public abstract class BaseComponent
     public bool Hovered { get; set; } = false;
     public bool Dragging { get; set; } = false;
     public bool Pressed { get; set; } = false;
+
+    /// <summary>
+    /// The direction the component bobs in. Set to null to disable bobbing.
+    /// </summary>
+    public BobDirection? Bob { get; set; }
+
+    /// <summary>
+    /// How many scaled pixels the bob shifts. Default is 4.
+    /// </summary>
+    public float BobDistance { get; set; } = 4f;
+
+    /// <summary>
+    /// How often the bob toggles in milliseconds. Default is 600ms.
+    /// </summary>
+    public float BobInterval { get; set; } = 650f;
+
+    private float _bobTimer;
+    private bool _bobOffset;
 
     /// <summary>
     /// Gets the collection of child components contained within this component.
@@ -209,6 +235,20 @@ public abstract class BaseComponent
         else if (Hovered && (OnClicked is not null || OnHoveredEnter is not null || OnPressed is not null))
             ControlState.RequestCursor(CursorType.Pointer);
 
+        // Bob effect
+        if (Bob is not null)
+        {
+            _bobTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (_bobTimer >= BobInterval)
+            {
+                _bobTimer -= BobInterval;
+                _bobOffset = !_bobOffset;
+
+                var delta = GetBobDelta(Bob.Value);
+                Position.TransformPosition(_bobOffset ? delta : -delta);
+            }
+        }
+
         foreach (var child in Children)
             child.Update(gameTime);
 
@@ -220,6 +260,15 @@ public abstract class BaseComponent
         foreach (var child in Children)
             child.Draw(spriteBatch);
     }
+
+    private Vector2 GetBobDelta(BobDirection direction) => direction switch
+    {
+        BobDirection.Left => new Vector2(-BobDistance, 0),
+        BobDirection.Right => new Vector2(BobDistance, 0),
+        BobDirection.Up => new Vector2(0, -BobDistance),
+        BobDirection.Down => new Vector2(0, BobDistance),
+        _ => Vector2.Zero
+    };
 
     public override string ToString()
     {

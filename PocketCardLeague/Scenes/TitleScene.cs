@@ -3,6 +3,8 @@ using Components;
 using Helpers;
 using PocketCardLeague.Enums;
 using PocketCardLeague.SpriteMaps;
+using System.Linq;
+using Microsoft.Xna.Framework.Input;
 
 namespace PocketCardLeague.Scenes;
 
@@ -89,22 +91,31 @@ public class TitleScene() : Scene<SceneType>(SceneType.Title)
         continueAction.OnHoveredEnter += () => continueAction.Color = Color.Yellow;
         continueAction.OnHoveredExit += () => continueAction.Color = Color.White;
 
-        var button = new Button("button", "Options", font, new Anchor(new Vector2(784, 1000), null), new Vector2(480, 120), true)
-        {
-            Background = Color.Green,
-            Border = new Border(4, Color.Black),
-            TextBorder = new Border(4, Color.Black)
-        };
-
-        button.OnHoveredEnter += () => button.Background = Color.LightGreen;
-        button.OnHoveredExit += () => button.Background = Color.Green;
-        button.OnClicked += () => SceneManager.SetActiveScene(SceneType.Options, new FadeTransition());
-
         AddComponent(title);
         AddComponent(animatedPokemon);
         AddComponent(continueAction);
-        AddComponent(button);
 
         base.Initialize();
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        var pressedKeys = ControlState.GetPressedKeys();
+        var heldKeys = ControlState.GetHeldKeys();
+        bool altHeld = heldKeys.Contains(Keys.LeftAlt) || heldKeys.Contains(Keys.RightAlt);
+
+        if (altHeld && pressedKeys.Contains(Keys.Home))
+        {
+            SceneManager.SetActiveScene(SceneType.Debug, new FadeTransition());
+            return;
+        }
+
+        if (pressedKeys.Contains(Keys.Space))
+        {
+            SceneManager.SetActiveScene(SceneType.Main, new FadeTransition());
+            return;
+        }
+
+        base.Update(gameTime);
     }
 }

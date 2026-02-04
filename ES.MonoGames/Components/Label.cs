@@ -31,10 +31,9 @@ public class Label(string? name = null, string text = "", SpriteFont? font = nul
 
                 if (Center)
                 {
-                    var pos = Position.GetVector2();
-                    Position.UpdateRelative(new Vector2(
-                        pos.X + (MaxWidth / 2) - (_lengthCache / 2),
-                        pos.Y
+                    Position.TransformPosition(new Vector2(
+                        (MaxWidth / 2) - (_lengthCache / 2),
+                        0
                     ));
                 }
             }

@@ -74,6 +74,8 @@ public class MainGame : Game
         SceneManager.AddScene(new TitleScene());
         SceneManager.AddScene(new OptionsScene());
         SceneManager.AddScene(new DebugScene());
+        SceneManager.AddScene(new MainScene());
+        SceneManager.AddScene(new DeckScene());
 
         SceneManager.SetActiveScene(SceneType.Title, new FadeTransition());
     }
@@ -91,15 +93,7 @@ public class MainGame : Game
     {
         ControlState.Update(gameTime);
 
-        var pressedKeys = ControlState.GetPressedKeys();
         var heldKeys = ControlState.GetHeldKeys();
-        bool altHeld = heldKeys.Contains(Keys.LeftAlt) || heldKeys.Contains(Keys.RightAlt);
-
-        if (altHeld && pressedKeys.Contains(Keys.Home))
-        {
-            SceneManager.SetActiveScene(SceneType.Debug, new FadeTransition());
-            return;
-        }
 
         if (heldKeys.Contains(Keys.Escape))
             Exit();
