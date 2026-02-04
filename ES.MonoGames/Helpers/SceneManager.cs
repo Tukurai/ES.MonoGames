@@ -21,7 +21,8 @@ public static class SceneManager
 
     public static void AddScene(IScene scene) => Instance.AddScene(scene);
     public static void RemoveScene(IScene scene) => Instance.RemoveScene(scene);
-    public static void SetActiveScene(Enum scene) => Instance.SetActiveScene(scene);
+    public static void SetActiveScene(Enum scene, SceneTransition? transition = null)
+        => Instance.SetActiveScene(scene, transition);
     public static void ReinitializeActiveScene() => Instance.ReinitializeActiveScene();
     public static IScene? ActiveScene => Instance.ActiveScene;
 }
@@ -30,7 +31,7 @@ internal interface ISceneManager
 {
     void AddScene(IScene scene);
     void RemoveScene(IScene scene);
-    void SetActiveScene(Enum scene);
+    void SetActiveScene(Enum scene, SceneTransition? transition = null);
     void ReinitializeActiveScene();
     IScene? ActiveScene { get; }
 }
@@ -46,20 +47,44 @@ internal sealed class SceneManagerImpl<T> : ISceneManager where T : Enum
     public void RemoveScene(IScene scene)
         => _scenes.Remove((Scene<T>)scene);
 
-    public void SetActiveScene(Enum scene)
-        => SetActiveScene((T)scene);
+    public void SetActiveScene(Enum scene, SceneTransition? transition = null)
+        => SetActiveScene((T)scene, transition);
 
-    private void SetActiveScene(T sceneType)
+    private void SetActiveScene(T sceneType, SceneTransition? transition)
     {
         var scene = _scenes.Find(s => s.Name == sceneType.ToString())
             ?? throw new ArgumentException($"Scene '{sceneType}' not found.");
 
-        ActiveScene?.Stop();
-        ActiveScene = scene;
-        ActiveScene.Start();
+        if (transition is not null && ActiveScene is not null)
+        {
+            var oldScene = ActiveScene;
+            ActiveScene = scene;
+            ActiveScene.Start();
 
-        if (ActiveScene.SceneTrack is not null)
-            SoundManager.PlayTrack(ActiveScene.SceneTrack);
+            if (ActiveScene.SceneTrack is not null)
+                SoundManager.PlayTrack(ActiveScene.SceneTrack);
+
+            TransitionManager.StartTransition(oldScene, ActiveScene, transition);
+        }
+        else if (transition is FadeTransition fade && ActiveScene is null)
+        {
+            ActiveScene = scene;
+            ActiveScene.Start();
+
+            if (ActiveScene.SceneTrack is not null)
+                SoundManager.PlayTrack(ActiveScene.SceneTrack);
+
+            TransitionManager.StartFadeIn(ActiveScene, fade.Duration);
+        }
+        else
+        {
+            ActiveScene?.Stop();
+            ActiveScene = scene;
+            ActiveScene.Start();
+
+            if (ActiveScene.SceneTrack is not null)
+                SoundManager.PlayTrack(ActiveScene.SceneTrack);
+        }
     }
 
     public void ReinitializeActiveScene()

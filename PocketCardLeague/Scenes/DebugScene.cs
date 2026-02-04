@@ -64,7 +64,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
 
         if (!altHeld && pressedKeys.Contains(Keys.Home))
         {
-            SceneManager.SetActiveScene(SceneType.Title);
+            SceneManager.SetActiveScene(SceneType.Title, new FadeTransition());
             return;
         }
 

@@ -151,7 +151,7 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
 
         button.OnHoveredEnter += () => button.Background = Color.LightGreen;
         button.OnHoveredExit += () => button.Background = Color.Green;
-        button.OnClicked += () => SceneManager.SetActiveScene(SceneType.Title);
+        button.OnClicked += () => SceneManager.SetActiveScene(SceneType.Title, new FadeTransition());
 
         var nameInput = new InputField(
             name: "name_input",

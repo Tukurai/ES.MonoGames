@@ -35,6 +35,8 @@ public interface IScene
 
     void AddComponent(BaseComponent component);
     void Draw(SpriteBatch spriteBatch);
+    void DrawBackground(SpriteBatch spriteBatch);
+    void DrawContent(SpriteBatch spriteBatch);
     void Pause();
     void RemoveComponent(BaseComponent component);
     void Reinitialize();
@@ -174,7 +176,11 @@ public abstract class Scene<T> : IScene where T : Enum
     public virtual void Draw(SpriteBatch spriteBatch)
     {
         DrawBackground(spriteBatch);
+        DrawContent(spriteBatch);
+    }
 
+    public void DrawContent(SpriteBatch spriteBatch)
+    {
         Components.ForEach(c => c.Draw(spriteBatch));
 
         // Draw overlays (dropdowns, popups, tooltips) on top of everything
@@ -183,7 +189,7 @@ public abstract class Scene<T> : IScene where T : Enum
         OnSceneDrawn?.Invoke();
     }
 
-    private void DrawBackground(SpriteBatch spriteBatch)
+    public void DrawBackground(SpriteBatch spriteBatch)
     {
         var dest = new Rectangle(0, 0, ScaleManager.VirtualWidth, ScaleManager.VirtualHeight);
 

@@ -41,6 +41,7 @@ public class MainGame : Game
         ScaleManager.Initialize(_graphics, VirtualWidth, VirtualHeight, SettingsManager.GetCurrentScale());
         SceneManager.Initialize<SceneType>();
         base.Initialize();
+        TransitionManager.Initialize(GraphicsDevice);
 
         // Apply saved settings now that the graphics device is fully initialized
         ScaleManager.SetScale(SettingsManager.GetCurrentScale());
@@ -74,7 +75,7 @@ public class MainGame : Game
         SceneManager.AddScene(new OptionsScene());
         SceneManager.AddScene(new DebugScene());
 
-        SceneManager.SetActiveScene(SceneType.Title);
+        SceneManager.SetActiveScene(SceneType.Title, new FadeTransition());
     }
 
     /// <summary>
@@ -96,14 +97,17 @@ public class MainGame : Game
 
         if (altHeld && pressedKeys.Contains(Keys.Home))
         {
-            SceneManager.SetActiveScene(SceneType.Debug);
+            SceneManager.SetActiveScene(SceneType.Debug, new FadeTransition());
             return;
         }
 
         if (heldKeys.Contains(Keys.Escape))
             Exit();
 
-        SceneManager.ActiveScene?.Update(gameTime);
+        if (TransitionManager.IsTransitioning)
+            TransitionManager.Update(gameTime);
+        else
+            SceneManager.ActiveScene?.Update(gameTime);
 
         base.Update(gameTime);
 
@@ -119,19 +123,27 @@ public class MainGame : Game
     /// </remarks>
     protected override void Draw(GameTime gameTime)
     {
-        // Begin rendering to the virtual resolution render target
-        ScaleManager.BeginRender(GraphicsDevice);
+        if (TransitionManager.IsTransitioning)
+        {
+            TransitionManager.Draw(_spriteBatch, GraphicsDevice);
+            ScaleManager.EndRender(GraphicsDevice, _spriteBatch);
+        }
+        else
+        {
+            // Begin rendering to the virtual resolution render target
+            ScaleManager.BeginRender(GraphicsDevice);
 
-        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-        SceneManager.ActiveScene?.Draw(_spriteBatch);
+            SceneManager.ActiveScene?.Draw(_spriteBatch);
 
-        ControlState.Draw(_spriteBatch);
+            ControlState.Draw(_spriteBatch);
 
-        _spriteBatch.End();
+            _spriteBatch.End();
 
-        // End render target and draw scaled to screen
-        ScaleManager.EndRender(GraphicsDevice, _spriteBatch);
+            // End render target and draw scaled to screen
+            ScaleManager.EndRender(GraphicsDevice, _spriteBatch);
+        }
 
         // Draw custom cursor at screen resolution (crisp, no render target scaling)
         if (ControlState.HasCustomCursor)

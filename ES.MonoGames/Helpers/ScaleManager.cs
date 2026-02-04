@@ -216,15 +216,16 @@ public static class ScaleManager
     /// Begins rendering to the virtual render target.
     /// Call this before drawing game content.
     /// </summary>
-    public static void BeginRender(GraphicsDevice graphicsDevice)
+    /// <summary>
+    /// Ensures the render target and destination rect are initialized.
+    /// Called automatically by BeginRender, but can be called externally
+    /// when the render target is needed without starting a full render pass.
+    /// </summary>
+    public static void EnsureInitialized(GraphicsDevice graphicsDevice)
     {
-        // Lazy init render target if needed
-        if (_renderTarget == null || _renderTarget.IsDisposed)
-        {
+        if (_renderTarget is null || _renderTarget.IsDisposed)
             CreateRenderTarget(graphicsDevice);
-        }
 
-        // Update destination rect based on actual viewport
         if (_destinationRect.Width == 0 || _destinationRect.Height == 0)
         {
             var viewport = graphicsDevice.Viewport;
@@ -240,6 +241,11 @@ public static class ScaleManager
 
             _destinationRect = new Rectangle(x, y, scaledWidth, scaledHeight);
         }
+    }
+
+    public static void BeginRender(GraphicsDevice graphicsDevice)
+    {
+        EnsureInitialized(graphicsDevice);
 
         graphicsDevice.SetRenderTarget(_renderTarget);
         graphicsDevice.Clear(Color.Black);

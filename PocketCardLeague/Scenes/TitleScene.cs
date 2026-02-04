@@ -98,7 +98,7 @@ public class TitleScene() : Scene<SceneType>(SceneType.Title)
 
         button.OnHoveredEnter += () => button.Background = Color.LightGreen;
         button.OnHoveredExit += () => button.Background = Color.Green;
-        button.OnClicked += () => SceneManager.SetActiveScene(SceneType.Options);
+        button.OnClicked += () => SceneManager.SetActiveScene(SceneType.Options, new FadeTransition());
 
         AddComponent(title);
         AddComponent(animatedPokemon);
