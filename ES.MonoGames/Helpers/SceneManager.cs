@@ -57,6 +57,9 @@ internal sealed class SceneManagerImpl<T> : ISceneManager where T : Enum
         ActiveScene?.Stop();
         ActiveScene = scene;
         ActiveScene.Start();
+
+        if (ActiveScene.SceneTrack is not null)
+            SoundManager.PlayTrack(ActiveScene.SceneTrack);
     }
 
     public void ReinitializeActiveScene()

@@ -13,7 +13,7 @@ namespace PocketCardLeague.Scenes;
 public class DebugScene() : Scene<SceneType>(SceneType.Debug)
 {
     private int _currentPage = 0;
-    private const int TotalPages = 5;
+    private const int TotalPages = 6;
 
     public override void Initialize()
     {
@@ -40,6 +40,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             case 2: BuildPage3(font); break;
             case 3: BuildPage4(font); break;
             case 4: BuildPage5(font); break;
+            case 5: BuildPage6(font); break;
         }
 
         // Navigation footer
@@ -652,6 +653,133 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         scrollBtn3.OnHoveredEnter += () => scrollBtn3.Background = new Color(70, 100, 70);
         scrollBtn3.OnHoveredExit += () => scrollBtn3.Background = new Color(50, 70, 50);
         scrollPanel.Children.Add(scrollBtn3);
+
+        AddComponent(scrollPanel);
+    }
+
+    private void BuildPage6(SpriteFont font)
+    {
+        var sectionLabel = new Label("p6_section", "Audio", font,
+            new Anchor(new Vector2(96, 140)))
+        { Color = Color.Gray };
+        AddComponent(sectionLabel);
+
+        // ─── Music Track (left side) ───
+        var trackDesc = new Label("p6_track_desc", "Music Track", font,
+            new Anchor(new Vector2(96, 210)))
+        { Color = Color.DarkGray };
+        AddComponent(trackDesc);
+
+        var trackDropdown = new Dropdown("p6_track_dropdown",
+            new Anchor(new Vector2(96, 276)),
+            new Vector2(480, 96))
+        {
+            Font = font,
+            Placeholder = "Select track...",
+            MaxVisibleItems = 5,
+            Padding = 16,
+            ArrowWidth = 64,
+            ArrowSize = 24,
+            TrianglePixelSize = 4,
+            ScrollbarWidth = 12,
+            Border = new Border(4, Color.Gray),
+            FocusedBorder = new Border(4, Color.CornflowerBlue),
+            ListBorder = new Border(4, Color.Gray)
+        };
+
+        var tracks = new[]
+        {
+            "ms_battle", "ms_battle_2", "ms_battle_3", "ms_battle_4",
+            "ms_battle_intro", "ms_defeat", "ms_ending",
+            "ms_league", "ms_main", "ms_tutorial", "ms_victory"
+        };
+
+        foreach (var track in tracks)
+            trackDropdown.Items.Add(track);
+
+        var toggleButton = new Button("p6_toggle", SoundManager.IsPlaying ? "Stop Music" : "Play Music", font,
+            new Anchor(new Vector2(96, 400)), new Vector2(480, 96), true)
+        {
+            Background = SoundManager.IsPlaying ? new Color(80, 50, 50) : new Color(50, 80, 50),
+            Border = new Border(4, Color.Gray),
+            TextBorder = new Border(4, Color.Black),
+            PressDepth = 4
+        };
+        toggleButton.OnHoveredEnter += () => toggleButton.Background = SoundManager.IsPlaying ? new Color(110, 70, 70) : new Color(70, 110, 70);
+        toggleButton.OnHoveredExit += () => toggleButton.Background = SoundManager.IsPlaying ? new Color(80, 50, 50) : new Color(50, 80, 50);
+
+        trackDropdown.OnSelectionChanged += index =>
+        {
+            if (trackDropdown.SelectedItem is not null)
+            {
+                SoundManager.PlayTrack(trackDropdown.SelectedItem);
+                toggleButton.Text = "Stop Music";
+                toggleButton.Background = new Color(80, 50, 50);
+            }
+        };
+        AddComponent(trackDropdown);
+
+        toggleButton.OnClicked += () =>
+        {
+            if (SoundManager.IsPlaying)
+            {
+                SoundManager.StopTrack();
+                toggleButton.Text = "Play Music";
+                toggleButton.Background = new Color(50, 80, 50);
+            }
+            else if (trackDropdown.SelectedItem is not null)
+            {
+                SoundManager.PlayTrack(trackDropdown.SelectedItem);
+                toggleButton.Text = "Stop Music";
+                toggleButton.Background = new Color(80, 50, 50);
+            }
+        };
+        AddComponent(toggleButton);
+
+        // ─── Sound Effects (right side) ───
+        var effectsDesc = new Label("p6_effects_desc", "Sound Effects", font,
+            new Anchor(new Vector2(700, 210)))
+        { Color = Color.DarkGray };
+        AddComponent(effectsDesc);
+
+        var effects = new[]
+        {
+            "sn_card", "sn_click", "sn_click_2", "sn_coin", "sn_enterview",
+            "sn_event", "sn_faint", "sn_flipcard", "sn_hurt", "sn_money",
+            "sn_noise", "sn_rare", "sn_rare_2", "sn_text", "sn_upgrade"
+        };
+
+        var scrollPanel = new ScrollPanel("p6_effects_scroll")
+        {
+            Position = new Anchor(new Vector2(700, 276)),
+            Size = new Vector2(600, 700),
+            ContentSize = new Vector2(600, effects.Length * 80 + 20),
+            Background = new Color(35, 40, 50),
+            Border = new Border(4, Color.Gray),
+            ScrollbarWidth = 16,
+            ScrollbarPadding = 4,
+            ScrollSpeed = 60f,
+            EnableHorizontalScroll = false
+        };
+
+        float y = 290;
+        foreach (var effect in effects)
+        {
+            var effectName = effect;
+            var btn = new Button($"p6_fx_{effectName}", effectName, font,
+                new Anchor(new Vector2(724, y)), new Vector2(520, 64), true)
+            {
+                Background = new Color(50, 60, 80),
+                Border = new Border(4, Color.Gray),
+                TextBorder = new Border(4, Color.Black),
+                PressDepth = 4
+            };
+            btn.OnHoveredEnter += () => btn.Background = new Color(70, 85, 110);
+            btn.OnHoveredExit += () => btn.Background = new Color(50, 60, 80);
+            btn.OnClicked += () => SoundManager.PlayEffect(effectName);
+            scrollPanel.Children.Add(btn);
+            y += 80;
+        }
 
         AddComponent(scrollPanel);
     }

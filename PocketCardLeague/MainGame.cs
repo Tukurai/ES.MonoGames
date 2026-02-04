@@ -35,6 +35,7 @@ public class MainGame : Game
         ContentHelper.Initialize(new PocketCardLeagueConfig(), Content);
         RendererHelper.Initialize(GraphicsDevice);
         SettingsManager.Initialize(); // Load settings first
+        SoundManager.Initialize();
         ScaleManager.Initialize(_graphics, VirtualWidth, VirtualHeight, SettingsManager.GetCurrentScale());
         SceneManager.Initialize<SceneType>();
         base.Initialize();

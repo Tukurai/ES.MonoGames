@@ -8,6 +8,8 @@ namespace PocketCardLeague.Scenes;
 
 public class TitleScene() : Scene<SceneType>(SceneType.Title)
 {
+    public override string? SceneTrack { get; set; } = "ms_main";
+
     public override void Initialize()
     {
         BackgroundColor = Color.Black;

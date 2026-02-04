@@ -20,6 +20,7 @@ public enum SceneState
 public interface IScene
 {
     string Name { get; }
+    string? SceneTrack { get; }
     SceneState State { get; set; }
     Color BackgroundColor { get; set; }
 
@@ -38,6 +39,7 @@ public interface IScene
 public abstract class Scene<T> : IScene where T : Enum
 {
     public string Name { get; set; }
+    public virtual string? SceneTrack { get; set; }
     public SceneState State { get; set; } = SceneState.None;
     public Color BackgroundColor { get; set; } = Color.CornflowerBlue;
 
