@@ -55,6 +55,7 @@ public class MainGame : Game
 
         SceneManager.AddScene(new TitleScene());
         SceneManager.AddScene(new OptionsScene());
+        SceneManager.AddScene(new DebugScene());
 
         SceneManager.SetActiveScene(SceneType.Title);
     }
@@ -72,7 +73,17 @@ public class MainGame : Game
     {
         ControlState.Update(gameTime);
 
-        if (ControlState.GetHeldKeys().Contains(Keys.Escape))
+        var pressedKeys = ControlState.GetPressedKeys();
+        var heldKeys = ControlState.GetHeldKeys();
+        bool altHeld = heldKeys.Contains(Keys.LeftAlt) || heldKeys.Contains(Keys.RightAlt);
+
+        if (altHeld && pressedKeys.Contains(Keys.Home))
+        {
+            SceneManager.SetActiveScene(SceneType.Debug);
+            return;
+        }
+
+        if (heldKeys.Contains(Keys.Escape))
             Exit();
 
         SceneManager.ActiveScene?.Update(gameTime);

@@ -103,13 +103,6 @@
 /processorParam:Quality=Best
 /build:effects/sn_upgrade.wav
 
-#begin fonts/DefaultFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:fonts/DefaultFont.spritefont
-
 #begin fonts/DefaultFont_x1.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -138,12 +131,12 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/DefaultFont_x4.spritefont
 
-#begin fonts/TitleFont.spritefont
+#begin fonts/DefaultFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:fonts/TitleFont.spritefont
+/build:fonts/DefaultFont.spritefont
 
 #begin fonts/TitleFont_x1.spritefont
 /importer:FontDescriptionImporter
@@ -173,6 +166,13 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/TitleFont_x4.spritefont
 
+#begin fonts/TitleFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/TitleFont.spritefont
+
 #begin spritesheets/Buttons.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -185,6 +185,18 @@
 /processorParam:TextureFormat=Color
 /build:spritesheets/Buttons.png
 
+#begin spritesheets/Pixelfont.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:spritesheets/Pixelfont.png
+
 #begin spritesheets/Pokemon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -196,6 +208,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:spritesheets/Pokemon.png
+
+#begin spritesheets/Scoreboard.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:spritesheets/Scoreboard.png
 
 #begin tracks/ms_battle_2.wav
 /importer:WavImporter
