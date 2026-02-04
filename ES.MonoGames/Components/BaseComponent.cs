@@ -85,6 +85,25 @@ public abstract class BaseComponent
     /// </summary>
     public float BobInterval { get; set; } = 650f;
 
+    /// <summary>
+    /// Opacity of this component (0f = fully transparent, 1f = fully opaque). Default is 1f.
+    /// Children inherit their parent's effective opacity multiplicatively.
+    /// </summary>
+    public float Opacity { get; set; } = 1f;
+
+    /// <summary>
+    /// The computed opacity including parent opacity. Use this when drawing.
+    /// </summary>
+    public float EffectiveOpacity => Opacity * _parentOpacity;
+
+    private float _parentOpacity = 1f;
+
+    /// <summary>
+    /// Returns the given color with EffectiveOpacity applied to its alpha channel.
+    /// </summary>
+    protected Color ApplyOpacity(Color color)
+        => color * EffectiveOpacity;
+
     private float _bobTimer;
     private bool _bobOffset;
 
@@ -250,7 +269,10 @@ public abstract class BaseComponent
         }
 
         foreach (var child in Children)
+        {
+            child._parentOpacity = EffectiveOpacity;
             child.Update(gameTime);
+        }
 
         OnComponentUpdated?.Invoke();
     }
@@ -258,7 +280,10 @@ public abstract class BaseComponent
     public virtual void Draw(SpriteBatch spriteBatch)
     {
         foreach (var child in Children)
+        {
+            child._parentOpacity = EffectiveOpacity;
             child.Draw(spriteBatch);
+        }
     }
 
     private Vector2 GetBobDelta(BobDirection direction) => direction switch

@@ -1,8 +1,10 @@
 using Components;
 using Helpers;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using PocketCardLeague.Enums;
 using PocketCardLeague.SpriteMaps;
+using System.Linq;
 
 namespace PocketCardLeague.Scenes;
 
@@ -22,18 +24,18 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
         var btnRight = new SpriteButton("button_to_main",
             new Anchor(new Vector2(1852, 508)));
         btnRight.SetNormalSprite(arrowsAtlas.GetTextureFromAtlas("arrow_right"));
-        btnRight.SetHoveredSprite(arrowsAtlas.GetTextureFromAtlas("arrow_right_hover"));
+        btnRight.SetHoveredSprite(arrowsAtlas.GetTextureFromAtlas("arrow_right"));
         btnRight.SetPressedSprite(arrowsAtlas.GetTextureFromAtlas("arrow_right_active"));
         btnRight.Scale = new Vector2(4, 4);
         btnRight.Bob = BobDirection.Right;
-        AddComponent(btnRight);
-
+        btnRight.Opacity = 0.8f;
+        btnRight.OnHoveredEnter += () => btnRight.Opacity = 1f;
+        btnRight.OnHoveredExit += () => btnRight.Opacity = 0.8f;
         btnRight.OnClicked += () => SceneManager.SetActiveScene(SceneType.Main, new SlideTransition(SlideDirection.Left));
-
-        var rightLabel = new Label("main_label", "Main", font,
+        btnRight.Children.Add(new Label("main_label", "Main", font,
             new Anchor(new Vector2(14, 60), btnRight.Position), true)
-        { Border = new Border(4, Color.Black) };
-        AddComponent(rightLabel);
+        { Border = new Border(4, Color.Black) });
+        AddComponent(btnRight);
 
         // Graphics settings
         var graphicsLabel = new Label("graphics_label", "Graphics", font, new Anchor(new Vector2(96, 200)))
@@ -203,5 +205,17 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
         AddComponent(nameInput);
 
         base.Initialize();
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        var pressedKeys = ControlState.GetPressedKeys();
+        if (pressedKeys.Contains(Keys.Right))
+        {
+            SceneManager.SetActiveScene(SceneType.Main, new SlideTransition(SlideDirection.Left));
+            return;
+        }
+
+        base.Update(gameTime);
     }
 }

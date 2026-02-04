@@ -214,7 +214,7 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
                 texture,
                 pos,
                 sourceRect,
-                tint,
+                ApplyOpacity(tint),
                 Rotation,
                 Vector2.Zero,
                 Scale,
@@ -277,10 +277,15 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
             pos.Y + (Size.Y * Scale.Y - textSize.Y) / 2
         );
 
-        var textColor = IsEnabled ? TextColor : DisabledTint;
+        var textColor = ApplyOpacity(IsEnabled ? TextColor : DisabledTint);
 
         if (TextBorder is not null && TextBorder.Thickness > 0)
-            RendererHelper.DrawOutlinedString(spriteBatch, Font, Text, textPos, textColor, TextBorder);
+        {
+            var border = EffectiveOpacity < 1f
+                ? new Border(TextBorder.Thickness, ApplyOpacity(TextBorder.Color))
+                : TextBorder;
+            RendererHelper.DrawOutlinedString(spriteBatch, Font, Text, textPos, textColor, border);
+        }
         else
             spriteBatch.DrawString(Font, Text, textPos, textColor);
     }

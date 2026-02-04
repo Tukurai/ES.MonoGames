@@ -3,6 +3,8 @@ using Components;
 using Helpers;
 using PocketCardLeague.Enums;
 using PocketCardLeague.SpriteMaps;
+using System.Linq;
+using Microsoft.Xna.Framework.Input;
 
 namespace PocketCardLeague.Scenes;
 
@@ -26,7 +28,7 @@ public class DeckScene() : Scene<SceneType>(SceneType.Deck)
         var btnLeft = new SpriteButton("button_to_main",
             new Anchor(new Vector2(140, 508)));
         btnLeft.SetNormalSprite(arrowsAtlas.GetTextureFromAtlas("arrow_left"));
-        btnLeft.SetHoveredSprite(arrowsAtlas.GetTextureFromAtlas("arrow_left_hover"));
+        btnLeft.SetHoveredSprite(arrowsAtlas.GetTextureFromAtlas("arrow_left"));
         btnLeft.SetPressedSprite(arrowsAtlas.GetTextureFromAtlas("arrow_left_active"));
         btnLeft.Bob = BobDirection.Left;
         btnLeft.Scale = new Vector2(4, 4);
@@ -40,5 +42,17 @@ public class DeckScene() : Scene<SceneType>(SceneType.Deck)
         AddComponent(leftLabel);
 
         base.Initialize();
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        var pressedKeys = ControlState.GetPressedKeys();
+        if (pressedKeys.Contains(Keys.Left))
+        {
+            SceneManager.SetActiveScene(SceneType.Main, new SlideTransition(SlideDirection.Right));
+            return;
+        }
+
+        base.Update(gameTime);
     }
 }

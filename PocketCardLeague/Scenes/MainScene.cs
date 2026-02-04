@@ -3,6 +3,8 @@ using Components;
 using Helpers;
 using PocketCardLeague.Enums;
 using PocketCardLeague.SpriteMaps;
+using System.Linq;
+using Microsoft.Xna.Framework.Input;
 
 namespace PocketCardLeague.Scenes;
 
@@ -26,35 +28,53 @@ public class MainScene() : Scene<SceneType>(SceneType.Main)
         var btnLeft = new SpriteButton("button_to_options",
             new Anchor(new Vector2(140, 508)));
         btnLeft.SetNormalSprite(arrowsAtlas.GetTextureFromAtlas("arrow_left"));
-        btnLeft.SetHoveredSprite(arrowsAtlas.GetTextureFromAtlas("arrow_left_hover"));
+        btnLeft.SetHoveredSprite(arrowsAtlas.GetTextureFromAtlas("arrow_left"));
         btnLeft.SetPressedSprite(arrowsAtlas.GetTextureFromAtlas("arrow_left_active"));
         btnLeft.Bob = BobDirection.Left;
         btnLeft.Scale = new Vector2(4, 4);
-        AddComponent(btnLeft);
-
+        btnLeft.Opacity = 0.8f;
+        btnLeft.OnHoveredEnter += () => btnLeft.Opacity = 1f;
+        btnLeft.OnHoveredExit += () => btnLeft.Opacity = 0.8f;
         btnLeft.OnClicked += () => SceneManager.SetActiveScene(SceneType.Options, new SlideTransition(SlideDirection.Right));
-
-        var leftLabel = new Label("options_label", "Options", font,
+        btnLeft.Children.Add(new Label("options_label", "Options", font,
             new Anchor(new Vector2(14, 60), btnLeft.Position), true)
-        { Border = new Border(4, Color.Black) };
-        AddComponent(leftLabel);
+        { Border = new Border(4, Color.Black) });
+        AddComponent(btnLeft);
 
         var btnRight = new SpriteButton("button_to_deckbuilder",
             new Anchor(new Vector2(1852, 508)));
         btnRight.SetNormalSprite(arrowsAtlas.GetTextureFromAtlas("arrow_right"));
-        btnRight.SetHoveredSprite(arrowsAtlas.GetTextureFromAtlas("arrow_right_hover"));
+        btnRight.SetHoveredSprite(arrowsAtlas.GetTextureFromAtlas("arrow_right"));
         btnRight.SetPressedSprite(arrowsAtlas.GetTextureFromAtlas("arrow_right_active"));
         btnRight.Scale = new Vector2(4, 4);
         btnRight.Bob = BobDirection.Right;
+        btnRight.Opacity = 0.8f;
+        btnRight.OnHoveredEnter += () => btnRight.Opacity = 1f;
+        btnRight.OnHoveredExit += () => btnRight.Opacity = 0.8f;
+        btnRight.OnClicked += () => SceneManager.SetActiveScene(SceneType.Deck, new SlideTransition(SlideDirection.Left));
+        btnRight.Children.Add(new Label("deckbuilder_label", "Deck", font,
+            new Anchor(new Vector2(14, 60), btnRight.Position), true)
+        { Border = new Border(4, Color.Black) });
         AddComponent(btnRight);
 
-        btnRight.OnClicked += () => SceneManager.SetActiveScene(SceneType.Deck, new SlideTransition(SlideDirection.Left));
-
-        var rightLabel = new Label("deckbuilder_label", "Deck", font,
-            new Anchor(new Vector2(14, 60), btnRight.Position), true)
-        { Border = new Border(4, Color.Black) };
-        AddComponent(rightLabel);
-
         base.Initialize();
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        var pressedKeys = ControlState.GetPressedKeys();
+        if (pressedKeys.Contains(Keys.Left))
+        {
+            SceneManager.SetActiveScene(SceneType.Options, new SlideTransition(SlideDirection.Right));
+            return;
+        }
+
+        if (pressedKeys.Contains(Keys.Right))
+        {
+            SceneManager.SetActiveScene(SceneType.Deck, new SlideTransition(SlideDirection.Left));
+            return;
+        }
+
+        base.Update(gameTime);
     }
 }

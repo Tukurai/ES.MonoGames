@@ -50,10 +50,17 @@ public class Label(string? name = null, string text = "", SpriteFont? font = nul
     public override void Draw(SpriteBatch spriteBatch)
     {
         if (Font is not null)
+        {
+            var color = ApplyOpacity(Color);
+            var border = EffectiveOpacity < 1f
+                ? new Border(Border.Thickness, ApplyOpacity(Border.Color))
+                : Border;
+
             if (QuickDraw)
-                RendererHelper.DrawOutlinedStringFast(spriteBatch, Font, Text, Position.GetVector2(), Color, Border);
+                RendererHelper.DrawOutlinedStringFast(spriteBatch, Font, Text, Position.GetVector2(), color, border);
             else
-                RendererHelper.DrawOutlinedString(spriteBatch, Font, Text, Position.GetVector2(), Color, Border);
+                RendererHelper.DrawOutlinedString(spriteBatch, Font, Text, Position.GetVector2(), color, border);
+        }
 
         base.Draw(spriteBatch);
     }
