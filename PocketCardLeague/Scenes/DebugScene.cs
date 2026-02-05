@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using System.Linq;
 using Components;
 using Helpers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using PocketCardLeague.Consts;
 using PocketCardLeague.Enums;
 using PocketCardLeague.SpriteMaps;
 
@@ -19,13 +18,10 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
     {
         BackgroundColor = new Color(20, 20, 30);
 
-        var font = ContentHelper.LoadFont("DefaultFont");
-        var titleFont = ContentHelper.LoadFont("TitleFont");
-
         // Page header
         var header = new Label("page_header",
             $"Debug - Page {_currentPage + 1}/{TotalPages}",
-            titleFont,
+            Fonts.Title,
             new Anchor(new Vector2(0, 24), null), true, 2048)
         {
             Border = new Border(4, Color.Black)
@@ -35,18 +31,18 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         // Build current page
         switch (_currentPage)
         {
-            case 0: BuildPage1(font); break;
-            case 1: BuildPage2(font); break;
-            case 2: BuildPage3(font); break;
-            case 3: BuildPage4(font); break;
-            case 4: BuildPage5(font); break;
-            case 5: BuildPage6(font); break;
+            case 0: BuildPage1(); break;
+            case 1: BuildPage2(); break;
+            case 2: BuildPage3(); break;
+            case 3: BuildPage4(); break;
+            case 4: BuildPage5(); break;
+            case 5: BuildPage6(); break;
         }
 
         // Navigation footer
         var footer = new Label("nav_footer",
             "< > Navigate Pages | CTRL +/- Scale | HOME to return",
-            font,
+            Fonts.Default,
             new Anchor(new Vector2(0, 1080), null), true, 2048)
         {
             Color = Color.Gray
@@ -105,15 +101,15 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
 
     // ─── Page Builders ────────────────────────────────────────
 
-    private void BuildPage1(SpriteFont font)
+    private void BuildPage1()
     {
-        var sectionLabel = new Label("p1_section", "Text & Labels", font,
+        var sectionLabel = new Label("p1_section", "Text & Labels", Fonts.Default,
             new Anchor(new Vector2(96, 140)))
         { Color = Color.Gray };
         AddComponent(sectionLabel);
 
         // Regular Label
-        var label = new Label("p1_label", "Regular SpriteFont Label", font,
+        var label = new Label("p1_label", "Regular SpriteFont Label", Fonts.Default,
             new Anchor(new Vector2(96, 220)))
         { Color = Color.White };
         AddComponent(label);
@@ -122,7 +118,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         var pixelfontAtlas = new PixelfontSpriteAtlas();
         var pixelfontMap = PixelLabel.CreatePixelfontMap();
 
-        var leftDesc = new Label("p1_left_desc", "PixelLabel (Pixelfont, Left)", font,
+        var leftDesc = new Label("p1_left_desc", "PixelLabel (Pixelfont, Left)", Fonts.Default,
             new Anchor(new Vector2(96, 310)))
         { Color = Color.DarkGray };
         AddComponent(leftDesc);
@@ -138,7 +134,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(pixelLeft);
 
         // PixelLabel - Pixelfont center-aligned
-        var centerDesc = new Label("p1_center_desc", "PixelLabel (Pixelfont, Center)", font,
+        var centerDesc = new Label("p1_center_desc", "PixelLabel (Pixelfont, Center)", Fonts.Default,
             new Anchor(new Vector2(96, 460)))
         { Color = Color.DarkGray };
         AddComponent(centerDesc);
@@ -156,7 +152,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(pixelCenter);
 
         // PixelLabel - Pixelfont right-aligned
-        var rightDesc = new Label("p1_right_desc", "PixelLabel (Pixelfont, Right)", font,
+        var rightDesc = new Label("p1_right_desc", "PixelLabel (Pixelfont, Right)", Fonts.Default,
             new Anchor(new Vector2(96, 610)))
         { Color = Color.DarkGray };
         AddComponent(rightDesc);
@@ -174,7 +170,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(pixelRight);
 
         // PixelLabel - Scoreboard
-        var scoreDesc = new Label("p1_score_desc", "PixelLabel (Scoreboard)", font,
+        var scoreDesc = new Label("p1_score_desc", "PixelLabel (Scoreboard)", Fonts.Default,
             new Anchor(new Vector2(96, 780)))
         { Color = Color.DarkGray };
         AddComponent(scoreDesc);
@@ -193,20 +189,20 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(scoreLabel);
     }
 
-    private void BuildPage2(SpriteFont font)
+    private void BuildPage2()
     {
-        var sectionLabel = new Label("p2_section", "Buttons & Inputs", font,
+        var sectionLabel = new Label("p2_section", "Buttons & Inputs", Fonts.Default,
             new Anchor(new Vector2(96, 140)))
         { Color = Color.Gray };
         AddComponent(sectionLabel);
 
         // Button
-        var buttonDesc = new Label("p2_btn_desc", "Button", font,
+        var buttonDesc = new Label("p2_btn_desc", "Button", Fonts.Default,
             new Anchor(new Vector2(96, 210)))
         { Color = Color.DarkGray };
         AddComponent(buttonDesc);
 
-        var button = new Button("p2_button", "Click Me", font,
+        var button = new Button("p2_button", "Click Me", Fonts.Default,
             new Anchor(new Vector2(96, 266)), new Vector2(400, 96), true)
         {
             Background = new Color(50, 60, 80),
@@ -219,22 +215,21 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(button);
 
         // SpriteButton
-        var buttonDesc2 = new Label("p2_sprbtn_desc", "SpriteButton", font,
+        var buttonDesc2 = new Label("p2_sprbtn_desc", "SpriteButton", Fonts.Default,
             new Anchor(new Vector2(96, 400)))
         { Color = Color.DarkGray };
         AddComponent(buttonDesc2);
 
-        var arrowsSpriteAtlas = new ArrowsSpriteAtlas();
         var spriteBtn = new SpriteButton("p2_sprite_button",
             new Anchor(new Vector2(96, 456)));
-        spriteBtn.SetNormalSprite(arrowsSpriteAtlas.GetTextureFromAtlas("arrow_right"));
-        spriteBtn.SetHoveredSprite(arrowsSpriteAtlas.GetTextureFromAtlas("arrow_right_hover"));
-        spriteBtn.SetPressedSprite(arrowsSpriteAtlas.GetTextureFromAtlas("arrow_right_active"));
+        spriteBtn.SetNormalSprite(ArrowsSpriteAtlas.Arrow_right);
+        spriteBtn.SetHoveredSprite(ArrowsSpriteAtlas.Arrow_right_hover);
+        spriteBtn.SetPressedSprite(ArrowsSpriteAtlas.Arrow_right_active);
         spriteBtn.Scale = new Vector2(6, 6);
         AddComponent(spriteBtn);
 
         // Checkboxes
-        var cbDesc = new Label("p2_cb_desc", "Checkbox", font,
+        var cbDesc = new Label("p2_cb_desc", "Checkbox", Fonts.Default,
             new Anchor(new Vector2(600, 210)))
         { Color = Color.DarkGray };
         AddComponent(cbDesc);
@@ -243,7 +238,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             new Anchor(new Vector2(600, 276)))
         {
             Label = "Checked",
-            Font = font,
+            Font = Fonts.Default,
             LabelColor = Color.White,
             IsChecked = true,
             BoxBackground = new Color(60, 60, 60),
@@ -259,7 +254,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             new Anchor(new Vector2(600, 396)))
         {
             Label = "Unchecked",
-            Font = font,
+            Font = Fonts.Default,
             LabelColor = Color.White,
             IsChecked = false,
             BoxBackground = new Color(60, 60, 60),
@@ -272,7 +267,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(cbUnchecked);
 
         // Sprite Checkboxes (toggles)
-        var sprCbDesc = new Label("p2_sprcb_desc", "Sprite Checkbox (toggle)", font,
+        var sprCbDesc = new Label("p2_sprcb_desc", "Sprite Checkbox (toggle)", Fonts.Default,
             new Anchor(new Vector2(600, 520)))
         { Color = Color.DarkGray };
         AddComponent(sprCbDesc);
@@ -291,7 +286,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         }
 
         // InputField
-        var inputDesc = new Label("p2_input_desc", "InputField", font,
+        var inputDesc = new Label("p2_input_desc", "InputField", Fonts.Default,
             new Anchor(new Vector2(96, 580)))
         { Color = Color.DarkGray };
         AddComponent(inputDesc);
@@ -299,7 +294,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         var inputField = new InputField(
             name: "p2_input",
             placeholderText: "Type something...",
-            font: font,
+            font: Fonts.Default,
             position: new Anchor(new Vector2(96, 636)),
             size: new Vector2(400, 100))
         {
@@ -314,15 +309,15 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(inputField);
     }
 
-    private void BuildPage3(SpriteFont font)
+    private void BuildPage3()
     {
-        var sectionLabel = new Label("p3_section", "Sliders & Dropdowns", font,
+        var sectionLabel = new Label("p3_section", "Sliders & Dropdowns", Fonts.Default,
             new Anchor(new Vector2(96, 140)))
         { Color = Color.Gray };
         AddComponent(sectionLabel);
 
         // Slider
-        var sliderDesc = new Label("p3_slider_desc", "Slider", font,
+        var sliderDesc = new Label("p3_slider_desc", "Slider", Fonts.Default,
             new Anchor(new Vector2(96, 210)))
         { Color = Color.DarkGray };
         AddComponent(sliderDesc);
@@ -334,7 +329,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             MinValue = 0,
             MaxValue = 100,
             Value = 42,
-            Font = font,
+            Font = Fonts.Default,
             ShowValue = true,
             TrackFillColor = Color.CornflowerBlue,
             TrackHeight = 24,
@@ -346,7 +341,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(slider);
 
         // Second slider
-        var slider2Desc = new Label("p3_slider2_desc", "Slider (alternate style)", font,
+        var slider2Desc = new Label("p3_slider2_desc", "Slider (alternate style)", Fonts.Default,
             new Anchor(new Vector2(96, 380)))
         { Color = Color.DarkGray };
         AddComponent(slider2Desc);
@@ -358,7 +353,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             MinValue = 0,
             MaxValue = 255,
             Value = 128,
-            Font = font,
+            Font = Fonts.Default,
             ShowValue = true,
             TrackFillColor = Color.Orange,
             TrackHeight = 24,
@@ -370,7 +365,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(slider2);
 
         // Dropdown
-        var ddDesc = new Label("p3_dd_desc", "Dropdown", font,
+        var ddDesc = new Label("p3_dd_desc", "Dropdown", Fonts.Default,
             new Anchor(new Vector2(96, 560)))
         { Color = Color.DarkGray };
         AddComponent(ddDesc);
@@ -379,7 +374,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             new Anchor(new Vector2(96, 616)),
             new Vector2(480, 96))
         {
-            Font = font,
+            Font = Fonts.Default,
             Placeholder = "Select item...",
             MaxVisibleItems = 4,
             Padding = 16,
@@ -399,9 +394,9 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(dropdown);
     }
 
-    private void BuildPage4(SpriteFont font)
+    private void BuildPage4()
     {
-        var sectionLabel = new Label("p4_section", "Sprites", font,
+        var sectionLabel = new Label("p4_section", "Sprites", Fonts.Default,
             new Anchor(new Vector2(96, 140)))
         { Color = Color.Gray };
         AddComponent(sectionLabel);
@@ -409,19 +404,19 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         var pokemonAtlas = new PokemonSpriteAtlas();
 
         // Static Sprite
-        var spriteDesc = new Label("p4_sprite_desc", "Sprite (static)", font,
+        var spriteDesc = new Label("p4_sprite_desc", "Sprite (static)", Fonts.Default,
             new Anchor(new Vector2(96, 210)))
         { Color = Color.DarkGray };
         AddComponent(spriteDesc);
 
         var sprite = new Sprite("p4_sprite",
             new Anchor(new Vector2(144, 276)));
-        sprite.SetFromAtlas(pokemonAtlas.GetTextureFromAtlas("0025_000_mf_n_00000000_n"));
+        sprite.SetFromAtlas(PokemonSpriteAtlas._0025_000_mf_n_00000000_n);
         sprite.Scale = new Vector2(8, 8);
         AddComponent(sprite);
 
         // AnimatedSprite
-        var animDesc = new Label("p4_anim_desc", "Sprite (Animated)", font,
+        var animDesc = new Label("p4_anim_desc", "Sprite (Animated)", Fonts.Default,
             new Anchor(new Vector2(800, 210)))
         { Color = Color.DarkGray };
         AddComponent(animDesc);
@@ -436,28 +431,28 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
 
         var animFrames = new[]
         {
-            "0001_000_mf_n_00000000_n",
-            "0004_000_mf_n_00000000_n",
-            "0007_000_mf_n_00000000_n",
-            "0025_000_mf_n_00000000_n",
+            PokemonSpriteAtlas._0001_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0004_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0007_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0025_000_mf_n_00000000_n,
         };
 
-        foreach (var frameName in animFrames)
-            animSprite.AddFrame(pokemonAtlas.GetTextureFromAtlas(frameName));
+        foreach (var frame in animFrames)
+            animSprite.AddFrame(frame);
 
         animSprite.Play();
         AddComponent(animSprite);
     }
 
-    private void BuildPage5(SpriteFont font)
+    private void BuildPage5()
     {
-        var sectionLabel = new Label("p5_section", "Panels", font,
+        var sectionLabel = new Label("p5_section", "Panels", Fonts.Default,
             new Anchor(new Vector2(96, 140)))
         { Color = Color.Gray };
         AddComponent(sectionLabel);
 
         // ─── Regular Panel ───
-        var panelDesc = new Label("p5_panel_desc", "Panel", font,
+        var panelDesc = new Label("p5_panel_desc", "Panel", Fonts.Default,
             new Anchor(new Vector2(96, 210)))
         { Color = Color.DarkGray };
         AddComponent(panelDesc);
@@ -470,17 +465,17 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             Border = new Border(4, Color.Gray)
         };
 
-        var panelLabel1 = new Label("p5_panel_label1", "Inside a Panel", font,
+        var panelLabel1 = new Label("p5_panel_label1", "Inside a Panel", Fonts.Default,
             new Anchor(new Vector2(120, 296)))
         { Color = Color.White };
         panel.Children.Add(panelLabel1);
 
-        var panelLabel2 = new Label("p5_panel_label2", "Panels are containers", font,
+        var panelLabel2 = new Label("p5_panel_label2", "Panels are containers", Fonts.Default,
             new Anchor(new Vector2(120, 356)))
         { Color = Color.CornflowerBlue };
         panel.Children.Add(panelLabel2);
 
-        var panelBtn = new Button("p5_panel_btn", "Panel Button", font,
+        var panelBtn = new Button("p5_panel_btn", "Panel Button", Fonts.Default,
             new Anchor(new Vector2(120, 430)), new Vector2(340, 80), true)
         {
             Background = new Color(60, 70, 90),
@@ -495,7 +490,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(panel);
 
         // ─── ScrollPanel ───
-        var scrollDesc = new Label("p5_scroll_desc", "ScrollPanel", font,
+        var scrollDesc = new Label("p5_scroll_desc", "ScrollPanel", Fonts.Default,
             new Anchor(new Vector2(700, 210)))
         { Color = Color.DarkGray };
         AddComponent(scrollDesc);
@@ -516,13 +511,13 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         // Fill scroll panel with varied components
         float y = 290;
 
-        var scrollLabel1 = new Label("p5_sl1", "Scrollable Content", font,
+        var scrollLabel1 = new Label("p5_sl1", "Scrollable Content", Fonts.Default,
             new Anchor(new Vector2(724, y)))
         { Color = Color.White };
         scrollPanel.Children.Add(scrollLabel1);
         y += 80;
 
-        var scrollBtn1 = new Button("p5_sb1", "Button A", font,
+        var scrollBtn1 = new Button("p5_sb1", "Button A", Fonts.Default,
             new Anchor(new Vector2(724, y)), new Vector2(300, 80), true)
         {
             Background = new Color(60, 70, 90),
@@ -539,7 +534,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             new Anchor(new Vector2(724, y)))
         {
             Label = "Option 1",
-            Font = font,
+            Font = Fonts.Default,
             LabelColor = Color.White,
             IsChecked = true,
             BoxBackground = new Color(60, 60, 60),
@@ -556,7 +551,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             new Anchor(new Vector2(724, y)))
         {
             Label = "Option 2",
-            Font = font,
+            Font = Fonts.Default,
             LabelColor = Color.White,
             IsChecked = false,
             BoxBackground = new Color(60, 60, 60),
@@ -576,7 +571,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             MinValue = 0,
             MaxValue = 100,
             Value = 65,
-            Font = font,
+            Font = Fonts.Default,
             ShowValue = true,
             TrackFillColor = Color.CornflowerBlue,
             TrackHeight = 24,
@@ -588,7 +583,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         scrollPanel.Children.Add(scrollSlider);
         y += 120;
 
-        var scrollBtn2 = new Button("p5_sb2", "Button B", font,
+        var scrollBtn2 = new Button("p5_sb2", "Button B", Fonts.Default,
             new Anchor(new Vector2(724, y)), new Vector2(300, 80), true)
         {
             Background = new Color(80, 50, 50),
@@ -601,7 +596,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         scrollPanel.Children.Add(scrollBtn2);
         y += 120;
 
-        var scrollLabel2 = new Label("p5_sl2", "More content below...", font,
+        var scrollLabel2 = new Label("p5_sl2", "More content below...", Fonts.Default,
             new Anchor(new Vector2(724, y)))
         { Color = Color.Gray };
         scrollPanel.Children.Add(scrollLabel2);
@@ -614,7 +609,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             MinValue = 0,
             MaxValue = 255,
             Value = 180,
-            Font = font,
+            Font = Fonts.Default,
             ShowValue = true,
             TrackFillColor = Color.Orange,
             TrackHeight = 24,
@@ -630,7 +625,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             new Anchor(new Vector2(724, y)))
         {
             Label = "Option 3",
-            Font = font,
+            Font = Fonts.Default,
             LabelColor = Color.White,
             IsChecked = true,
             BoxBackground = new Color(60, 60, 60),
@@ -643,7 +638,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         scrollPanel.Children.Add(scrollCb3);
         y += 100;
 
-        var scrollBtn3 = new Button("p5_sb3", "Button C", font,
+        var scrollBtn3 = new Button("p5_sb3", "Button C", Fonts.Default,
             new Anchor(new Vector2(724, y)), new Vector2(300, 80), true)
         {
             Background = new Color(50, 70, 50),
@@ -658,15 +653,15 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(scrollPanel);
     }
 
-    private void BuildPage6(SpriteFont font)
+    private void BuildPage6()
     {
-        var sectionLabel = new Label("p6_section", "Audio", font,
+        var sectionLabel = new Label("p6_section", "Audio", Fonts.Default,
             new Anchor(new Vector2(96, 140)))
         { Color = Color.Gray };
         AddComponent(sectionLabel);
 
         // ─── Music Track (left side) ───
-        var trackDesc = new Label("p6_track_desc", "Music Track", font,
+        var trackDesc = new Label("p6_track_desc", "Music Track", Fonts.Default,
             new Anchor(new Vector2(96, 210)))
         { Color = Color.DarkGray };
         AddComponent(trackDesc);
@@ -675,7 +670,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
             new Anchor(new Vector2(96, 276)),
             new Vector2(480, 96))
         {
-            Font = font,
+            Font = Fonts.Default,
             Placeholder = "Select track...",
             MaxVisibleItems = 5,
             Padding = 16,
@@ -698,7 +693,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         foreach (var track in tracks)
             trackDropdown.Items.Add(track);
 
-        var toggleButton = new Button("p6_toggle", SoundManager.IsPlaying ? "Stop Music" : "Play Music", font,
+        var toggleButton = new Button("p6_toggle", SoundManager.IsPlaying ? "Stop Music" : "Play Music", Fonts.Default,
             new Anchor(new Vector2(96, 400)), new Vector2(480, 96), true)
         {
             Background = SoundManager.IsPlaying ? new Color(80, 50, 50) : new Color(50, 80, 50),
@@ -738,7 +733,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         AddComponent(toggleButton);
 
         // ─── Sound Effects (right side) ───
-        var effectsDesc = new Label("p6_effects_desc", "Sound Effects", font,
+        var effectsDesc = new Label("p6_effects_desc", "Sound Effects", Fonts.Default,
             new Anchor(new Vector2(700, 210)))
         { Color = Color.DarkGray };
         AddComponent(effectsDesc);
@@ -767,7 +762,7 @@ public class DebugScene() : Scene<SceneType>(SceneType.Debug)
         foreach (var effect in effects)
         {
             var effectName = effect;
-            var btn = new Button($"p6_fx_{effectName}", effectName, font,
+            var btn = new Button($"p6_fx_{effectName}", effectName, Fonts.Default,
                 new Anchor(new Vector2(724, y)), new Vector2(520, 64), true)
             {
                 Background = new Color(50, 60, 80),

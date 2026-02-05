@@ -5,6 +5,7 @@ using PocketCardLeague.Enums;
 using PocketCardLeague.SpriteMaps;
 using System.Linq;
 using Microsoft.Xna.Framework.Input;
+using PocketCardLeague.Consts;
 
 namespace PocketCardLeague.Scenes;
 
@@ -17,9 +18,8 @@ public class TitleScene() : Scene<SceneType>(SceneType.Title)
         BackgroundColor = Color.Black;
 
         // Virtual resolution is 2048x1152, downscaled to window
-        var font = ContentHelper.LoadFont("DefaultFont");
 
-        var title = new Label("title", "Pocket Card League", ContentHelper.LoadFont("TitleFont"), new Anchor(new Vector2(0, 80), null), true, 2048)
+        var title = new Label("title", "Pocket Card League", Fonts.Title, new Anchor(new Vector2(0, 80), null), true, 2048)
         {
             Border = new Border(4, Color.Black)
         };
@@ -37,53 +37,45 @@ public class TitleScene() : Scene<SceneType>(SceneType.Title)
 
         var animationFrames = new[]
         {
-            "0001_000_mf_n_00000000_n",  // Bulbasaur
-            "0002_000_mf_n_00000000_n",  // Bulbasaur
-            "0003_000_mf_n_00000000_n",  // Bulbasaur
-
-            "0004_000_mf_n_00000000_n",  // Charmander
-            "0005_000_mf_n_00000000_n",  // Charmander
-            "0006_000_mf_n_00000000_n",  // Charmander
-            
-            "0007_000_mf_n_00000000_n",  // Squirtle
-            "0008_000_mf_n_00000000_n",  // Squirtle
-            "0009_000_mf_n_00000000_n",  // Squirtle
-            
-            "0010_000_mf_n_00000000_n",  // Squirtle
-            "0011_000_mf_n_00000000_n",  // Squirtle
-            "0012_000_mf_n_00000000_n",  // Squirtle
-            
-            "0013_000_mf_n_00000000_n",  // Squirtle
-            "0014_000_mf_n_00000000_n",  // Squirtle
-            "0015_000_mf_n_00000000_n",  // Squirtle
-            
-            "0016_000_mf_n_00000000_n",  // Squirtle
-            "0017_000_mf_n_00000000_n",  // Squirtle
-            "0018_000_mf_n_00000000_n",  // Squirtle
-            
-            "0019_000_mf_n_00000000_n",  // Squirtle
-            "0020_000_mf_n_00000000_n",  // Squirtle
-            "0021_000_mf_n_00000000_n",  // Squirtle
-            
-            "0022_000_mf_n_00000000_n",  // Squirtle
-            "0023_000_mf_n_00000000_n",  // Squirtle
-            "0024_000_mf_n_00000000_n",  // Squirtle
-
-            "0025_000_mf_n_00000000_n",  // Pikachu
-            "0026_000_mf_n_00000000_n",  // Pikachu
-            
-            "0150_000_mf_n_00000000_n",  // Pikachu
-            "0151_000_mf_n_00000000_n",  // Pikachu
+            PokemonSpriteAtlas._0001_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0001_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0002_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0003_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0004_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0005_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0006_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0007_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0008_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0009_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0010_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0011_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0012_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0013_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0014_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0015_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0016_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0017_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0018_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0019_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0020_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0021_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0022_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0023_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0024_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0025_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0026_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0150_000_mf_n_00000000_n,
+            PokemonSpriteAtlas._0151_000_mf_n_00000000_n,
         };
 
-        foreach (var frameName in animationFrames)
+        foreach (var frame in animationFrames)
         {
-            animatedPokemon.AddFrame(pokemonAtlas.GetTextureFromAtlas(frameName));
+            animatedPokemon.AddFrame(frame);
         }
 
         animatedPokemon.Play();
 
-        var continueAction = new Label("continue", "Press SPACE", font, new Anchor(new Vector2(0, 880), null), true, 2048)
+        var continueAction = new Label("continue", "Press SPACE", Fonts.Default, new Anchor(new Vector2(0, 880), null), true, 2048)
         {
             Border = new Border(4, Color.Black)
         };

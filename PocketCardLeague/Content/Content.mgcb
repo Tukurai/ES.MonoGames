@@ -103,34 +103,6 @@
 /processorParam:Quality=Best
 /build:effects/sn_upgrade.wav
 
-#begin fonts/DefaultFont_x1.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:fonts/DefaultFont_x1.spritefont
-
-#begin fonts/DefaultFont_x2.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:fonts/DefaultFont_x2.spritefont
-
-#begin fonts/DefaultFont_x3.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:fonts/DefaultFont_x3.spritefont
-
-#begin fonts/DefaultFont_x4.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:fonts/DefaultFont_x4.spritefont
-
 #begin fonts/DefaultFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -138,33 +110,19 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/DefaultFont.spritefont
 
-#begin fonts/TitleFont_x1.spritefont
+#begin fonts/HeaderFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:fonts/TitleFont_x1.spritefont
+/build:fonts/HeaderFont.spritefont
 
-#begin fonts/TitleFont_x2.spritefont
+#begin fonts/TitleFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:fonts/TitleFont_x2.spritefont
-
-#begin fonts/TitleFont_x3.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:fonts/TitleFont_x3.spritefont
-
-#begin fonts/TitleFont_x4.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:fonts/TitleFont_x4.spritefont
+/build:fonts/TitleFont.spritefont
 
 #begin fonts/TitleFont.spritefont
 /importer:FontDescriptionImporter

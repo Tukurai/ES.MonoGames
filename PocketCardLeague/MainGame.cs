@@ -57,19 +57,27 @@ public class MainGame : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+        ContentHelper.RegisterAtlas<ArrowsSpriteAtlas>();
+        ContentHelper.RegisterAtlas<ButtonsSpriteAtlas>();
+        ContentHelper.RegisterAtlas<LocationsSpriteAtlas>();
+        ContentHelper.RegisterAtlas<PixelCursorsSpriteAtlas>();
+        ContentHelper.RegisterAtlas<PixelfontSpriteAtlas>();
+        ContentHelper.RegisterAtlas<PokemonSpriteAtlas>();
+        ContentHelper.RegisterAtlas<ScoreboardSpriteAtlas>();
+
+
         // Register pixel cursors
         var cursors = new PixelCursorsSpriteAtlas();
         ControlState.RegisterCursors(
-            cursors.GetTextureFromAtlas(PixelCursorsSpriteAtlas.Arrow)!,
-            cursors.GetTextureFromAtlas(PixelCursorsSpriteAtlas.Pointer)!,
-            cursors.GetTextureFromAtlas(PixelCursorsSpriteAtlas.Grabber)!,
+            PixelCursorsSpriteAtlas.Arrow,
+            PixelCursorsSpriteAtlas.Pointer,
+            PixelCursorsSpriteAtlas.Grabber,
             arrowOrigin: new Vector2(1, 1),
             pointerOrigin: new Vector2(3, 1),
             grabOrigin: new Vector2(3, 1));
 
         // Set default scene background
-        var locations = new LocationsSpriteAtlas();
-        Scene<SceneType>.DefaultBackground = locations.GetTextureFromAtlas(LocationsSpriteAtlas.Border);
+        Scene<SceneType>.DefaultBackground = LocationsSpriteAtlas.Border;
 
         SceneManager.AddScene(new TitleScene());
         SceneManager.AddScene(new OptionsScene());

@@ -9,7 +9,7 @@ public class ArrowsSpriteAtlas : SpriteAtlas
         Atlas = [new("Arrows")
         {
             Name = "Arrows",
-            SmartUpdateKey = "$TexturePacker:SmartUpdate:c01b91924b44b03c525c43f3aa17edd2:9852e130f998e5475cd977621a766be9:8c78d36d3d74cf1ad05bd2a7267f9a3e$",
+            SmartUpdateKey = "$TexturePacker:SmartUpdate:835a7da2322dc6f3ab879ba5d6e93c00:9852e130f998e5475cd977621a766be9:8c78d36d3d74cf1ad05bd2a7267f9a3e$",
             SpriteAtlas =
             {
                 new("arrow_down", false, 48, 0, 14, 8, 14, 14, 0.5f, 0.875f),
@@ -41,30 +41,29 @@ public class ArrowsSpriteAtlas : SpriteAtlas
         }];
     }
 
-    public const string Arrow_down = "arrow_down";
-    public const string Arrow_down_active = "arrow_down_active";
-    public const string Arrow_down_hover = "arrow_down_hover";
-    public const string Arrow_down_small = "arrow_down_small";
-    public const string Arrow_down_small_active = "arrow_down_small_active";
-    public const string Arrow_down_small_hover = "arrow_down_small_hover";
-    public const string Arrow_left = "arrow_left";
-    public const string Arrow_left_active = "arrow_left_active";
-    public const string Arrow_left_hover = "arrow_left_hover";
-    public const string Arrow_left_small = "arrow_left_small";
-    public const string Arrow_left_small_active = "arrow_left_small_active";
-    public const string Arrow_left_small_hover = "arrow_left_small_hover";
-    public const string Arrow_right = "arrow_right";
-    public const string Arrow_right_active = "arrow_right_active";
-    public const string Arrow_right_hover = "arrow_right_hover";
-    public const string Arrow_right_small = "arrow_right_small";
-    public const string Arrow_right_small_active = "arrow_right_small_active";
-    public const string Arrow_right_small_hover = "arrow_right_small_hover";
-    public const string Arrow_up = "arrow_up";
-    public const string Arrow_up_active = "arrow_up_active";
-    public const string Arrow_up_howver = "arrow_up_howver";
-    public const string Arrow_up_small = "arrow_up_small";
-    public const string Arrow_up_small_active = "arrow_up_small_active";
-    public const string Arrow_up_small_hover = "arrow_up_small_hover";
+    public static TextureResult Arrow_down => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_down")!;
+    public static TextureResult Arrow_down_active => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_down_active")!;
+    public static TextureResult Arrow_down_hover => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_down_hover")!;
+    public static TextureResult Arrow_down_small => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_down_small")!;
+    public static TextureResult Arrow_down_small_active => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_down_small_active")!;
+    public static TextureResult Arrow_down_small_hover => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_down_small_hover")!;
+    public static TextureResult Arrow_left => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_left")!;
+    public static TextureResult Arrow_left_active => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_left_active")!;
+    public static TextureResult Arrow_left_hover => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_left_hover")!;
+    public static TextureResult Arrow_left_small => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_left_small")!;
+    public static TextureResult Arrow_left_small_active => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_left_small_active")!;
+    public static TextureResult Arrow_left_small_hover => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_left_small_hover")!;
+    public static TextureResult Arrow_right => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_right")!;
+    public static TextureResult Arrow_right_active => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_right_active")!;
+    public static TextureResult Arrow_right_hover => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_right_hover")!;
+    public static TextureResult Arrow_right_small => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_right_small")!;
+    public static TextureResult Arrow_right_small_active => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_right_small_active")!;
+    public static TextureResult Arrow_right_small_hover => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_right_small_hover")!;
+    public static TextureResult Arrow_up => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_up")!;
+    public static TextureResult Arrow_up_active => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_up_active")!;
+    public static TextureResult Arrow_up_howver => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_up_howver")!;
+    public static TextureResult Arrow_up_small => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_up_small")!;
+    public static TextureResult Arrow_up_small_active => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_up_small_active")!;
+    public static TextureResult Arrow_up_small_hover => ContentHelper.GetTextureResult<ArrowsSpriteAtlas>("arrow_up_small_hover")!;
 
 }
-

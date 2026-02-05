@@ -32,6 +32,7 @@ public interface IScene
     SceneBackgroundMode BackgroundMode { get; set; }
     Color BackgroundColor { get; set; }
     TextureResult? BackgroundSprite { get; set; }
+    float BackgroundOpacity { get; set; }
 
     void AddComponent(BaseComponent component);
     void Draw(SpriteBatch spriteBatch);
@@ -75,6 +76,11 @@ public abstract class Scene<T> : IScene where T : Enum
             BackgroundMode = value is not null ? SceneBackgroundMode.Sprite : SceneBackgroundMode.Default;
         }
     }
+
+    /// <summary>
+    /// Opacity of the background (0f = fully transparent, 1f = fully opaque). Default is 1f.
+    /// </summary>
+    public float BackgroundOpacity { get; set; } = 1f;
 
     private bool _pendingReinitialize = false;
 
@@ -196,22 +202,22 @@ public abstract class Scene<T> : IScene where T : Enum
         switch (BackgroundMode)
         {
             case SceneBackgroundMode.Sprite when BackgroundSprite is not null:
-                spriteBatch.GraphicsDevice.Clear(Color.Black);
-                DrawTextureResult(spriteBatch, BackgroundSprite, dest);
+                spriteBatch.GraphicsDevice.Clear(BackgroundColor);
+                DrawTextureResult(spriteBatch, BackgroundSprite, dest, BackgroundOpacity);
                 break;
 
             case SceneBackgroundMode.Default when DefaultBackground is not null:
-                spriteBatch.GraphicsDevice.Clear(Color.Black);
-                DrawTextureResult(spriteBatch, DefaultBackground, dest);
+                spriteBatch.GraphicsDevice.Clear(BackgroundColor);
+                DrawTextureResult(spriteBatch, DefaultBackground, dest, BackgroundOpacity);
                 break;
 
             default:
-                spriteBatch.GraphicsDevice.Clear(BackgroundColor);
+                spriteBatch.GraphicsDevice.Clear(BackgroundColor * BackgroundOpacity);
                 break;
         }
     }
 
-    private static void DrawTextureResult(SpriteBatch spriteBatch, TextureResult texture, Rectangle dest)
+    private static void DrawTextureResult(SpriteBatch spriteBatch, TextureResult texture, Rectangle dest, float opacity)
     {
         var sourceRect = new Rectangle(
             texture.AtlasEntry.FrameX,
@@ -219,6 +225,6 @@ public abstract class Scene<T> : IScene where T : Enum
             texture.AtlasEntry.FrameWidth,
             texture.AtlasEntry.FrameHeight);
 
-        spriteBatch.Draw(texture.Texture, dest, sourceRect, Color.White);
+        spriteBatch.Draw(texture.Texture, dest, sourceRect, Color.White * opacity);
     }
 }

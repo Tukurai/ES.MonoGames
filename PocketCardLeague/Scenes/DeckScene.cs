@@ -5,6 +5,7 @@ using PocketCardLeague.Enums;
 using PocketCardLeague.SpriteMaps;
 using System.Linq;
 using Microsoft.Xna.Framework.Input;
+using PocketCardLeague.Consts;
 
 namespace PocketCardLeague.Scenes;
 
@@ -14,32 +15,29 @@ public class DeckScene() : Scene<SceneType>(SceneType.Deck)
 
     public override void Initialize()
     {
-        var locations = new LocationsSpriteAtlas();
-
+        BackgroundColor = new Color(25, 25, 25, 255);
         BackgroundMode = SceneBackgroundMode.Sprite;
-        BackgroundSprite = locations.GetTextureFromAtlas(LocationsSpriteAtlas.Cave_11);
+        BackgroundSprite = LocationsSpriteAtlas.Cave_10;
+        BackgroundOpacity = 0.25f;
 
         // Virtual resolution is 2048x1152, downscaled to window
 
-
-        var font = ContentHelper.LoadFont("DefaultFont");
-        var arrowsAtlas = new ArrowsSpriteAtlas();
-
         var btnLeft = new SpriteButton("button_to_main",
             new Anchor(new Vector2(140, 508)));
-        btnLeft.SetNormalSprite(arrowsAtlas.GetTextureFromAtlas("arrow_left"));
-        btnLeft.SetHoveredSprite(arrowsAtlas.GetTextureFromAtlas("arrow_left"));
-        btnLeft.SetPressedSprite(arrowsAtlas.GetTextureFromAtlas("arrow_left_active"));
+
+        btnLeft.SetNormalSprite(ArrowsSpriteAtlas.Arrow_left);
+        btnLeft.SetHoveredSprite(ArrowsSpriteAtlas.Arrow_left);
+        btnLeft.SetPressedSprite(ArrowsSpriteAtlas.Arrow_left_active);
         btnLeft.Bob = BobDirection.Left;
         btnLeft.Scale = new Vector2(4, 4);
-        AddComponent(btnLeft);
-
+        btnLeft.Opacity = 0.8f;
+        btnLeft.OnHoveredEnter += () => btnLeft.Opacity = 1f;
+        btnLeft.OnHoveredExit += () => btnLeft.Opacity = 0.8f;
         btnLeft.OnClicked += () => SceneManager.SetActiveScene(SceneType.Main, new SlideTransition(SlideDirection.Right));
-
-        var leftLabel = new Label("main_label", "Main", font,
+        btnLeft.Children.Add(new Label("main_label", "Main", Fonts.Header,
             new Anchor(new Vector2(14, 60), btnLeft.Position), true)
-        { Border = new Border(4, Color.Black) };
-        AddComponent(leftLabel);
+        { Border = new Border(4, new Color(25, 25, 25, 170)) });
+        AddComponent(btnLeft);
 
         base.Initialize();
     }

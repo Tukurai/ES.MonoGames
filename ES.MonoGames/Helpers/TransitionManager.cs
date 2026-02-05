@@ -81,9 +81,9 @@ public static class TransitionManager
 
         var isSlideShared = _sharedBackground && _transition is SlideTransition;
 
-        // Render old scene to its render target (black if no old scene)
+        // Render old scene to its render target
         graphicsDevice.SetRenderTarget(_oldTarget);
-        graphicsDevice.Clear(Color.Black);
+        graphicsDevice.Clear(isSlideShared || _oldScene is null ? Color.Transparent : Color.Black);
         if (_oldScene is not null)
         {
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
@@ -151,9 +151,16 @@ public static class TransitionManager
         return a.BackgroundMode switch
         {
             SceneBackgroundMode.Color => a.BackgroundColor == b.BackgroundColor,
-            SceneBackgroundMode.Sprite => a.BackgroundSprite == b.BackgroundSprite,
+            SceneBackgroundMode.Sprite => SpritesMatch(a.BackgroundSprite, b.BackgroundSprite),
             SceneBackgroundMode.Default => true,
             _ => false
         };
+    }
+
+    private static bool SpritesMatch(TextureResult? a, TextureResult? b)
+    {
+        if (a is null && b is null) return true;
+        if (a is null || b is null) return false;
+        return a.Texture == b.Texture && a.AtlasEntry.Name == b.AtlasEntry.Name;
     }
 }

@@ -37,6 +37,33 @@ public static class ContentHelper
     private static string EffectPath(string asset) => _config.EffectsRoot + asset;
     private static string TrackPath(string asset) => _config.TracksRoot + asset;
 
+    // ***
+
+    public static void RegisterAtlas<T>() where T : SpriteAtlas, new()
+    {
+        EnsureInitialized();
+        if (!AtlasesCache.ContainsKey(typeof(T).Name))
+        {
+            AtlasesCache[typeof(T).Name] = new T();
+        }
+    }
+
+    private static Dictionary<string, SpriteAtlas> AtlasesCache { get; } = [];
+
+    public static TextureResult? GetTextureResult<T>(string name) where T : SpriteAtlas, new()
+    {
+        EnsureInitialized();
+        if (!AtlasesCache.TryGetValue(typeof(T).Name, out var atlas))
+        {
+            // Lazy load the atlas instance for type T
+            atlas = Activator.CreateInstance<T>()!;
+            AtlasesCache[typeof(T).Name] = atlas;
+        }
+        return atlas.GetTextureFromAtlas(name);
+    }
+
+    // ***
+
     /// <summary>
     /// Loads a font without scale suffix (for non-scaled fonts).
     /// </summary>
