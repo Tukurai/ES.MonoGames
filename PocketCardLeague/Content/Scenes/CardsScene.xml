@@ -9,7 +9,7 @@
                 Bob="up" Opacity="0.8">
     <Children>
       <Label Name="decks_label" Text="Decks" Font="HeaderFont"
-             RelativeTo="btn_up" OffsetX="24" OffsetY="48" Center="true">
+             RelativeTo="btn_up" X="24" Y="48" Center="true">
         <Border Thickness="4" Color="25,25,25,170"/>
       </Label>
     </Children>

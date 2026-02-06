@@ -107,14 +107,14 @@ public class PixelLabel : BaseComponent
         var pos = Position.GetVector2();
         var totalWidth = MeasureText();
 
-        float offsetX = Alignment switch
+        float X = Alignment switch
         {
             TextAlignment.Center => (MaxWidth - totalWidth) / 2f,
             TextAlignment.Right => MaxWidth - totalWidth,
             _ => 0
         };
 
-        float drawX = pos.X + offsetX;
+        float drawX = pos.X + X;
         float drawY = pos.Y;
 
         for (int i = 0; i < Text.Length; i++)

@@ -24,7 +24,7 @@ public class SlideTransition(SlideDirection direction, float duration = 0.4f) : 
         var height = destRect.Height;
 
         // Calculate offsets based on direction
-        var (oldOffsetX, oldOffsetY, newOffsetX, newOffsetY) = Direction switch
+        var (oldX, oldY, newX, newY) = Direction switch
         {
             SlideDirection.Left => (
                 (int)(-width * eased), 0,
@@ -42,14 +42,14 @@ public class SlideTransition(SlideDirection direction, float duration = 0.4f) : 
         };
 
         var oldRect = new Rectangle(
-            destRect.X + oldOffsetX,
-            destRect.Y + oldOffsetY,
+            destRect.X + oldX,
+            destRect.Y + oldY,
             destRect.Width,
             destRect.Height);
 
         var newRect = new Rectangle(
-            destRect.X + newOffsetX,
-            destRect.Y + newOffsetY,
+            destRect.X + newX,
+            destRect.Y + newY,
             destRect.Width,
             destRect.Height);
 

@@ -219,27 +219,17 @@ public static class SceneLoader
     /// <summary>
     /// Parse position from element (absolute or relative).
     /// </summary>
-    private static Anchor? ParsePosition(XElement element)
+    private static Anchor ParsePosition(XElement element)
     {
-        var x = ParseFloat(element.Attribute("X")?.Value);
-        var y = ParseFloat(element.Attribute("Y")?.Value);
+        var x = ParseFloat(element.Attribute("X")?.Value) ?? 0;
+        var y = ParseFloat(element.Attribute("Y")?.Value) ?? 0;
         var relativeTo = element.Attribute("RelativeTo")?.Value;
-        var offsetX = ParseFloat(element.Attribute("OffsetX")?.Value) ?? 0;
-        var offsetY = ParseFloat(element.Attribute("OffsetY")?.Value) ?? 0;
 
         if (!string.IsNullOrEmpty(relativeTo) && _namedComponents.TryGetValue(relativeTo, out var relativeComponent))
-        {
-            // Relative position
-            return new Anchor(new Vector2(offsetX, offsetY), relativeComponent.Position);
-        }
+            return new Anchor(new Vector2(x, y), relativeComponent.Position);
 
-        if (x.HasValue || y.HasValue)
-        {
             // Absolute position
-            return new Anchor(new Vector2(x ?? 0, y ?? 0));
-        }
-
-        return null;
+        return new Anchor(new Vector2(x, y));
     }
 
     #region Component Creators
