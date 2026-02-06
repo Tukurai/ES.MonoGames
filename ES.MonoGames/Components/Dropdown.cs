@@ -50,6 +50,11 @@ public class Dropdown : BaseComponent
     public bool IsExpanded { get; private set; } = false;
 
     /// <summary>
+    /// Closes the dropdown if it's expanded.
+    /// </summary>
+    public void Close() => IsExpanded = false;
+
+    /// <summary>
     /// Font for rendering text.
     /// </summary>
     public SpriteFont? Font { get; set; }

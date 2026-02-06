@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Card Template - A reusable card component for displaying game cards
+
+  USAGE IN XML:
+  =============
+  Basic usage (use template defaults):
+  <Include Src="Card.xml" Name="my_card" X="100" Y="100" />
+
+  Override root properties:
+  <Include Src="Card.xml" Name="player_card" X="200" Y="200" Width="200" Height="300" />
+
+  Override child component properties by name:
+  <Include Src="Card.xml" Name="attack_card" X="100" Y="100">
+    <card_title Text="Fire Blast"/>
+    <card_description Text="Deals 50 damage to the target."/>
+  </Include>
+
+  USAGE IN CODE (OnXmlLoaded):
+  ============================
+  // Bind events to a card created from XML
+  var card = Bind<Panel>("my_card");
+  card.OnClicked += HandleCardClick;
+
+  // Or create cards programmatically with SceneLoader.LoadTemplate
+  var card = SceneLoader.LoadTemplate("Card.xml", this,
+      overrides: new Dictionary<string, string>
+      {
+          ["Name"] = "dynamic_card",
+          ["X"] = "100",
+          ["Y"] = "200"
+      },
+      nestedOverrides: new Dictionary<string, Dictionary<string, string>>
+      {
+          ["card_title"] = new() { ["Text"] = "Fire Blast" },
+          ["card_description"] = new() { ["Text"] = "Deals 50 fire damage." }
+      }
+  );
+  if (card is not null)
+  {
+      AddComponent(card);
+      card.OnClicked += HandleCardClick;
+  }
+-->
+<Template>
+  <Panel Name="card_panel" Width="180" Height="260" Background="45,45,60,255">
+    <Border Thickness="4" Color="80,80,100"/>
+    <Children>
+      <!-- Card image area - can hold a Sprite child if needed -->
+      <Panel Name="card_image_panel" X="10" Y="10" Width="160" Height="140" Background="30,30,45">
+        <Border Thickness="2" Color="60,60,80"/>
+      </Panel>
+
+      <!-- Card title -->
+      <Label Name="card_title" Text="Card Name" Font="HeaderFont"
+             X="10" Y="158" Color="White">
+        <Border Thickness="2" Color="Black"/>
+      </Label>
+
+      <!-- Card stats (optional - shows HP, attack, etc.) -->
+      <Label Name="card_stats" Text="" Font="DefaultFont"
+             X="10" Y="190" Color="200,200,100"/>
+
+      <!-- Card description area -->
+      <Label Name="card_description" Text="Card description goes here." Font="DefaultFont"
+             X="10" Y="215" Color="180,180,180" MaxWidth="160"/>
+    </Children>
+  </Panel>
+</Template>

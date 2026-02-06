@@ -7,6 +7,8 @@ using PocketCardLeague.Config;
 using PocketCardLeague.Enums;
 using PocketCardLeague.Scenes;
 using PocketCardLeague.SpriteMaps;
+using System;
+using System.IO;
 using System.Linq;
 
 namespace PocketCardLeague;
@@ -86,6 +88,12 @@ public class MainGame : Game
         SceneManager.AddScene(new DeckScene());
 
         SceneManager.SetActiveScene(SceneType.Title, new FadeTransition());
+
+        // Initialize hot reload for XML scenes (only in debug mode)
+#if DEBUG
+        var scenesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "Scenes");
+        HotReloadManager.Initialize(scenesPath);
+#endif
     }
 
     /// <summary>
@@ -100,6 +108,11 @@ public class MainGame : Game
     protected override void Update(GameTime gameTime)
     {
         ControlState.Update(gameTime);
+
+        // Check for hot reload (safe point - before scene update)
+#if DEBUG
+        HotReloadManager.Update();
+#endif
 
         var heldKeys = ControlState.GetHeldKeys();
 

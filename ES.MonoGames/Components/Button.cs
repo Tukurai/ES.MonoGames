@@ -20,39 +20,37 @@ public class Button(string? name = null, string text = "Button", SpriteFont? fon
 
     private float _lengthCache = -1f;
     private float _heightCache = -1f;
-    private Vector2 _textPositionCache = Vector2.Zero;
+    private string _cachedText = "";
 
-    public override void Initialize()
+    private void EnsureTextMeasured()
     {
-        if (_lengthCache < 0f && _heightCache < 0f)
+        // Re-measure if font exists and text changed or never measured
+        if (Font is not null && (_lengthCache < 0f || _cachedText != Text))
         {
-            if (Font is not null)
-            {
-                _lengthCache = Font.MeasureString(Text).X;
-                _heightCache = Font.MeasureString(Text).Y;
-
-                // Calculate text position based on centering and padding
-                _textPositionCache = Position.GetVector2();
-                if (Centered)
-                {
-                    _textPositionCache.X += (Size.X - _lengthCache) / 2;
-                    _textPositionCache.Y += (Size.Y - _heightCache) / 2;
-                }
-                else
-                {
-                    _textPositionCache.X += Padding;
-                    _textPositionCache.Y += Padding;
-                }
-            }
+            _lengthCache = Font.MeasureString(Text).X;
+            _heightCache = Font.MeasureString(Text).Y;
+            _cachedText = Text;
         }
-
-        base.Initialize();
     }
 
-    public override void Update(GameTime gameTime)
+    private Vector2 GetTextPosition()
     {
-        base.Update(gameTime);
+        EnsureTextMeasured();
+
+        var pos = Position.GetVector2();
+        if (Centered && _lengthCache >= 0f)
+        {
+            pos.X += (Size.X - _lengthCache) / 2;
+            pos.Y += (Size.Y - _heightCache) / 2;
+        }
+        else
+        {
+            pos.X += Padding;
+            pos.Y += Padding;
+        }
+        return pos;
     }
+
 
     public override void Draw(SpriteBatch spriteBatch)
     {
@@ -74,9 +72,9 @@ public class Button(string? name = null, string text = "Button", SpriteFont? fon
 
         if (Font is not null)
         {
-            var textPos = Pressed && PressDepth > 0
-                ? _textPositionCache + new Vector2(0, PressDepth)
-                : _textPositionCache;
+            var textPos = GetTextPosition();
+            if (Pressed && PressDepth > 0)
+                textPos.Y += PressDepth;
 
             if (QuickDraw)
                 RendererHelper.DrawOutlinedStringFast(spriteBatch, Font, Text, textPos, TextColor, TextBorder);

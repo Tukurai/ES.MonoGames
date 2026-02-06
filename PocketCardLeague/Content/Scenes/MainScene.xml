@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Scene BackgroundColor="25,25,25" BackgroundSprite="Locations.Cave_11" BackgroundOpacity="0.25" SceneTrack="ms_main">
+
+  <!-- Left navigation button (to Options) -->
+  <SpriteButton Name="btn_left" X="140" Y="508" Scale="4,4"
+                NormalSprite="Arrows.Arrow_left"
+                HoveredSprite="Arrows.Arrow_left"
+                PressedSprite="Arrows.Arrow_left_active"
+                Bob="Left" Opacity="0.8">
+    <Children>
+      <Label Name="options_label" Text="Options" Font="HeaderFont"
+             RelativeTo="btn_left" OffsetX="14" OffsetY="60" Center="true">
+        <Border Thickness="4" Color="25,25,25,170"/>
+      </Label>
+    </Children>
+  </SpriteButton>
+
+  <Label Name="m3_label" Text="Options" Font="M3Default" X="100" Y="100" Center="true">
+    <Border Thickness="4" Color="25,25,25,170"/>
+  </Label>
+
+  <Label Name="m5_label" Text="Options" Font="M5Default" X="100" Y="130" Center="true">
+    <Border Thickness="4" Color="25,25,25,170"/>
+  </Label>
+
+  <Label Name="m6_label" Text="Options" Font="M6Default" X="100" Y="160" Center="true">
+    <Border Thickness="4" Color="25,25,25,170"/>
+  </Label>
+
+  <!-- Right navigation button (to Deck) -->
+  <SpriteButton Name="btn_right" X="1852" Y="508" Scale="4,4"
+                NormalSprite="Arrows.Arrow_right"
+                HoveredSprite="Arrows.Arrow_right"
+                PressedSprite="Arrows.Arrow_right_active"
+                Bob="Right" Opacity="0.8">
+    <Children>
+      <Label Name="deck_label" Text="Deck" Font="HeaderFont"
+             RelativeTo="btn_right" OffsetX="14" OffsetY="60" Center="true">
+        <Border Thickness="4" Color="25,25,25,170"/>
+      </Label>
+    </Children>
+  </SpriteButton>
+
+</Scene>

@@ -27,7 +27,7 @@ public enum SceneBackgroundMode
 public interface IScene
 {
     string Name { get; }
-    string? SceneTrack { get; }
+    string? SceneTrack { get; set; }
     SceneState State { get; set; }
     SceneBackgroundMode BackgroundMode { get; set; }
     Color BackgroundColor { get; set; }
@@ -46,6 +46,11 @@ public interface IScene
     void Start();
     void Stop();
     void Update(GameTime gameTime);
+
+    /// <summary>
+    /// Set background properties from XML loader.
+    /// </summary>
+    void SetBackgroundFromXml(SceneBackgroundMode mode, Color? color, TextureResult? sprite, float opacity);
 }
 
 public abstract class Scene<T> : IScene where T : Enum
@@ -226,5 +231,18 @@ public abstract class Scene<T> : IScene where T : Enum
             texture.AtlasEntry.FrameHeight);
 
         spriteBatch.Draw(texture.Texture, dest, sourceRect, Color.White * opacity);
+    }
+
+    /// <summary>
+    /// Set background properties from XML loader.
+    /// </summary>
+    public void SetBackgroundFromXml(SceneBackgroundMode mode, Color? color, TextureResult? sprite, float opacity)
+    {
+        BackgroundMode = mode;
+        if (color.HasValue)
+            BackgroundColor = color.Value;
+        if (sprite is not null)
+            BackgroundSprite = sprite;
+        BackgroundOpacity = opacity;
     }
 }

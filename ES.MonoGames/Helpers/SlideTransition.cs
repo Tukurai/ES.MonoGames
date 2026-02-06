@@ -53,7 +53,8 @@ public class SlideTransition(SlideDirection direction, float duration = 0.4f) : 
             destRect.Width,
             destRect.Height);
 
-        spriteBatch.Draw(oldTarget, oldRect, Color.White);
-        spriteBatch.Draw(newTarget, newRect, Color.White);
+        // Draw only the destRect portion of each render target (they may be full-screen)
+        spriteBatch.Draw(oldTarget, oldRect, destRect, Color.White);
+        spriteBatch.Draw(newTarget, newRect, destRect, Color.White);
     }
 }
