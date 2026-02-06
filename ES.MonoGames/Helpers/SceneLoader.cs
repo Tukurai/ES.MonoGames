@@ -144,12 +144,12 @@ public static class SceneLoader
         ApplyCommonProperties(component, element);
 
         // Register this component by name BEFORE parsing children
-        // This allows children to use RelativeTo to reference their parent
+        // This allows children to use Anchor to reference their parent
         var name = element.Attribute("Name")?.Value;
         if (!string.IsNullOrEmpty(name))
             _namedComponents[name] = component;
 
-        // Parse children (they can now reference this component via RelativeTo)
+        // Parse children (they can now reference this component via Anchor)
         var childrenElement = element.Element("Children");
         if (childrenElement is not null)
         {
@@ -223,9 +223,9 @@ public static class SceneLoader
     {
         var x = ParseFloat(element.Attribute("X")?.Value) ?? 0;
         var y = ParseFloat(element.Attribute("Y")?.Value) ?? 0;
-        var relativeTo = element.Attribute("RelativeTo")?.Value;
+        var anchor = element.Attribute("Anchor")?.Value;
 
-        if (!string.IsNullOrEmpty(relativeTo) && _namedComponents.TryGetValue(relativeTo, out var relativeComponent))
+        if (!string.IsNullOrEmpty(anchor) && _namedComponents.TryGetValue(anchor, out var relativeComponent))
             return new Anchor(new Vector2(x, y), relativeComponent.Position);
 
             // Absolute position

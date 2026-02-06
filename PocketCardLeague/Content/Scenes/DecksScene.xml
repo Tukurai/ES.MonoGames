@@ -9,7 +9,7 @@
                 Bob="Left" Opacity="0.8">
     <Children>
       <Label Name="main_label" Text="Main" Font="HeaderFont"
-             RelativeTo="btn_left" X="16" Y="60" Center="true">
+             Anchor="btn_left" X="16" Y="60" Center="true">
         <Border Thickness="4" Color="25,25,25,170"/>
       </Label>
     </Children>
@@ -23,7 +23,7 @@
                 Bob="down" Opacity="0.8">
     <Children>
       <Label Name="cards_label" Text="Cards" Font="HeaderFont"
-             RelativeTo="btn_down" X="24" Y="-80" Center="true">
+             Anchor="btn_down" X="24" Y="-80" Center="true">
         <Border Thickness="4" Color="25,25,25,170"/>
       </Label>
     </Children>
@@ -32,7 +32,7 @@
   <Label Name="decks_container_label" Text="Decks" Font="HeaderFont" X="280" Y="80" Color="White">
     <Border Thickness="4" Color="25,25,25,170"/>
   </Label>
-  <ScrollPanel Name="decks_container" RelativeTo="decks_container_label" X="0" Y="80" Width="1620" Height="780"
+  <ScrollPanel Name="decks_container" Anchor="decks_container_label" X="0" Y="80" Width="1620" Height="780"
                 ContentWidth="600" ContentHeight="1220" Background="40,45,55"
                 ScrollbarWidth="16" ScrollbarPadding="4" ScrollSpeed="60"
                 EnableHorizontalScroll="false">
