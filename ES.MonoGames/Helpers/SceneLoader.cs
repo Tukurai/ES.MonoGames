@@ -132,6 +132,7 @@ public static class SceneLoader
             "Sprite" => CreateSprite(element),
             "AnimatedSprite" => CreateAnimatedSprite(element),
             "PixelLabel" => CreatePixelLabel(element),
+            "BitmapLabel" => CreateBitmapLabel(element),
             "Include" => CreateInclude(element, scene),
             _ => null
         };
@@ -861,6 +862,57 @@ public static class SceneLoader
             pixelLabel.MaxWidth = maxWidth.Value;
 
         return pixelLabel;
+    }
+
+    private static BitmapLabel CreateBitmapLabel(XElement element)
+    {
+        var bitmapLabel = new BitmapLabel();
+
+        // Text
+        var text = element.Attribute("Text")?.Value;
+        if (!string.IsNullOrEmpty(text))
+            bitmapLabel.Text = text;
+
+        // Font properties
+        var fontFamily = element.Attribute("FontFamily")?.Value;
+        if (!string.IsNullOrEmpty(fontFamily))
+            bitmapLabel.FontFamily = fontFamily;
+
+        var fontSize = ParseFloat(element.Attribute("FontSize")?.Value);
+        if (fontSize.HasValue)
+            bitmapLabel.FontSize = fontSize.Value;
+
+        var fontStyle = element.Attribute("FontStyle")?.Value;
+        if (!string.IsNullOrEmpty(fontStyle))
+        {
+            if (Enum.TryParse<System.Drawing.FontStyle>(fontStyle, true, out var style))
+                bitmapLabel.FontStyle = style;
+        }
+
+        // Colors
+        var tint = ParseColor(element.Attribute("Tint")?.Value);
+        if (tint.HasValue)
+            bitmapLabel.Tint = tint.Value;
+
+        var textColor = ParseColor(element.Attribute("TextColor")?.Value);
+        if (textColor.HasValue)
+            bitmapLabel.TextColor = textColor.Value;
+
+        var background = ParseColor(element.Attribute("Background")?.Value);
+        if (background.HasValue)
+            bitmapLabel.Background = background.Value;
+
+        // Padding
+        var padding = ParseInt(element.Attribute("Padding")?.Value);
+        if (padding.HasValue)
+            bitmapLabel.Padding = padding.Value;
+
+        // Border
+        var border = ParseBorder(element);
+        if (border is not null)
+            bitmapLabel.Border = border;
+
+        return bitmapLabel;
     }
 
     private static AnimatedSprite? CreateAnimatedSprite(XElement element)

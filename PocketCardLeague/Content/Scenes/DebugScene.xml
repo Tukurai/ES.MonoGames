@@ -28,14 +28,22 @@
               <Label Name="p1_score_desc" Text="PixelLabel (Scoreboard)" Font="DefaultFont" RelativeTo="p1_pixel_right" OffsetX="0" OffsetY="40" Color="DarkGray"/>
               <PixelLabel Name="p1_score" Atlas="Scoreboard" Text="12/34" RelativeTo="p1_score_desc" OffsetX="0" OffsetY="40" CharScale="6,6" Spacing="0" Tint="Gold"/>
 
-              <Label Name="p1_sprite_desc" Text="Sprite (static)" Font="DefaultFont" RelativeTo="p1_score" OffsetX="0" OffsetY="84" Color="DarkGray"/>
+              <Label Name="p1_bitmap_desc" Text="BitmapLabel (no AA)" Font="DefaultFont" RelativeTo="p1_score" OffsetX="0" OffsetY="80" Color="DarkGray"/>
+              <BitmapLabel Name="p1_bitmap" Text="Charizard" FontFamily="m3x6" FontSize="16" TextColor="White" RelativeTo="p1_bitmap_desc" OffsetX="0" OffsetY="32" Scale="4,4">
+                <Border Thickness="4" Color="40,40,40"/>
+              </BitmapLabel>
+              <BitmapLabel Name="p1_bitmap2" Text="No Anti-Aliasing!" FontFamily="m5x7" FontSize="16" TextColor="LimeGreen" RelativeTo="p1_bitmap" OffsetX="0" OffsetY="44" Scale="4,4">
+                <Border Thickness="4" Color="40,40,40"/>
+              </BitmapLabel>
+
+              <Label Name="p1_sprite_desc" Text="Sprite (static)" Font="DefaultFont" RelativeTo="p1_bitmap2" OffsetX="0" OffsetY="60" Color="DarkGray"/>
               <Sprite Name="p1_sprite_1" RelativeTo="p1_sprite_desc" OffsetX="40" OffsetY="56" Scale="4,4" Texture="Pokemon.0025_000_mf_n_00000000_n"/>
               <Sprite Name="p1_sprite_2" RelativeTo="p1_sprite_desc" OffsetX="160" OffsetY="56" Scale="4,4" Texture="Pokemon.0150_000_mf_n_00000000_n"/>
 
-              <Label Name="p1_anim_desc" Text="Sprite (Animated)" Font="DefaultFont" RelativeTo="p1_sprite_desc" OffsetX="280" OffsetY="0" Color="DarkGray"/>
-              <AnimatedSprite Name="p1_anim_1" RelativeTo="p1_sprite_desc" OffsetX="180" OffsetY="-60" Scale="4,4" FrameDelayMs="500" Loop="true" AutoStart="true"
+              <Label Name="p1_anim_desc" Text="Sprite (Animated)" Font="DefaultFont" RelativeTo="p1_sprite_desc" OffsetX="270" OffsetY="0" Color="DarkGray"/>
+              <AnimatedSprite Name="p1_anim_1" RelativeTo="p1_anim_desc" OffsetX="-80" OffsetY="-60" Scale="4,4" FrameDelayMs="500" Loop="true" AutoStart="true"
                               Frames="Pokemon.0001_000_mf_n_00000000_n,Pokemon.0004_000_mf_n_00000000_n,Pokemon.0007_000_mf_n_00000000_n,Pokemon.0025_000_mf_n_00000000_n"/>
-              <AnimatedSprite Name="p1_anim_2" RelativeTo="p1_sprite_desc" OffsetX="300" OffsetY="-60" Scale="4,4" FrameDelayMs="500" Loop="true" AutoStart="true"
+              <AnimatedSprite Name="p1_anim_2" RelativeTo="p1_anim_1" OffsetX="120" OffsetY="0" Scale="4,4" FrameDelayMs="500" Loop="true" AutoStart="true"
                               Frames="Pokemon.0003_000_mf_n_00000000_n,Pokemon.0006_000_mf_n_00000000_n,Pokemon.0009_000_mf_n_00000000_n,Pokemon.0026_000_mf_n_00000000_n"/>
             </Children>
           </Panel>
@@ -47,7 +55,7 @@
               <Label Name="p1_btn_desc" Text="Button" Font="DefaultFont" RelativeTo="p1_panel_buttons" OffsetX="20" OffsetY="12" Color="DarkGray"/>
               <Button Name="p1_button" Text="Click Me" Font="DefaultFont"  RelativeTo="p1_btn_desc" OffsetX="0" OffsetY="44" Width="530" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
 
               <Label Name="p1_sprbtn_desc" Text="SpriteButton" Font="DefaultFont" RelativeTo="p1_button" OffsetX="0" OffsetY="72" Color="DarkGray"/>
@@ -91,7 +99,7 @@
                       Min="0" Max="100" Value="42" ShowValue="true" Font="DefaultFont"
                       TrackFillColor="CornflowerBlue" TrackHeight="24" ThumbWidth="36" ThumbHeight="44">
                 <TrackBorder Thickness="4" Color="Gray"/>
-                <ThumbBorder Thickness="4" Color="Black"/>
+                <ThumbBorder Thickness="4" Color="40,40,40"/>
               </Slider>
 
               <Label Name="p1_slider2_desc" Text="Slider (alternate style)" Font="DefaultFont" RelativeTo="p1_slider" OffsetX="0" OffsetY="56" Color="DarkGray"/>
@@ -99,7 +107,7 @@
                       Min="0" Max="255" Value="128" ShowValue="true" Font="DefaultFont"
                       TrackFillColor="Orange" TrackHeight="24" ThumbWidth="36" ThumbHeight="44">
                 <TrackBorder Thickness="4" Color="Gray"/>
-                <ThumbBorder Thickness="4" Color="Black"/>
+                <ThumbBorder Thickness="4" Color="40,40,40"/>
               </Slider>
 
               <Label Name="p1_dd_desc" Text="Dropdown" Font="DefaultFont" RelativeTo="p1_slider2" OffsetX="0" OffsetY="56" Color="DarkGray"/>
@@ -128,7 +136,7 @@
               <Label Name="p2_button_desc" Text="Start or stop music:" Font="DefaultFont" RelativeTo="p2_panel_music" OffsetX="20" OffsetY="12" Color="DarkGray"/>
               <Button Name="p2_toggle" Text="Play Music" Font="DefaultFont" RelativeTo="p2_button_desc" OffsetX="0" OffsetY="44" Width="530" Height="64" Background="50,80,50" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
 
               <Label Name="p2_track_desc" Text="Select a Track to play:" Font="DefaultFont" RelativeTo="p2_toggle" OffsetX="0" OffsetY="72" Color="DarkGray"/>
@@ -147,7 +155,7 @@
                       Min="0" Max="100" Value="100" ShowValue="true" Font="DefaultFont"
                       TrackFillColor="Gold" TrackHeight="24" ThumbWidth="36" ThumbHeight="44">
                 <TrackBorder Thickness="4" Color="Gray"/>
-                <ThumbBorder Thickness="4" Color="Black"/>
+                <ThumbBorder Thickness="4" Color="40,40,40"/>
               </Slider>
 
               <Label Name="p2_music_desc" Text="Music Volume:" Font="DefaultFont" RelativeTo="p2_master_slider" OffsetX="0" OffsetY="56" Color="DarkGray"/>
@@ -155,7 +163,7 @@
                       Min="0" Max="100" Value="75" ShowValue="true" Font="DefaultFont"
                       TrackFillColor="CornflowerBlue" TrackHeight="24" ThumbWidth="36" ThumbHeight="44">
                 <TrackBorder Thickness="4" Color="Gray"/>
-                <ThumbBorder Thickness="4" Color="Black"/>
+                <ThumbBorder Thickness="4" Color="40,40,40"/>
               </Slider>
 
               <Label Name="p2_sfx_desc" Text="SFX Volume:" Font="DefaultFont" RelativeTo="p2_music_slider" OffsetX="0" OffsetY="56" Color="DarkGray"/>
@@ -163,7 +171,7 @@
                       Min="0" Max="100" Value="75" ShowValue="true" Font="DefaultFont"
                       TrackFillColor="LimeGreen" TrackHeight="24" ThumbWidth="36" ThumbHeight="44">
                 <TrackBorder Thickness="4" Color="Gray"/>
-                <ThumbBorder Thickness="4" Color="Black"/>
+                <ThumbBorder Thickness="4" Color="40,40,40"/>
               </Slider>
             </Children>
           </Panel>
@@ -178,63 +186,63 @@
               <Label Name="p2_fx_desc" Text="Click to play effect:" Font="DefaultFont" RelativeTo="p2_panel_effects" OffsetX="20" OffsetY="12" Color="DarkGray"/>
               <Button Name="p2_fx_sn_card" Text="sn_card" Font="DefaultFont" RelativeTo="p2_fx_desc" OffsetX="0" OffsetY="44" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_click" Text="sn_click" Font="DefaultFont" RelativeTo="p2_fx_sn_card" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_click_2" Text="sn_click_2" Font="DefaultFont" RelativeTo="p2_fx_sn_click" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_coin" Text="sn_coin" Font="DefaultFont" RelativeTo="p2_fx_sn_click_2" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_enterview" Text="sn_enterview" Font="DefaultFont" RelativeTo="p2_fx_sn_coin" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_event" Text="sn_event" Font="DefaultFont" RelativeTo="p2_fx_sn_enterview" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_faint" Text="sn_faint" Font="DefaultFont" RelativeTo="p2_fx_sn_event" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_flipcard" Text="sn_flipcard" Font="DefaultFont" RelativeTo="p2_fx_sn_faint" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_hurt" Text="sn_hurt" Font="DefaultFont" RelativeTo="p2_fx_sn_flipcard" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_money" Text="sn_money" Font="DefaultFont" RelativeTo="p2_fx_sn_hurt" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_noise" Text="sn_noise" Font="DefaultFont" RelativeTo="p2_fx_sn_money" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_rare" Text="sn_rare" Font="DefaultFont" RelativeTo="p2_fx_sn_noise" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_rare_2" Text="sn_rare_2" Font="DefaultFont" RelativeTo="p2_fx_sn_rare" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_text" Text="sn_text" Font="DefaultFont" RelativeTo="p2_fx_sn_rare_2" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
               <Button Name="p2_fx_sn_upgrade" Text="sn_upgrade" Font="DefaultFont" RelativeTo="p2_fx_sn_text" OffsetX="0" OffsetY="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
-                <TextBorder Thickness="4" Color="Black"/>
+                <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
             </Children>
           </ScrollPanel>

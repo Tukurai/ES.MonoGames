@@ -48,10 +48,6 @@ public static class RendererHelper
                     if (x == 0 && y == 0)
                         continue;
 
-                    // optional: circular outline instead of square
-                    if (x * x + y * y > border.Thickness * border.Thickness)
-                        continue;
-
                     spriteBatch.DrawString(
                         font,
                         text,
