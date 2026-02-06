@@ -19,7 +19,7 @@ public abstract class BaseComponent
     /// <summary>
     /// This is a unique identifier for the component. Can be used to track components across sessions.
     /// </summary>
-    public Guid Id { get; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
     /// This is a human-readable name for the component. Does not have to be unique.

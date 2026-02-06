@@ -59,17 +59,7 @@ public class MainGame : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        ContentHelper.RegisterAtlas<ArrowsSpriteAtlas>();
-        ContentHelper.RegisterAtlas<ButtonsSpriteAtlas>();
-        ContentHelper.RegisterAtlas<LocationsSpriteAtlas>();
-        ContentHelper.RegisterAtlas<PixelCursorsSpriteAtlas>();
-        ContentHelper.RegisterAtlas<PixelfontSpriteAtlas>();
-        ContentHelper.RegisterAtlas<PokemonSpriteAtlas>();
-        ContentHelper.RegisterAtlas<ScoreboardSpriteAtlas>();
-
-
         // Register pixel cursors
-        var cursors = new PixelCursorsSpriteAtlas();
         ControlState.RegisterCursors(
             PixelCursorsSpriteAtlas.Arrow,
             PixelCursorsSpriteAtlas.Pointer,
@@ -86,6 +76,7 @@ public class MainGame : Game
         SceneManager.AddScene(new DebugScene());
         SceneManager.AddScene(new MainScene());
         SceneManager.AddScene(new DecksScene());
+        SceneManager.AddScene(new DeckBuilderScene());
         SceneManager.AddScene(new CardsScene());
 
         SceneManager.SetActiveScene(SceneType.Title, new FadeTransition());

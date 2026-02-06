@@ -322,6 +322,7 @@ public class ScrollPanel(string? name = null) : Panel(name)
         var scrollTransform = Matrix.CreateTranslation(-_scrollOffset.X, -_scrollOffset.Y, 0);
 
         spriteBatch.Begin(
+            samplerState: SamplerState.PointClamp,
             rasterizerState: _scissorRasterizer,
             transformMatrix: scrollTransform
         );
