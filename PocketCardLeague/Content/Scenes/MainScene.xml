@@ -2,28 +2,28 @@
 <Scene BackgroundColor="25,25,25" BackgroundSprite="Locations.Cave_11" BackgroundOpacity="0.25" SceneTrack="ms_main">
 
   <!-- Left navigation button (to Options) -->
-  <SpriteButton Name="btn_left" X="140" Y="508" Scale="4,4"
+  <SpriteButton Name="btn_left" Position="140,508" Scale="4,4"
                 NormalSprite="Arrows.Arrow_left"
                 HoveredSprite="Arrows.Arrow_left"
                 PressedSprite="Arrows.Arrow_left_active"
                 Bob="Left" Opacity="0.8">
     <Children>
       <Label Name="options_label" Text="Options" Font="HeaderFont"
-             Anchor="btn_left" X="16" Y="60" Center="true">
+             Position="16,60,btn_left" Center="true">
         <Border Thickness="4" Color="25,25,25,170"/>
       </Label>
     </Children>
   </SpriteButton>
 
   <!-- Right navigation button (to Deck) -->
-  <SpriteButton Name="btn_right" X="1852" Y="508" Scale="4,4"
+  <SpriteButton Name="btn_right" Position="1852,508" Scale="4,4"
                 NormalSprite="Arrows.Arrow_right"
                 HoveredSprite="Arrows.Arrow_right"
                 PressedSprite="Arrows.Arrow_right_active"
                 Bob="Right" Opacity="0.8">
     <Children>
       <Label Name="deck_label" Text="Decks" Font="HeaderFont"
-             Anchor="btn_right" X="16" Y="60" Center="true">
+             Position="16,60,btn_right" Center="true">
         <Border Thickness="4" Color="25,25,25,170"/>
       </Label>
     </Children>

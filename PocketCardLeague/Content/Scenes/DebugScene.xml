@@ -3,84 +3,82 @@
 
   <!-- Page header - updated dynamically in code -->
   <Label Name="page_header" Text="Debug - Page 1/2" Font="HeaderFont"
-         X="0" Y="24" Center="true" MaxWidth="2048">
+         Position="0,24" Center="true" MaxWidth="2048">
     <Border Thickness="4" Color="Black"/>
   </Label>
 
   <!-- SubSceneContainer for all debug pages -->
-  <SubSceneContainer Name="page_container" X="0" Y="0" Width="2048" Height="1152" Background="Transparent">
+  <SubSceneContainer Name="page_container" Position="0,0" Size="2048,1152" Background="Transparent">
     <SubScenes>
 
       <!-- Page 1: Text & Labels -->
       <SubScene Name="page_1" Background="Transparent">
         <Children>
-          <Label Name="p1_section_labels" Text="Text &amp; Labels &amp; Sprites" Font="DefaultFont" X="96" Y="160" Color="Gray"/>
-          <Panel Name="p1_panel_labels" Anchor="p1_section_labels" X="0" Y="56" Width="570" Height="810" Background="40,45,55">
+          <Label Name="p1_section_labels" Text="Text &amp; Labels &amp; Sprites" Font="DefaultFont" Position="96,160" Color="Gray"/>
+          <Panel Name="p1_panel_labels" Position="0,56,p1_section_labels" Size="570,810" Background="40,45,55">
             <Border Thickness="4" Color="Gray"/>
             <Children>
-              <Label Name="p1_label" Text="Regular SpriteFont Label" Font="DefaultFont" Anchor="p1_panel_labels" X="20" Y="12" Color="White"/>
-              <Label Name="p1_left_desc" Text="PixelLabel (Pixelfont, Left)" Font="DefaultFont" Anchor="p1_label" X="0" Y="40" Color="DarkGray"/>
-              <PixelLabel Name="p1_pixel_left" Atlas="Pixelfont" Text="Left aligned pixel text!" Anchor="p1_left_desc" X="0" Y="40" CharScale="4,4" Spacing="0" Tint="White"/>
-              <Label Name="p1_center_desc" Text="PixelLabel (Pixelfont, Center)" Font="DefaultFont" Anchor="p1_pixel_left" X="0" Y="40" Color="DarkGray"/>
-              <PixelLabel Name="p1_pixel_center" Atlas="Pixelfont" Text="Centered pixel text!" Anchor="p1_center_desc" X="0" Y="40" CharScale="4,4" Spacing="0" Alignment="Center" MaxWidth="530" Tint="CornflowerBlue"/>
-              <Label Name="p1_right_desc" Text="PixelLabel (Pixelfont, Right)" Font="DefaultFont" Anchor="p1_pixel_center" X="0" Y="40" Color="DarkGray"/>
-              <PixelLabel Name="p1_pixel_right" Atlas="Pixelfont" Text="Right aligned pixel text!" Anchor="p1_right_desc" X="0" Y="40" CharScale="4,4" Spacing="0" Alignment="Right" MaxWidth="530" Tint="LimeGreen"/>
-              <Label Name="p1_score_desc" Text="PixelLabel (Scoreboard)" Font="DefaultFont" Anchor="p1_pixel_right" X="0" Y="40" Color="DarkGray"/>
-              <PixelLabel Name="p1_score" Atlas="Scoreboard" Text="12/34" Anchor="p1_score_desc" X="0" Y="40" CharScale="6,6" Spacing="0" Tint="Gold"/>
+              <Label Name="p1_label" Text="Regular SpriteFont Label" Font="DefaultFont" Position="20,12,p1_panel_labels" Color="White"/>
+              <Label Name="p1_left_desc" Text="PixelLabel (Pixelfont, Left)" Font="DefaultFont" Position="0,40,p1_label" Color="DarkGray"/>
+              <PixelLabel Name="p1_pixel_left" Atlas="Pixelfont" Text="Left aligned pixel text!" Position="0,40,p1_left_desc" CharScale="4,4" Spacing="0" Tint="White"/>
+              <Label Name="p1_center_desc" Text="PixelLabel (Pixelfont, Center)" Font="DefaultFont" Position="0,40,p1_pixel_left" Color="DarkGray"/>
+              <PixelLabel Name="p1_pixel_center" Atlas="Pixelfont" Text="Centered pixel text!" Position="0,40,p1_center_desc" CharScale="4,4" Spacing="0" Alignment="Center" MaxWidth="530" Tint="CornflowerBlue"/>
+              <Label Name="p1_right_desc" Text="PixelLabel (Pixelfont, Right)" Font="DefaultFont" Position="0,40,p1_pixel_center" Color="DarkGray"/>
+              <PixelLabel Name="p1_pixel_right" Atlas="Pixelfont" Text="Right aligned pixel text!" Position="0,40,p1_right_desc" CharScale="4,4" Spacing="0" Alignment="Right" MaxWidth="530" Tint="LimeGreen"/>
+              <Label Name="p1_score_desc" Text="PixelLabel (Scoreboard)" Font="DefaultFont" Position="0,40,p1_pixel_right" Color="DarkGray"/>
+              <PixelLabel Name="p1_score" Atlas="Scoreboard" Text="12/34" Position="0,40,p1_score_desc" CharScale="6,6" Spacing="0" Tint="Gold"/>
 
-              <Label Name="p1_bitmap_desc" Text="BitmapLabel (no AA)" Font="DefaultFont" Anchor="p1_score" X="0" Y="80" Color="DarkGray"/>
-              <BitmapLabel Name="p1_bitmap" Text="Charizard" FontFamily="m3x6" FontSize="16" TextColor="White" Anchor="p1_bitmap_desc" X="0" Y="32" Scale="4,4">
+              <Label Name="p1_bitmap_desc" Text="BitmapLabel (no AA)" Font="DefaultFont" Position="0,80,p1_score" Color="DarkGray"/>
+              <BitmapLabel Name="p1_bitmap" Text="Charizard" FontFamily="m3x6" FontSize="16" TextColor="White" Position="0,32,p1_bitmap_desc" Scale="4,4">
                 <Border Thickness="4" Color="40,40,40"/>
               </BitmapLabel>
-              <BitmapLabel Name="p1_bitmap2" Text="No Anti-Aliasing!" FontFamily="m5x7" FontSize="16" TextColor="LimeGreen" Anchor="p1_bitmap" X="0" Y="44" Scale="4,4">
+              <BitmapLabel Name="p1_bitmap2" Text="No Anti-Aliasing!" FontFamily="m5x7" FontSize="16" TextColor="LimeGreen" Position="0,44,p1_bitmap" Scale="4,4">
                 <Border Thickness="4" Color="40,40,40"/>
               </BitmapLabel>
 
-              <Label Name="p1_sprite_desc" Text="Sprite (static)" Font="DefaultFont" Anchor="p1_bitmap2" X="0" Y="60" Color="DarkGray"/>
-              <Sprite Name="p1_sprite_1" Anchor="p1_sprite_desc" X="40" Y="56" Scale="4,4" Texture="Pokemon.0025_000_mf_n_00000000_n"/>
-              <Sprite Name="p1_sprite_2" Anchor="p1_sprite_desc" X="160" Y="56" Scale="4,4" Texture="Pokemon.0150_000_mf_n_00000000_n"/>
+              <Label Name="p1_sprite_desc" Text="Sprite (static)" Font="DefaultFont" Position="0,60,p1_bitmap2" Color="DarkGray"/>
+              <Sprite Name="p1_sprite_1" Position="40,56,p1_sprite_desc" Scale="4,4" Texture="Pokemon.0025_000_mf_n_00000000_n"/>
+              <Sprite Name="p1_sprite_2" Position="160,56,p1_sprite_desc" Scale="4,4" Texture="Pokemon.0150_000_mf_n_00000000_n"/>
 
-              <Label Name="p1_anim_desc" Text="Sprite (Animated)" Font="DefaultFont" Anchor="p1_sprite_desc" X="270" Y="0" Color="DarkGray"/>
-              <AnimatedSprite Name="p1_anim_1" Anchor="p1_anim_desc" X="-80" Y="-60" Scale="4,4" FrameDelayMs="500" Loop="true" AutoStart="true"
+              <Label Name="p1_anim_desc" Text="Sprite (Animated)" Font="DefaultFont" Position="270,0,p1_sprite_desc" Color="DarkGray"/>
+              <AnimatedSprite Name="p1_anim_1" Position="-80,-60,p1_anim_desc" Scale="4,4" FrameDelayMs="500" Loop="true" AutoStart="true"
                               Frames="Pokemon.0001_000_mf_n_00000000_n,Pokemon.0004_000_mf_n_00000000_n,Pokemon.0007_000_mf_n_00000000_n,Pokemon.0025_000_mf_n_00000000_n"/>
-              <AnimatedSprite Name="p1_anim_2" Anchor="p1_anim_1" X="120" Y="0" Scale="4,4" FrameDelayMs="500" Loop="true" AutoStart="true"
+              <AnimatedSprite Name="p1_anim_2" Position="120,0,p1_anim_1" Scale="4,4" FrameDelayMs="500" Loop="true" AutoStart="true"
                               Frames="Pokemon.0003_000_mf_n_00000000_n,Pokemon.0006_000_mf_n_00000000_n,Pokemon.0009_000_mf_n_00000000_n,Pokemon.0026_000_mf_n_00000000_n"/>
             </Children>
           </Panel>
 
-          <Label Name="p1_section_buttons" Text="Buttons &amp; Input" Font="DefaultFont" Anchor="p1_section_labels" X="630" Y="0" Color="Gray"/>
-          <Panel Name="p1_panel_buttons" Anchor="p1_section_buttons" X="0" Y="56" Width="570" Height="810" Background="40,45,55">
+          <Label Name="p1_section_buttons" Text="Buttons &amp; Input" Font="DefaultFont" Position="630,0,p1_section_labels" Color="Gray"/>
+          <Panel Name="p1_panel_buttons" Position="0,56,p1_section_buttons" Size="570,810" Background="40,45,55">
             <Border Thickness="4" Color="Gray"/>
             <Children>
-              <Label Name="p1_btn_desc" Text="Button" Font="DefaultFont" Anchor="p1_panel_buttons" X="20" Y="12" Color="DarkGray"/>
-              <Button Name="p1_button" Text="Click Me" Font="DefaultFont"  Anchor="p1_btn_desc" X="0" Y="44" Width="530" Height="64" Background="50,60,80" PressDepth="4">
+              <Label Name="p1_btn_desc" Text="Button" Font="DefaultFont" Position="20,12,p1_panel_buttons" Color="DarkGray"/>
+              <Button Name="p1_button" Text="Click Me" Font="DefaultFont"  Position="0,44,p1_btn_desc" Size="530,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
 
-              <Label Name="p1_sprbtn_desc" Text="SpriteButton" Font="DefaultFont" Anchor="p1_button" X="0" Y="72" Color="DarkGray"/>
-              <SpriteButton Name="p1_sprite_button_1" Anchor="p1_sprbtn_desc" X="0" Y="48" Scale="4,4" NormalSprite="Arrows.Arrow_right" HoveredSprite="Arrows.Arrow_right_hover" PressedSprite="Arrows.Arrow_right_active"/>
-              <SpriteButton Name="p1_sprite_button_2" Anchor="p1_sprite_button_1" X="48" Y="0" Scale="4,4" NormalSprite="Arrows.Arrow_left" HoveredSprite="Arrows.Arrow_left_hover" PressedSprite="Arrows.Arrow_left_active"/>
-              <SpriteButton Name="p1_sprite_button_3" Anchor="p1_sprite_button_2" X="48" Y="12" Scale="4,4" NormalSprite="Arrows.Arrow_up" HoveredSprite="Arrows.Arrow_up_hover" PressedSprite="Arrows.Arrow_up_active"/>
-              <SpriteButton Name="p1_sprite_button_4" Anchor="p1_sprite_button_3" X="72" Y="0" Scale="4,4" NormalSprite="Arrows.Arrow_down" HoveredSprite="Arrows.Arrow_down_hover" PressedSprite="Arrows.Arrow_down_active"/>
-
-              <Label Name="p1_cb_desc" Text="Checkbox" Font="DefaultFont" Anchor="p1_sprite_button_1" X="0" Y="64" Color="DarkGray"/>
-              <Checkbox Name="p1_cb_checked" Anchor="p1_cb_desc" X="0" Y="48" Label="Checked" Font="DefaultFont" LabelColor="White"
+              <Label Name="p1_sprbtn_desc" Text="SpriteButton" Font="DefaultFont" Position="0,72,p1_button" Color="DarkGray"/>
+              <SpriteButton Name="p1_sprite_button_1" Position="0,48,p1_sprbtn_desc" Scale="4,4" NormalSprite="Arrows.Arrow_right" HoveredSprite="Arrows.Arrow_right_hover" PressedSprite="Arrows.Arrow_right_active"/>
+              <SpriteButton Name="p1_sprite_button_2" Position="48,0,p1_sprite_button_1" Scale="4,4" NormalSprite="Arrows.Arrow_left" HoveredSprite="Arrows.Arrow_left_hover" PressedSprite="Arrows.Arrow_left_active"/>
+              <SpriteButton Name="p1_sprite_button_3" Position="48,12,p1_sprite_button_2" Scale="4,4" NormalSprite="Arrows.Arrow_up" HoveredSprite="Arrows.Arrow_up_hover" PressedSprite="Arrows.Arrow_up_active"/>
+              <SpriteButton Name="p1_sprite_button_4" Position="72,0,p1_sprite_button_3" Scale="4,4" NormalSprite="Arrows.Arrow_down" HoveredSprite="Arrows.Arrow_down_hover" PressedSprite="Arrows.Arrow_down_active"/>
+              <Label Name="p1_cb_desc" Text="Checkbox" Font="DefaultFont" Position="0,64,p1_sprite_button_1" Color="DarkGray"/>
+              <Checkbox Name="p1_cb_checked" Position="0,48,p1_cb_desc" Label="Checked" Font="DefaultFont" LabelColor="White"
                         IsChecked="true" BoxSize="40" BoxBackground="60,60,60" BoxBorderColor="Gray" CheckmarkColor="LimeGreen"
                         BoxBorderThickness="4" LabelSpacing="24"/>
-              <Checkbox Name="p1_cb_unchecked" Anchor="p1_cb_desc" X="250" Y="48" Label="Unchecked" Font="DefaultFont" LabelColor="White"
+              <Checkbox Name="p1_cb_unchecked" Position="250,48,p1_cb_desc" Label="Unchecked" Font="DefaultFont" LabelColor="White"
                         IsChecked="false" BoxSize="40" BoxBackground="60,60,60" BoxBorderColor="Gray" CheckmarkColor="LimeGreen"
                         BoxBorderThickness="4" LabelSpacing="24"/>
 
-              <Label Name="p1_sprcb_desc" Text="Sprite Checkbox (toggle)" Font="DefaultFont" Anchor="p1_cb_desc" X="0" Y="100" Color="DarkGray"/>
-              <Checkbox Name="p1_toggle_atk" Anchor="p1_sprcb_desc" X="0" Y="48" Scale="4,4" IsChecked="false" UncheckedSprite="Buttons.Toggle_atk_off" CheckedSprite="Buttons.Toggle_atk_on"/>
-              <Checkbox Name="p1_toggle_def" Anchor="p1_toggle_atk" X="80" Y="0" Scale="4,4" IsChecked="true" UncheckedSprite="Buttons.Toggle_def_off" CheckedSprite="Buttons.Toggle_def_on"/>
-              <Checkbox Name="p1_toggle_dex" Anchor="p1_toggle_def" X="80" Y="0" Scale="4,4" IsChecked="false" UncheckedSprite="Buttons.Toggle_dex_off" CheckedSprite="Buttons.Toggle_dex_on"/>
-              <Checkbox Name="p1_toggle_innate" Anchor="p1_toggle_dex" X="80" Y="0" Scale="4,4" IsChecked="true" UncheckedSprite="Buttons.Toggle_innate_off" CheckedSprite="Buttons.Toggle_innate_on"/>
-              <Checkbox Name="p1_toggle_level" Anchor="p1_toggle_innate" X="80" Y="0" Scale="4,4" IsChecked="false" UncheckedSprite="Buttons.Toggle_level_off" CheckedSprite="Buttons.Toggle_level_on"/>
-
-              <Label Name="p1_input_desc" Text="InputField" Font="DefaultFont" Anchor="p1_sprcb_desc" X="0" Y="120" Color="DarkGray"/>
-              <InputField Name="p1_input" Anchor="p1_input_desc" X="0" Y="48" Width="530" Height="64"
+              <Label Name="p1_sprcb_desc" Text="Sprite Checkbox (toggle)" Font="DefaultFont" Position="0,100,p1_cb_desc" Color="DarkGray"/>
+              <Checkbox Name="p1_toggle_atk" Position="0,48,p1_sprcb_desc" Scale="4,4" IsChecked="false" UncheckedSprite="Buttons.Toggle_atk_off" CheckedSprite="Buttons.Toggle_atk_on"/>
+              <Checkbox Name="p1_toggle_def" Position="80,0,p1_toggle_atk" Scale="4,4" IsChecked="true" UncheckedSprite="Buttons.Toggle_def_off" CheckedSprite="Buttons.Toggle_def_on"/>
+              <Checkbox Name="p1_toggle_dex" Position="80,0,p1_toggle_def" Scale="4,4" IsChecked="false" UncheckedSprite="Buttons.Toggle_dex_off" CheckedSprite="Buttons.Toggle_dex_on"/>
+              <Checkbox Name="p1_toggle_innate" Position="80,0,p1_toggle_dex" Scale="4,4" IsChecked="true" UncheckedSprite="Buttons.Toggle_innate_off" CheckedSprite="Buttons.Toggle_innate_on"/>
+              <Checkbox Name="p1_toggle_level" Position="80,0,p1_toggle_innate" Scale="4,4" IsChecked="false" UncheckedSprite="Buttons.Toggle_level_off" CheckedSprite="Buttons.Toggle_level_on"/>
+              <Label Name="p1_input_desc" Text="InputField" Font="DefaultFont" Position="0,120,p1_sprcb_desc" Color="DarkGray"/>
+              <InputField Name="p1_input" Position="0,48,p1_input_desc" Size="530,64"
                           Placeholder="Type something..." Font="DefaultFont"
                           Background="40,40,40" TextColor="White" PlaceholderColor="DarkGray"
                           Padding="12" CursorWidth="4">
@@ -90,28 +88,28 @@
             </Children>
           </Panel>
 
-          <Label Name="p1_section_sliders" Text="Sliders &amp; Dropdowns" Font="DefaultFont" Anchor="p1_section_buttons" X="630" Y="0" Color="Gray"/>
-          <Panel Name="p1_panel_sliders" Anchor="p1_section_sliders" X="0" Y="56" Width="570" Height="810" Background="40,45,55">
+          <Label Name="p1_section_sliders" Text="Sliders &amp; Dropdowns" Font="DefaultFont" Position="630,0,p1_section_buttons" Color="Gray"/>
+          <Panel Name="p1_panel_sliders" Position="0,56,p1_section_sliders" Size="570,810" Background="40,45,55">
             <Border Thickness="4" Color="Gray"/>
             <Children>
-              <Label Name="p1_slider_desc" Text="Slider" Font="DefaultFont" Anchor="p1_panel_sliders" X="20" Y="12" Color="DarkGray"/>
-              <Slider Name="p1_slider" Anchor="p1_slider_desc" X="0" Y="32" Width="470" Height="64"
+              <Label Name="p1_slider_desc" Text="Slider" Font="DefaultFont" Position="20,12,p1_panel_sliders" Color="DarkGray"/>
+              <Slider Name="p1_slider" Position="0,32,p1_slider_desc" Size="470,64"
                       Min="0" Max="100" Value="42" ShowValue="true" Font="DefaultFont"
-                      TrackFillColor="CornflowerBlue" TrackHeight="24" ThumbWidth="36" ThumbHeight="44">
+                      TrackFillColor="CornflowerBlue" TrackHeight="24" ThumbSize="36,44">
                 <TrackBorder Thickness="4" Color="Gray"/>
                 <ThumbBorder Thickness="4" Color="40,40,40"/>
               </Slider>
 
-              <Label Name="p1_slider2_desc" Text="Slider (alternate style)" Font="DefaultFont" Anchor="p1_slider" X="0" Y="56" Color="DarkGray"/>
-              <Slider Name="p1_slider2" Anchor="p1_slider2_desc" X="0" Y="36" Width="470" Height="64"
+              <Label Name="p1_slider2_desc" Text="Slider (alternate style)" Font="DefaultFont" Position="0,56,p1_slider" Color="DarkGray"/>
+              <Slider Name="p1_slider2" Position="0,36,p1_slider2_desc" Size="470,64"
                       Min="0" Max="255" Value="128" ShowValue="true" Font="DefaultFont"
-                      TrackFillColor="Orange" TrackHeight="24" ThumbWidth="36" ThumbHeight="44">
+                      TrackFillColor="Orange" TrackHeight="24" ThumbSize="36,44">
                 <TrackBorder Thickness="4" Color="Gray"/>
                 <ThumbBorder Thickness="4" Color="40,40,40"/>
               </Slider>
 
-              <Label Name="p1_dd_desc" Text="Dropdown" Font="DefaultFont" Anchor="p1_slider2" X="0" Y="56" Color="DarkGray"/>
-              <Dropdown Name="p1_dropdown" Anchor="p1_dd_desc" X="0" Y="52" Width="530" Height="64"
+              <Label Name="p1_dd_desc" Text="Dropdown" Font="DefaultFont" Position="0,56,p1_slider2" Color="DarkGray"/>
+              <Dropdown Name="p1_dropdown" Position="0,52,p1_dd_desc" Size="530,64"
                         Items="Option A,Option B,Option C,Option D,Option E"
                         Placeholder="Select item..." Font="DefaultFont" MaxVisibleItems="4"
                         Padding="16" ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4" ScrollbarWidth="12"
@@ -129,18 +127,18 @@
       <SubScene Name="page_2" Background="Transparent">
         <Children>
 
-          <Label Name="p2_section_music" Text="Music" Font="DefaultFont" X="96" Y="160" Color="Gray"/>
-          <Panel Name="p2_panel_music" Anchor="p2_section_music" X="0" Y="56" Width="570" Height="810" Background="40,45,55">
+          <Label Name="p2_section_music" Text="Music" Font="DefaultFont" Position="96,160" Color="Gray"/>
+          <Panel Name="p2_panel_music" Position="0,56,p2_section_music" Size="570,810" Background="40,45,55">
             <Border Thickness="4" Color="Gray"/>
             <Children>
-              <Label Name="p2_button_desc" Text="Start or stop music:" Font="DefaultFont" Anchor="p2_panel_music" X="20" Y="12" Color="DarkGray"/>
-              <Button Name="p2_toggle" Text="Play Music" Font="DefaultFont" Anchor="p2_button_desc" X="0" Y="44" Width="530" Height="64" Background="50,80,50" PressDepth="4">
+              <Label Name="p2_button_desc" Text="Start or stop music:" Font="DefaultFont" Position="20,12,p2_panel_music" Color="DarkGray"/>
+              <Button Name="p2_toggle" Text="Play Music" Font="DefaultFont" Position="0,44,p2_button_desc" Size="530,64" Background="50,80,50" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
 
-              <Label Name="p2_track_desc" Text="Select a Track to play:" Font="DefaultFont" Anchor="p2_toggle" X="0" Y="72" Color="DarkGray"/>
-              <Dropdown Name="p2_track_dropdown" Anchor="p2_track_desc" X="0" Y="48" Width="530" Height="64"
+              <Label Name="p2_track_desc" Text="Select a Track to play:" Font="DefaultFont" Position="0,72,p2_toggle" Color="DarkGray"/>
+              <Dropdown Name="p2_track_dropdown" Position="0,48,p2_track_desc" Size="530,64"
                         Items="ms_battle,ms_battle_2,ms_battle_3,ms_battle_4,ms_battle_intro,ms_defeat,ms_ending,ms_league,ms_main,ms_tutorial,ms_victory"
                         Placeholder="Select track..." Font="DefaultFont" MaxVisibleItems="5"
                         Padding="16" ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4" ScrollbarWidth="12"
@@ -150,97 +148,97 @@
                 <ListBorder Thickness="4" Color="Gray"/>
               </Dropdown>
 
-              <Label Name="p2_master_desc" Text="Master Volume:" Font="DefaultFont" Anchor="p2_track_dropdown" X="0" Y="80" Color="DarkGray"/>
-              <Slider Name="p2_master_slider" Anchor="p2_master_desc" X="0" Y="32" Width="470" Height="64"
+              <Label Name="p2_master_desc" Text="Master Volume:" Font="DefaultFont" Position="0,80,p2_track_dropdown" Color="DarkGray"/>
+              <Slider Name="p2_master_slider" Position="0,32,p2_master_desc" Size="470,64"
                       Min="0" Max="100" Value="100" ShowValue="true" Font="DefaultFont"
-                      TrackFillColor="Gold" TrackHeight="24" ThumbWidth="36" ThumbHeight="44">
+                      TrackFillColor="Gold" TrackHeight="24" ThumbSize="36,44">
                 <TrackBorder Thickness="4" Color="Gray"/>
                 <ThumbBorder Thickness="4" Color="40,40,40"/>
               </Slider>
 
-              <Label Name="p2_music_desc" Text="Music Volume:" Font="DefaultFont" Anchor="p2_master_slider" X="0" Y="56" Color="DarkGray"/>
-              <Slider Name="p2_music_slider" Anchor="p2_music_desc" X="0" Y="32" Width="470" Height="64"
+              <Label Name="p2_music_desc" Text="Music Volume:" Font="DefaultFont" Position="0,56,p2_master_slider" Color="DarkGray"/>
+              <Slider Name="p2_music_slider" Position="0,32,p2_music_desc" Size="470,64"
                       Min="0" Max="100" Value="75" ShowValue="true" Font="DefaultFont"
-                      TrackFillColor="CornflowerBlue" TrackHeight="24" ThumbWidth="36" ThumbHeight="44">
+                      TrackFillColor="CornflowerBlue" TrackHeight="24" ThumbSize="36,44">
                 <TrackBorder Thickness="4" Color="Gray"/>
                 <ThumbBorder Thickness="4" Color="40,40,40"/>
               </Slider>
 
-              <Label Name="p2_sfx_desc" Text="SFX Volume:" Font="DefaultFont" Anchor="p2_music_slider" X="0" Y="56" Color="DarkGray"/>
-              <Slider Name="p2_sfx_slider" Anchor="p2_sfx_desc" X="0" Y="32" Width="470" Height="64"
+              <Label Name="p2_sfx_desc" Text="SFX Volume:" Font="DefaultFont" Position="0,56,p2_music_slider" Color="DarkGray"/>
+              <Slider Name="p2_sfx_slider" Position="0,32,p2_sfx_desc" Size="470,64"
                       Min="0" Max="100" Value="75" ShowValue="true" Font="DefaultFont"
-                      TrackFillColor="LimeGreen" TrackHeight="24" ThumbWidth="36" ThumbHeight="44">
+                      TrackFillColor="LimeGreen" TrackHeight="24" ThumbSize="36,44">
                 <TrackBorder Thickness="4" Color="Gray"/>
                 <ThumbBorder Thickness="4" Color="40,40,40"/>
               </Slider>
             </Children>
           </Panel>
 
-          <Label Name="p2_section_effects" Text="Sound Effects" Font="DefaultFont" Anchor="p2_section_music" X="630" Y="0" Color="Gray"/>
-          <ScrollPanel Name="p2_panel_effects" Anchor="p2_section_effects" X="0" Y="56" Width="570" Height="810"
-                       ContentWidth="600" ContentHeight="1220" Background="40,45,55"
+          <Label Name="p2_section_effects" Text="Sound Effects" Font="DefaultFont" Position="630,0,p2_section_music" Color="Gray"/>
+          <ScrollPanel Name="p2_panel_effects" Position="0,56,p2_section_effects" Size="570,810"
+                       ContentSize="600,1220" Background="40,45,55"
                        ScrollbarWidth="16" ScrollbarPadding="4" ScrollSpeed="60"
                        EnableHorizontalScroll="false">
             <Border Thickness="4" Color="Gray"/>
             <Children>
-              <Label Name="p2_fx_desc" Text="Click to play effect:" Font="DefaultFont" Anchor="p2_panel_effects" X="20" Y="12" Color="DarkGray"/>
-              <Button Name="p2_fx_sn_card" Text="sn_card" Font="DefaultFont" Anchor="p2_fx_desc" X="0" Y="44" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Label Name="p2_fx_desc" Text="Click to play effect:" Font="DefaultFont" Position="20,12,p2_panel_effects" Color="DarkGray"/>
+              <Button Name="p2_fx_sn_card" Text="sn_card" Font="DefaultFont" Position="0,44,p2_fx_desc" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_click" Text="sn_click" Font="DefaultFont" Anchor="p2_fx_sn_card" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_click" Text="sn_click" Font="DefaultFont" Position="0,76,p2_fx_sn_card" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_click_2" Text="sn_click_2" Font="DefaultFont" Anchor="p2_fx_sn_click" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_click_2" Text="sn_click_2" Font="DefaultFont" Position="0,76,p2_fx_sn_click" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_coin" Text="sn_coin" Font="DefaultFont" Anchor="p2_fx_sn_click_2" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_coin" Text="sn_coin" Font="DefaultFont" Position="0,76,p2_fx_sn_click_2" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_enterview" Text="sn_enterview" Font="DefaultFont" Anchor="p2_fx_sn_coin" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_enterview" Text="sn_enterview" Font="DefaultFont" Position="0,76,p2_fx_sn_coin" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_event" Text="sn_event" Font="DefaultFont" Anchor="p2_fx_sn_enterview" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_event" Text="sn_event" Font="DefaultFont" Position="0,76,p2_fx_sn_enterview" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_faint" Text="sn_faint" Font="DefaultFont" Anchor="p2_fx_sn_event" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_faint" Text="sn_faint" Font="DefaultFont" Position="0,76,p2_fx_sn_event" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_flipcard" Text="sn_flipcard" Font="DefaultFont" Anchor="p2_fx_sn_faint" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_flipcard" Text="sn_flipcard" Font="DefaultFont" Position="0,76,p2_fx_sn_faint" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_hurt" Text="sn_hurt" Font="DefaultFont" Anchor="p2_fx_sn_flipcard" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_hurt" Text="sn_hurt" Font="DefaultFont" Position="0,76,p2_fx_sn_flipcard" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_money" Text="sn_money" Font="DefaultFont" Anchor="p2_fx_sn_hurt" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_money" Text="sn_money" Font="DefaultFont" Position="0,76,p2_fx_sn_hurt" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_noise" Text="sn_noise" Font="DefaultFont" Anchor="p2_fx_sn_money" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_noise" Text="sn_noise" Font="DefaultFont" Position="0,76,p2_fx_sn_money" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_rare" Text="sn_rare" Font="DefaultFont" Anchor="p2_fx_sn_noise" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_rare" Text="sn_rare" Font="DefaultFont" Position="0,76,p2_fx_sn_noise" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_rare_2" Text="sn_rare_2" Font="DefaultFont" Anchor="p2_fx_sn_rare" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_rare_2" Text="sn_rare_2" Font="DefaultFont" Position="0,76,p2_fx_sn_rare" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_text" Text="sn_text" Font="DefaultFont" Anchor="p2_fx_sn_rare_2" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_text" Text="sn_text" Font="DefaultFont" Position="0,76,p2_fx_sn_rare_2" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
-              <Button Name="p2_fx_sn_upgrade" Text="sn_upgrade" Font="DefaultFont" Anchor="p2_fx_sn_text" X="0" Y="76" Width="516" Height="64" Background="50,60,80" PressDepth="4">
+              <Button Name="p2_fx_sn_upgrade" Text="sn_upgrade" Font="DefaultFont" Position="0,76,p2_fx_sn_text" Size="516,64" Background="50,60,80" PressDepth="4">
                 <Border Thickness="4" Color="Gray"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
@@ -254,6 +252,6 @@
 
   <!-- Navigation footer -->
   <Label Name="nav_footer" Text="&lt; &gt; Navigate Pages | CTRL +/- Scale | HOME to return"
-         Font="DefaultFont" X="0" Y="1080" Center="true" MaxWidth="2048" Color="Gray"/>
+         Font="DefaultFont" Position="0,1080" Center="true" MaxWidth="2048" Color="Gray"/>
 
 </Scene>

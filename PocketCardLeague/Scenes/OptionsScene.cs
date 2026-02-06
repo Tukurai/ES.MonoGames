@@ -143,8 +143,7 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
             ShowValue = true,
             TrackFillColor = Color.CornflowerBlue,
             TrackHeight = 24,
-            ThumbWidth = 36,
-            ThumbHeight = 44,
+            ThumbSize = new Vector2(36, 44),
             TrackBorder = new Border(4, Color.Gray),
             ThumbBorder = new Border(4, Color.DarkGray)
         };
@@ -167,8 +166,7 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
             ShowValue = true,
             TrackFillColor = Color.Orange,
             TrackHeight = 24,
-            ThumbWidth = 36,
-            ThumbHeight = 44,
+            ThumbSize = new Vector2(36, 44),
             TrackBorder = new Border(4, Color.Gray),
             ThumbBorder = new Border(4, Color.DarkGray)
         };
@@ -191,8 +189,7 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
             ShowValue = true,
             TrackFillColor = Color.LimeGreen,
             TrackHeight = 24,
-            ThumbWidth = 36,
-            ThumbHeight = 44,
+            ThumbSize = new Vector2(36, 44),
             TrackBorder = new Border(4, Color.Gray),
             ThumbBorder = new Border(4, Color.DarkGray)
         };

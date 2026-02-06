@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -176,16 +177,15 @@ public static class SceneLoader
         // applies centering transforms that would be lost if we overwrote the position here
         if (component is not Label)
         {
-            var position = ParsePosition(element);
+            var position = ParseAnchor(element.Attribute("Position")?.Value);
             if (position is not null)
                 component.Position = position;
         }
 
         // Size
-        var width = ParseFloat(element.Attribute("Width")?.Value);
-        var height = ParseFloat(element.Attribute("Height")?.Value);
-        if (width.HasValue || height.HasValue)
-            component.Size = new Vector2(width ?? component.Size.X, height ?? component.Size.Y);
+        var size = ParseVector2(element.Attribute("Size")?.Value);
+        if (size.HasValue)
+            component.Size = size.Value;
 
         // Scale
         var scale = ParseVector2(element.Attribute("Scale")?.Value);
@@ -216,22 +216,6 @@ public static class SceneLoader
             component.BobInterval = bobInterval.Value;
     }
 
-    /// <summary>
-    /// Parse position from element (absolute or relative).
-    /// </summary>
-    private static Anchor ParsePosition(XElement element)
-    {
-        var x = ParseFloat(element.Attribute("X")?.Value) ?? 0;
-        var y = ParseFloat(element.Attribute("Y")?.Value) ?? 0;
-        var anchor = element.Attribute("Anchor")?.Value;
-
-        if (!string.IsNullOrEmpty(anchor) && _namedComponents.TryGetValue(anchor, out var relativeComponent))
-            return new Anchor(new Vector2(x, y), relativeComponent.Position);
-
-            // Absolute position
-        return new Anchor(new Vector2(x, y));
-    }
-
     #region Component Creators
 
     private static Label CreateLabel(XElement element)
@@ -247,7 +231,7 @@ public static class SceneLoader
 
         // Parse position here because Label.Initialize() uses it for centering
         // and Initialize() is called in the constructor before ApplyCommonProperties
-        var position = ParsePosition(element);
+        var position = ParseAnchor(element.Attribute("Position")?.Value);
 
         var label = new Label(null, text, font, position, center, maxWidth);
 
@@ -279,10 +263,9 @@ public static class SceneLoader
         if (!string.IsNullOrEmpty(fontName))
             font = ContentHelper.LoadFont(fontName);
 
-        var width = ParseFloat(element.Attribute("Width")?.Value) ?? 100;
-        var height = ParseFloat(element.Attribute("Height")?.Value) ?? 40;
+        var size = ParseVector2(element.Attribute("Size")?.Value) ?? new Vector2(100, 40);
 
-        var button = new Button(null, text, font, null, new Vector2(width, height), centered);
+        var button = new Button(null, text, font, null, size, centered);
 
         // Button-specific properties
         var textColor = ParseColor(element.Attribute("TextColor")?.Value);
@@ -437,10 +420,9 @@ public static class SceneLoader
 
     private static Slider CreateSlider(XElement element)
     {
-        var width = ParseFloat(element.Attribute("Width")?.Value) ?? 200;
-        var height = ParseFloat(element.Attribute("Height")?.Value) ?? 20;
+        var size = ParseVector2(element.Attribute("Size")?.Value) ?? new Vector2(200, 20);
 
-        var slider = new Slider(null, null, new Vector2(width, height));
+        var slider = new Slider(null, null, size);
 
         // Range
         var min = ParseInt(element.Attribute("Min")?.Value);
@@ -473,13 +455,9 @@ public static class SceneLoader
             slider.TrackFillColor = trackFillColor.Value;
 
         // Thumb appearance
-        var thumbWidth = ParseInt(element.Attribute("ThumbWidth")?.Value);
-        if (thumbWidth.HasValue)
-            slider.ThumbWidth = thumbWidth.Value;
-
-        var thumbHeight = ParseInt(element.Attribute("ThumbHeight")?.Value);
-        if (thumbHeight.HasValue)
-            slider.ThumbHeight = thumbHeight.Value;
+        var thumbSize = ParseVector2(element.Attribute("ThumbSize")?.Value);
+        if (thumbSize.HasValue)
+            slider.ThumbSize = thumbSize.Value;
 
         var thumbColor = ParseColor(element.Attribute("ThumbColor")?.Value);
         if (thumbColor.HasValue)
@@ -512,10 +490,9 @@ public static class SceneLoader
 
     private static Dropdown CreateDropdown(XElement element)
     {
-        var width = ParseFloat(element.Attribute("Width")?.Value) ?? 200;
-        var height = ParseFloat(element.Attribute("Height")?.Value) ?? 32;
+        var size = ParseVector2(element.Attribute("Size")?.Value) ?? new Vector2(200, 32);
 
-        var dropdown = new Dropdown(null, null, new Vector2(width, height));
+        var dropdown = new Dropdown(null, null, size);
 
         // Items (comma-separated)
         var items = element.Attribute("Items")?.Value;
@@ -590,14 +567,13 @@ public static class SceneLoader
         var text = element.Attribute("Text")?.Value ?? "";
         var placeholder = element.Attribute("Placeholder")?.Value ?? "";
         var fontName = element.Attribute("Font")?.Value;
-        var width = ParseFloat(element.Attribute("Width")?.Value) ?? 200;
-        var height = ParseFloat(element.Attribute("Height")?.Value) ?? 32;
+        var size = ParseVector2(element.Attribute("Size")?.Value) ?? new Vector2(200, 32);
 
         SpriteFont? font = null;
         if (!string.IsNullOrEmpty(fontName))
             font = ContentHelper.LoadFont(fontName);
 
-        var inputField = new InputField(null, text, placeholder, font, null, new Vector2(width, height));
+        var inputField = new InputField(null, text, placeholder, font, null, size);
 
         // Appearance
         var textColor = ParseColor(element.Attribute("TextColor")?.Value);
@@ -669,10 +645,9 @@ public static class SceneLoader
             scrollPanel.Border = border;
 
         // Content size
-        var contentWidth = ParseFloat(element.Attribute("ContentWidth")?.Value);
-        var contentHeight = ParseFloat(element.Attribute("ContentHeight")?.Value);
-        if (contentWidth.HasValue || contentHeight.HasValue)
-            scrollPanel.ContentSize = new Vector2(contentWidth ?? 0, contentHeight ?? 0);
+        var contentSize = ParseVector2(element.Attribute("ContentSize")?.Value) ?? new Vector2(0, 0);
+        if (contentSize != Vector2.Zero)
+            scrollPanel.ContentSize = contentSize;
 
         // Scroll behavior
         var scrollSpeed = ParseFloat(element.Attribute("ScrollSpeed")?.Value);
@@ -1081,19 +1056,32 @@ public static class SceneLoader
             return null;
 
         var parts = value.Split(',');
-        if (parts.Length == 1)
-        {
-            if (float.TryParse(parts[0].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out var uniform))
-                return new Vector2(uniform, uniform);
-        }
-        else if (parts.Length == 2)
-        {
-            if (float.TryParse(parts[0].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out var x) &&
-                float.TryParse(parts[1].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out var y))
-                return new Vector2(x, y);
-        }
 
-        return null;
+        var width = parts.Length >= 1 ? ParseInt(parts[0]) ?? 0 : 0;
+        var height = parts.Length >= 2 ? ParseInt(parts[1]) ?? 0 : 0;
+
+        return new Vector2(width, parts.Length >= 2 ? height : width);
+    }
+
+    /// <summary>
+    /// Parse an Anchor from string (e.g., "100,200" or "100,200,relative_to").
+    /// </summary>
+    private static Anchor ParseAnchor(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return new Anchor(new Vector2(0, 0));
+
+        var parts = value.Split(',');
+
+        var x = parts.Length >= 1 ? ParseInt(parts[0]) ?? 0 : 0;
+        var y = parts.Length >= 2 ? ParseInt(parts[1]) ?? 0 : 0;
+        var anchor = parts.Length >= 3 ? parts[2] : null;
+
+        if (!string.IsNullOrEmpty(anchor) && _namedComponents.TryGetValue(anchor, out var relativeComponent))
+            return new Anchor(new Vector2(x, y), relativeComponent.Position);
+
+        // Absolute position
+        return new Anchor(new Vector2(x, y));
     }
 
     /// <summary>

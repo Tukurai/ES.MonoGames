@@ -2,38 +2,38 @@
 <Scene BackgroundColor="25,25,25" BackgroundSprite="Locations.Cave_10" BackgroundOpacity="0.25" SceneTrack="ms_main">
 
   <!-- Left navigation button (to Options) -->
-  <SpriteButton Name="btn_left" X="140" Y="508" Scale="4,4"
+  <SpriteButton Name="btn_left" Position="140,508" Scale="4,4"
                 NormalSprite="Arrows.Arrow_left"
                 HoveredSprite="Arrows.Arrow_left"
                 PressedSprite="Arrows.Arrow_left_active"
                 Bob="Left" Opacity="0.8">
     <Children>
       <Label Name="main_label" Text="Main" Font="HeaderFont"
-             Anchor="btn_left" X="16" Y="60" Center="true">
+             Position="16,60,btn_left" Center="true">
         <Border Thickness="4" Color="25,25,25,170"/>
       </Label>
     </Children>
   </SpriteButton>
 
   <!-- Bottom navigation button (to Cards) -->
-  <SpriteButton Name="btn_down" X="996" Y="1072" Scale="4,4"
+  <SpriteButton Name="btn_down" Position="996,1072" Scale="4,4"
                 NormalSprite="Arrows.Arrow_down"
                 HoveredSprite="Arrows.Arrow_down"
                 PressedSprite="Arrows.Arrow_down_active"
                 Bob="down" Opacity="0.8">
     <Children>
       <Label Name="cards_label" Text="Cards" Font="HeaderFont"
-             Anchor="btn_down" X="24" Y="-80" Center="true">
+             Position="24,-80,btn_down" Center="true">
         <Border Thickness="4" Color="25,25,25,170"/>
       </Label>
     </Children>
   </SpriteButton>
 
-  <Label Name="decks_container_label" Text="Decks" Font="HeaderFont" X="280" Y="80" Color="White">
+  <Label Name="decks_container_label" Text="Decks" Font="HeaderFont" Position="280,80" Color="White">
     <Border Thickness="4" Color="25,25,25,170"/>
   </Label>
-  <ScrollPanel Name="decks_container" Anchor="decks_container_label" X="0" Y="80" Width="1620" Height="780"
-                ContentWidth="600" ContentHeight="1220" Background="40,45,55"
+  <ScrollPanel Name="decks_container" Position="0,80,decks_container_label" Size="1620,780"
+                ContentSize="600,1220" Background="40,45,55"
                 ScrollbarWidth="16" ScrollbarPadding="4" ScrollSpeed="60"
                 EnableHorizontalScroll="false">
     <Border Thickness="4" Color="Gray"/>
@@ -41,7 +41,7 @@
     </Children>
   </ScrollPanel>
 
-  <Button Name="new_deck_button" Text="New Deck" Font="HeaderFont"  X="1400" Y="996" Width="500" Height="88" Background="50,60,80" PressDepth="4">
+  <Button Name="new_deck_button" Text="New Deck" Font="HeaderFont" Position="1400,996" Size="500,88" Background="50,60,80" PressDepth="4">
     <Border Thickness="4" Color="Gray"/>
     <TextBorder Thickness="4" Color="40,40,40"/>
   </Button>

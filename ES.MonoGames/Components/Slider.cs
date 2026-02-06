@@ -68,14 +68,9 @@ public class Slider : BaseComponent
 
     // Thumb appearance
     /// <summary>
-    /// Width of the thumb in pixels.
+    /// Size of the thumb in pixels.
     /// </summary>
-    public int ThumbWidth { get; set; } = 16;
-
-    /// <summary>
-    /// Height of the thumb in pixels.
-    /// </summary>
-    public int ThumbHeight { get; set; } = 20;
+    public Vector2 ThumbSize { get; set; } = new Vector2(16, 20);
 
     /// <summary>
     /// Color of the thumb.
@@ -172,9 +167,9 @@ public class Slider : BaseComponent
 
         // Check if mouse is over track area (for click-to-set)
         var sliderArea = new Rectangle(
-            trackRect.X - ThumbWidth / 2,
+            trackRect.X - (int)(ThumbSize.X / 2),
             (int)pos.Y,
-            trackRect.Width + ThumbWidth,
+            trackRect.Width + (int)ThumbSize.X,
             (int)Size.Y
         );
         var mouseInSlider = sliderArea.Contains(mousePos);
@@ -237,9 +232,9 @@ public class Slider : BaseComponent
         var trackY = (int)(pos.Y + (Size.Y - TrackHeight) / 2);
 
         return new Rectangle(
-            (int)pos.X + ThumbWidth / 2,
+            (int)pos.X + (int)(ThumbSize.X / 2),
             trackY,
-            (int)Size.X - ThumbWidth,
+            (int)Size.X - (int)ThumbSize.X,
             TrackHeight
         );
     }
@@ -252,10 +247,10 @@ public class Slider : BaseComponent
         // Calculate thumb position based on value
         var range = MaxValue - MinValue;
         var ratio = range > 0 ? (float)(Value - MinValue) / range : 0f;
-        var thumbX = trackRect.X + (int)(ratio * trackRect.Width) - ThumbWidth / 2;
-        var thumbY = (int)(pos.Y + (Size.Y - ThumbHeight) / 2);
+        var thumbX = trackRect.X + (int)(ratio * trackRect.Width) - (int)(ThumbSize.X / 2);
+        var thumbY = (int)(pos.Y + (Size.Y - ThumbSize.Y) / 2);
 
-        return new Rectangle(thumbX, thumbY, ThumbWidth, ThumbHeight);
+        return new Rectangle(thumbX, thumbY, (int)ThumbSize.X, (int)ThumbSize.Y);
     }
 
     public override void Draw(SpriteBatch spriteBatch)

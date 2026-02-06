@@ -2,14 +2,14 @@
 <Scene BackgroundColor="25,25,25" BackgroundSprite="Locations.Cave_10" BackgroundOpacity="0.25" SceneTrack="ms_main">
 
   <!-- Top navigation button (to Decks) -->
-  <SpriteButton Name="btn_up" X="996" Y="60" Scale="4,4"
+  <SpriteButton Name="btn_up" Position="996,60" Scale="4,4"
                 NormalSprite="Arrows.Arrow_up"
                 HoveredSprite="Arrows.Arrow_up"
                 PressedSprite="Arrows.Arrow_up_active"
                 Bob="up" Opacity="0.8">
     <Children>
       <Label Name="decks_label" Text="Decks" Font="HeaderFont"
-             Anchor="btn_up" X="24" Y="48" Center="true">
+             Position="24,48,btn_up" Center="true">
         <Border Thickness="4" Color="25,25,25,170"/>
       </Label>
     </Children>
