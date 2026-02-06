@@ -123,6 +123,9 @@ public class BitmapLabel : BaseComponent, IDisposable
     /// </summary>
     public int Padding { get; set; } = 0;
 
+    public TextAlignment Alignment { get; set; } = TextAlignment.Left;
+    public int MaxWidth { get; set; } = 0;
+
     public BitmapLabel(string? name = null, Anchor? position = null) : base(name, position)
     {
     }
@@ -137,6 +140,18 @@ public class BitmapLabel : BaseComponent, IDisposable
         if (_texture is not null)
         {
             var pos = Position.GetVector2();
+
+            // Apply text alignment offset
+            if (MaxWidth > 0)
+            {
+                var textWidth = Size.X * Scale.X;
+                pos.X += Alignment switch
+                {
+                    TextAlignment.Center => (MaxWidth - textWidth) / 2f,
+                    TextAlignment.Right => MaxWidth - textWidth,
+                    _ => 0
+                };
+            }
 
             // Draw border (outline) at screen-space offsets, matching Label behavior
             if (Border.Thickness > 0 && Border.Color.A > 0)

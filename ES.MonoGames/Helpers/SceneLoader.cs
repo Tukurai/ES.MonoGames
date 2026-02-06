@@ -872,6 +872,15 @@ public static class SceneLoader
         if (padding.HasValue)
             bitmapLabel.Padding = padding.Value;
 
+        // Alignment
+        var alignment = ParseAttribute<TextAlignment>(element, "Alignment", TextAlignment.Left);
+        bitmapLabel.Alignment = alignment;
+
+        // MaxWidth
+        var maxWidth = ParseInt(element.Attribute("MaxWidth")?.Value);
+        if (maxWidth.HasValue)
+            bitmapLabel.MaxWidth = maxWidth.Value;
+
         // Border
         var border = ParseBorder(element);
         if (border is not null)
