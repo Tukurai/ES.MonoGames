@@ -85,7 +85,8 @@ public class MainGame : Game
         SceneManager.AddScene(new OptionsScene());
         SceneManager.AddScene(new DebugScene());
         SceneManager.AddScene(new MainScene());
-        SceneManager.AddScene(new DeckScene());
+        SceneManager.AddScene(new DecksScene());
+        SceneManager.AddScene(new CardsScene());
 
         SceneManager.SetActiveScene(SceneType.Title, new FadeTransition());
 

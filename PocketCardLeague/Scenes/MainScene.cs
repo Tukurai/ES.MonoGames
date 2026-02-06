@@ -20,7 +20,7 @@ public class MainScene() : XmlScene<SceneType>(SceneType.Main)
         btnLeft.OnHoveredExit += () => btnLeft.Opacity = 0.8f;
 
         var btnRight = Bind<SpriteButton>("btn_right");
-        btnRight.OnClicked += () => SceneManager.SetActiveScene(SceneType.Deck, new SlideTransition(SlideDirection.Left));
+        btnRight.OnClicked += () => SceneManager.SetActiveScene(SceneType.Decks, new SlideTransition(SlideDirection.Left));
         btnRight.OnHoveredEnter += () => btnRight.Opacity = 1f;
         btnRight.OnHoveredExit += () => btnRight.Opacity = 0.8f;
     }
@@ -36,7 +36,7 @@ public class MainScene() : XmlScene<SceneType>(SceneType.Main)
 
         if (pressedKeys.Contains(Keys.Right))
         {
-            SceneManager.SetActiveScene(SceneType.Deck, new SlideTransition(SlideDirection.Left));
+            SceneManager.SetActiveScene(SceneType.Decks, new SlideTransition(SlideDirection.Left));
             return;
         }
 

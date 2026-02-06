@@ -9,21 +9,21 @@
                 Bob="Left" Opacity="0.8">
     <Children>
       <Label Name="options_label" Text="Options" Font="HeaderFont"
-             RelativeTo="btn_left" OffsetX="14" OffsetY="60" Center="true">
+             RelativeTo="btn_left" OffsetX="16" OffsetY="60" Center="true">
         <Border Thickness="4" Color="25,25,25,170"/>
       </Label>
     </Children>
   </SpriteButton>
 
-  <Label Name="m3_label" Text="Options" Font="M3Default" X="100" Y="100" Center="true">
+  <Label Name="m3_label" Text="Options" Font="M3Default" X="100" Y="100" Center="false">
     <Border Thickness="4" Color="25,25,25,170"/>
   </Label>
 
-  <Label Name="m5_label" Text="Options" Font="M5Default" X="100" Y="130" Center="true">
+  <Label Name="m5_label" Text="Options" Font="M5Default" X="100" Y="140" Center="false">
     <Border Thickness="4" Color="25,25,25,170"/>
   </Label>
 
-  <Label Name="m6_label" Text="Options" Font="M6Default" X="100" Y="160" Center="true">
+  <Label Name="m6_label" Text="Options" Font="M6Default" X="100" Y="180" Center="false">
     <Border Thickness="4" Color="25,25,25,170"/>
   </Label>
 
@@ -34,8 +34,8 @@
                 PressedSprite="Arrows.Arrow_right_active"
                 Bob="Right" Opacity="0.8">
     <Children>
-      <Label Name="deck_label" Text="Deck" Font="HeaderFont"
-             RelativeTo="btn_right" OffsetX="14" OffsetY="60" Center="true">
+      <Label Name="deck_label" Text="Decks" Font="HeaderFont"
+             RelativeTo="btn_right" OffsetX="16" OffsetY="60" Center="true">
         <Border Thickness="4" Color="25,25,25,170"/>
       </Label>
     </Children>

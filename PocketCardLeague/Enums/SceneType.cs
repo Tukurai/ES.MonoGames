@@ -6,5 +6,6 @@ public enum SceneType
     Options,
     Debug,
     Main,
-    Deck,
+    Decks,
+    Cards,
 }
