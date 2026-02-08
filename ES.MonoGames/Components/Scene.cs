@@ -177,8 +177,9 @@ public abstract class Scene<T> : IScene where T : Enum
             return; // Skip this frame's update after reinitializing
         }
 
-        // Clear overlay registrations from previous frame
+        // Clear overlay and tooltip registrations from previous frame
         OverlayManager.Clear();
+        ToolTipManager.Clear();
 
         Components.ForEach(c => c.Update(gameTime));
         OnSceneUpdated?.Invoke();
@@ -194,8 +195,11 @@ public abstract class Scene<T> : IScene where T : Enum
     {
         Components.ForEach(c => c.Draw(spriteBatch));
 
-        // Draw overlays (dropdowns, popups, tooltips) on top of everything
+        // Draw overlays (dropdowns, popups) on top of everything
         OverlayManager.DrawOverlays(spriteBatch);
+
+        // Draw tooltip on top of overlays
+        ToolTipManager.Draw(spriteBatch);
 
         OnSceneDrawn?.Invoke();
     }

@@ -1,13 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Helpers;
+using System.Text.Json.Serialization;
 
 namespace Components;
 
 public class Panel(string? name = null) : BaseComponent(name)
 {
-    public Color Background { get; set; } = Color.Transparent;
-    public Border Border { get; set; } = new Border();
+    [JsonIgnore] public Color Background { get; set; } = Color.Transparent;
+    [JsonIgnore] public Border Border { get; set; } = new Border();
 
     public override void Update(GameTime gameTime)
     {

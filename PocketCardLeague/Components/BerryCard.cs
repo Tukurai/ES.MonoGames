@@ -10,7 +10,7 @@ namespace PocketCardLeague.Components;
 
 public class BerryCard : Card
 {
-    public List<BerryType> BerryTypes { get; set; } = [BerryType.Green];
+    public List<BerryEnergyType> BerryTypes { get; set; } = [BerryEnergyType.Green];
     public List<BerryEffectType> BerryEffects { get; set; } = [BerryEffectType.None];
 
     public BerryCard() : base()

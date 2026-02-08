@@ -40,6 +40,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Update="Content\Data\pokedex.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\fonts\Jersey10-Regular.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

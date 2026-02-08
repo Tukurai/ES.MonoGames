@@ -4,10 +4,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PocketCardLeague.Config;
+using PocketCardLeague.Consts;
 using PocketCardLeague.Enums;
 using PocketCardLeague.Scenes;
 using PocketCardLeague.SpriteMaps;
 using System;
+using PocketCardLeague.Helpers;
 using System.IO;
 using System.Linq;
 
@@ -58,6 +60,7 @@ public class MainGame : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        _ = PokeDex.Entries; // Hit static constructor to load pokedex entries
 
         // Register pixel cursors
         ControlState.RegisterCursors(
@@ -68,8 +71,14 @@ public class MainGame : Game
             pointerOrigin: new Vector2(3, 1),
             grabOrigin: new Vector2(3, 1));
 
+        // Load saved games
+        GameStateManager.LoadAll();
+
         // Set default scene background
         Scene<SceneType>.DefaultBackground = LocationsSpriteAtlas.Border;
+
+        // Set default tooltip font
+        ToolTipManager.DefaultFont = Fonts.Default;
 
         SceneManager.AddScene(new TitleScene());
         SceneManager.AddScene(new OptionsScene());

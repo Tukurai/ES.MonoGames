@@ -19,9 +19,12 @@ public class DecksScene() : XmlScene<SceneType>(SceneType.Decks)
     private const int DeckPadding = 20;
     private const int DecksPerRow = 4;
 
+    private static readonly Color DefaultDeckBackground = new(50, 55, 65);
+    private static readonly Color SelectedDeckBackground = new(65, 80, 110);
+    private static readonly Color SelectedDeckBorderColor = new(120, 160, 220);
+
     protected override void OnXmlLoaded()
     {
-        // Bind events to components defined in XML
         var btnLeft = Bind<SpriteButton>("btn_left");
         btnLeft.OnClicked += () => SceneManager.SetActiveScene(SceneType.Main, new SlideTransition(SlideDirection.Right));
         btnLeft.OnHoveredEnter += () => btnLeft.Opacity = 1f;
@@ -32,6 +35,17 @@ public class DecksScene() : XmlScene<SceneType>(SceneType.Decks)
         btnDown.OnHoveredEnter += () => btnDown.Opacity = 1f;
         btnDown.OnHoveredExit += () => btnDown.Opacity = 0.8f;
 
+        RefreshDecks();
+    }
+
+    public override void Start()
+    {
+        base.Start();
+        RefreshDecks();
+    }
+
+    private void RefreshDecks()
+    {
         var decksList = Bind<ScrollPanel>("decks_container");
         decksList.Children.Clear();
 
@@ -39,36 +53,32 @@ public class DecksScene() : XmlScene<SceneType>(SceneType.Decks)
         var emptyDeck = CreateEmptyDeckButton(0);
         decksList.Children.Add(emptyDeck);
 
-        // Sample deck
-        var deck = new Deck("Sample Deck")
-        {
-            MainDeck =
-            [
-                new PokemonCard { CardName = "Pikachu", Level = 10, Type1 = PokemonType.Electric, DexId = 25 },
-                new PokemonCard { CardName = "Charmander", Level = 10, Type1 = PokemonType.Fire, DexId = 4 },
-                new PokemonCard { CardName = "Bulbasaur", Level = 10, Type1 = PokemonType.Grass, DexId = 1 },
-                new PokemonCard { CardName = "Squirtle", Level = 10, Type1 = PokemonType.Water, DexId = 7 },
-            ],
-            SideDeck =
-            [
-                new BerryCard { CardName = "Oran Berry", BerryTypes = [BerryType.Blue] },
-                new BerryCard { CardName = "Sitrus Berry", BerryTypes = [BerryType.Yellow] },
-            ],
-            FaceCard = new PokemonCard { CardName = "Pikachu", Level = 10, Type1 = PokemonType.Electric, DexId = 25 }
-        };
+        // Build deck boxes from save data
+        var decks = GameStateManager.ActiveSave.Decks;
+        var activeDeck = GameStateManager.ActiveSave.ActiveDeck;
 
-        deck.OnClicked += () =>
+        for (int i = 0; i < decks.Count; i++)
         {
-            CollectionManager.EditingDeck = deck;
-            SceneManager.SetActiveScene(SceneType.DeckBuilder, new FadeTransition(0.8f));
-        };
+            var deck = decks[i];
+            var isActive = activeDeck is not null && deck.Id == activeDeck.Id;
 
-        PositionDeckInGrid(deck, 1);
-        deck.BuildVisuals();
-        decksList.Children.Add(deck);
+            deck.Background = isActive ? SelectedDeckBackground : DefaultDeckBackground;
+            deck.Border = isActive ? new Border(4, SelectedDeckBorderColor) : new Border(4, Color.Gray);
+
+            deck.OnClicked += () =>
+            {
+                GameStateManager.ActiveSave.ActiveDeck = deck;
+                GameStateManager.ActiveSave.EditingDeck = deck;
+                SceneManager.SetActiveScene(SceneType.DeckBuilder, new FadeTransition(0.8f));
+            };
+
+            PositionDeckInGrid(deck, i + 1); // +1 because empty deck is index 0
+            deck.BuildVisuals();
+            decksList.Children.Add(deck);
+        }
 
         // Update content size based on total items
-        var totalItems = 2; // empty deck + sample deck
+        var totalItems = 1 + decks.Count;
         var rows = (totalItems + DecksPerRow - 1) / DecksPerRow;
         decksList.ContentSize = new Vector2(
             decksList.ContentSize.X,
@@ -124,7 +134,7 @@ public class DecksScene() : XmlScene<SceneType>(SceneType.Decks)
 
         panel.OnClicked += () =>
         {
-            CollectionManager.EditingDeck = null; // Clear any existing deck to indicate we're creating a new one
+            GameStateManager.ActiveSave.EditingDeck = null;
             SceneManager.SetActiveScene(SceneType.DeckBuilder, new SlideTransition(SlideDirection.Right));
         };
 

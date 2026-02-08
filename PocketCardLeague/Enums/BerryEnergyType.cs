@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PocketCardLeague.Enums;
 
-public enum BerryType
+public enum BerryEnergyType
 {
     White = 0,
     Blue = 1,

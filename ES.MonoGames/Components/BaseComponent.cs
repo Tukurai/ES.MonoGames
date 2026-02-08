@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Components;
 
@@ -24,6 +25,7 @@ public abstract class BaseComponent
     /// <summary>
     /// This is a human-readable name for the component. Does not have to be unique.
     /// </summary>
+    [JsonIgnore]
     public string Name
     {
         get;
@@ -33,6 +35,7 @@ public abstract class BaseComponent
     /// <summary>
     /// Gets or sets the position of the object in 2D space.
     /// </summary>
+    [JsonIgnore]
     public Anchor Position
     {
         get;
@@ -42,6 +45,7 @@ public abstract class BaseComponent
     /// <summary>
     /// Gets or sets the size of the component. The default is (0,0). This is the unscaled size.
     /// </summary>
+    [JsonIgnore]
     public Vector2 Size
     {
         get;
@@ -51,6 +55,7 @@ public abstract class BaseComponent
     /// <summary>
     /// Gets or sets the rotation represented by this object as a float. The default is 0f.
     /// </summary>
+    [JsonIgnore]
     public float Rotation
     {
         get;
@@ -60,40 +65,47 @@ public abstract class BaseComponent
     /// <summary>
     /// Local scale of the component, default is (1,1). This is applied before any parent scale.
     /// </summary>
+    [JsonIgnore]
     public Vector2 Scale
     {
         get;
         set { field = value; OnScaleChanged?.Invoke(); }
     } = new Vector2(1, 1);
 
-    public bool Hovered { get; set; } = false;
-    public bool Dragging { get; set; } = false;
-    public bool Pressed { get; set; } = false;
+    [JsonIgnore] public bool Hovered { get; set; } = false;
+    [JsonIgnore] public bool Dragging { get; set; } = false;
+    [JsonIgnore] public bool Pressed { get; set; } = false;
+    [JsonIgnore] public ToolTip? ToolTip { get; set; }
 
     /// <summary>
     /// The direction the component bobs in. Set to null to disable bobbing.
     /// </summary>
+    [JsonIgnore]
     public BobDirection? Bob { get; set; }
 
     /// <summary>
     /// How many scaled pixels the bob shifts. Default is 4.
     /// </summary>
+    [JsonIgnore]
     public float BobDistance { get; set; } = 4f;
 
     /// <summary>
     /// How often the bob toggles in milliseconds. Default is 600ms.
     /// </summary>
+    [JsonIgnore]
     public float BobInterval { get; set; } = 650f;
 
     /// <summary>
     /// Opacity of this component (0f = fully transparent, 1f = fully opaque). Default is 1f.
     /// Children inherit their parent's effective opacity multiplicatively.
     /// </summary>
+    [JsonIgnore]
     public float Opacity { get; set; } = 1f;
 
     /// <summary>
     /// The computed opacity including parent opacity. Use this when drawing.
     /// </summary>
+    [JsonIgnore]
     public float EffectiveOpacity => Opacity * _parentOpacity;
 
     private float _parentOpacity = 1f;
@@ -113,6 +125,7 @@ public abstract class BaseComponent
     /// <remarks>The returned list provides access to all direct child components. Modifying the collection
     /// affects the component hierarchy. The order of items in the list reflects the order in which child components are
     /// added.</remarks>
+    [JsonIgnore]
     public List<BaseComponent> Children { get; } = [];
 
     // Possible events on a component.
@@ -253,6 +266,10 @@ public abstract class BaseComponent
             ControlState.RequestCursor(CursorType.Grab);
         else if (Hovered && (OnClicked is not null || OnHoveredEnter is not null || OnPressed is not null))
             ControlState.RequestCursor(CursorType.Pointer);
+
+        // Request tooltip when hovered
+        if (Hovered && ToolTip is not null)
+            ToolTipManager.Request(ToolTip);
 
         // Bob effect
         if (Bob is not null)
