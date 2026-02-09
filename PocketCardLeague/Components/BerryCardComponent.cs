@@ -8,12 +8,12 @@ using System.Text;
 
 namespace PocketCardLeague.Components;
 
-public class BerryCard : Card
+public class BerryCardComponent : CardComponent
 {
     public List<BerryEnergyType> BerryTypes { get; set; } = [BerryEnergyType.Green];
     public List<BerryEffectType> BerryEffects { get; set; } = [BerryEffectType.None];
 
-    public BerryCard() : base()
+    public BerryCardComponent() : base()
     {
         BackSprite = CardPartsSpriteAtlas.Card_berry;
     }

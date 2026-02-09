@@ -37,8 +37,8 @@
               </BitmapLabel>
 
               <Label Name="p1_sprite_desc" Text="Sprite (static)" Font="DefaultFont" Position="0,60,p1_bitmap2" Color="DarkGray"/>
-              <Sprite Name="p1_sprite_1" Position="40,56,p1_sprite_desc" Scale="4,4" Texture="Pokemon.0025_000_mf_n_00000000_n"/>
-              <Sprite Name="p1_sprite_2" Position="160,56,p1_sprite_desc" Scale="4,4" Texture="Pokemon.0150_000_mf_n_00000000_n"/>
+              <Sprite Name="p1_sprite_1" Position="40,56,p1_sprite_desc" Scale="4,4" Texture="Pokemon.0025_000_md_n_00000000_n"/>
+              <Sprite Name="p1_sprite_2" Position="160,56,p1_sprite_desc" Scale="4,4" Texture="Pokemon.0150_000_uk_n_00000000_n"/>
 
               <Label Name="p1_anim_desc" Text="Sprite (Animated)" Font="DefaultFont" Position="270,0,p1_sprite_desc" Color="DarkGray"/>
               <AnimatedSprite Name="p1_anim_1" Position="-80,-60,p1_anim_desc" Scale="4,4" FrameDelayMs="500" Loop="true" AutoStart="true"

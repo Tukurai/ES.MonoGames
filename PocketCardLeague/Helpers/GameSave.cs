@@ -20,6 +20,6 @@ public class GameSave
     public Deck? EditingDeck { get; set; }
     public Deck? ActiveDeck { get; set; }
     public List<Deck> Decks { get; set; } = [];
-    public List<PokemonCard> PokemonCards { get; set; } = [];
-    public List<BerryCard> BerryCards { get; set; } = [];
+    public List<PokemonCardComponent> PokemonCards { get; set; } = [];
+    public List<BerryCardComponent> BerryCards { get; set; } = [];
 }

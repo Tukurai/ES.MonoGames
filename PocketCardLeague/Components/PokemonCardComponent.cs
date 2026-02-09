@@ -7,17 +7,13 @@ using System.Text.Json.Serialization;
 
 namespace PocketCardLeague.Components;
 
-public class PokemonCard : Card
+public class PokemonCardComponent : CardComponent
 {
-    public int Level { get; set; } = 1;
-    public int InnatePower { get; set; } = 0;
-    public string? Nickname { get; set; } = null;
-    public PokeDexEntry? BasePokemon { get; set; } = null;
+    public PokeCard? Card { get; set; } = null;
 
     public List<BerryEnergyType> Cost { get; set; } = [BerryEnergyType.Green, BerryEnergyType.Green, BerryEnergyType.Void];
 
-    [JsonIgnore]
-    public List<PokemonType> Types => BasePokemon is null ? [] : BasePokemon.Types;
+    public List<PokemonType> Types => Card is null ? [] : Card.BasePokemon.Types;
 
     public override void Update(GameTime gameTime)
     {

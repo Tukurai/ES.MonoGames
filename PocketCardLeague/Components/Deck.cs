@@ -17,15 +17,15 @@ namespace PocketCardLeague.Components;
 public class Deck : Panel
 {
     public string DeckName { get; set; } = string.Empty;
-    public List<PokemonCard> MainDeck { get; set; } = [];
-    public List<BerryCard> SideDeck { get; set; } = [];
-    public PokemonCard? FaceCard { get; set; }
+    public List<PokemonCardComponent> MainDeck { get; set; } = [];
+    public List<BerryCardComponent> SideDeck { get; set; } = [];
+    public PokemonCardComponent? FaceCard { get; set; }
 
     /// <summary>
     /// Gives you a tuple with the minimum and maximum level of the Pokemon cards in the main deck. If the main deck is empty, both values will be 0.
     /// </summary>
     [JsonIgnore]
-    public (int Min, int Max) LevelRange => (MainDeck.Min(c => c.Level), MainDeck.Max(c => c.Level));
+    public (int Min, int Max) LevelRange => (MainDeck.Min(c => c.Card?.Level ?? 0), MainDeck.Max(c => c.Card?.Level ?? 0));
 
     /// <summary>
     /// Gets a list of unique types in the main deck, ordered by frequency (most common first).
@@ -93,7 +93,7 @@ public class Deck : Panel
         // Face card sprite centered in the deckbox
         if (FaceCard is not null)
         {
-            var result = ContentHelper.GetTextureResult<PokemonSpriteAtlas>(FaceCard.SpriteIdentifier);
+            var result = ContentHelper.GetTextureResult<PokemonSpriteAtlas>(FaceCard.Card?.BasePokemon.SpriteIdentifier ?? "");
             if (result is not null)
             {
                 var spriteScale = 4f;
