@@ -2,9 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using PocketCardLeague.Enums;
 using PocketCardLeague.SpriteMaps;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PocketCardLeague.Components;
 

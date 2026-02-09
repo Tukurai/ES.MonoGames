@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -5,8 +7,6 @@ using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace Components;
@@ -23,80 +23,75 @@ public class BitmapLabel : BaseComponent, IDisposable
     private Font? _font;
     private bool _isDirty = true;
 
-    private string _text = "";
-    private string _fontFamily = "Arial";
-    private float _fontSize = 12f;
-    private FontStyle _fontStyle = FontStyle.Regular;
-
     /// <summary>
     /// The text to display.
     /// </summary>
     public string Text
     {
-        get => _text;
+        get;
         set
         {
-            if (_text != value)
+            if (field != value)
             {
-                _text = value;
+                field = value;
                 _isDirty = true;
             }
         }
-    }
+    } = "";
 
     /// <summary>
     /// The font family name (e.g., "Arial", "Consolas", or path to a .ttf file).
     /// </summary>
     public string FontFamily
     {
-        get => _fontFamily;
+        get;
         set
         {
-            if (_fontFamily != value)
+            if (field != value)
             {
-                _fontFamily = value;
+                field = value;
                 _font?.Dispose();
                 _font = null;
                 _isDirty = true;
             }
         }
-    }
+    } = "Arial";
 
     /// <summary>
     /// The font size in points.
     /// </summary>
     public float FontSize
     {
-        get => _fontSize;
+        get;
         set
         {
-            if (Math.Abs(_fontSize - value) > 0.01f)
+            if (Math.Abs(field - value) > 0.01f)
             {
-                _fontSize = value;
+                field = value;
                 _font?.Dispose();
                 _font = null;
                 _isDirty = true;
             }
         }
-    }
+    } = 12f;
 
     /// <summary>
     /// The font style (Regular, Bold, Italic, etc.).
     /// </summary>
     public FontStyle FontStyle
     {
-        get => _fontStyle;
+        get;
         set
         {
-            if (_fontStyle != value)
+            if (field != value)
             {
-                _fontStyle = value;
+                field = value;
                 _font?.Dispose();
                 _font = null;
                 _isDirty = true;
             }
         }
-    }
+    } = FontStyle.Regular;
 
     /// <summary>
     /// Tint color applied to the text.
@@ -183,7 +178,7 @@ public class BitmapLabel : BaseComponent, IDisposable
 
     private void RegenerateTexture()
     {
-        if (_graphicsDevice is null || string.IsNullOrEmpty(_text))
+        if (_graphicsDevice is null || string.IsNullOrEmpty(Text))
         {
             _isDirty = false;
             return;
@@ -205,7 +200,7 @@ public class BitmapLabel : BaseComponent, IDisposable
         using (var measureBitmap = new Bitmap(1, 1))
         using (var measureGraphics = Graphics.FromImage(measureBitmap))
         {
-            textSize = measureGraphics.MeasureString(_text, _font, PointF.Empty, format);
+            textSize = measureGraphics.MeasureString(Text, _font, PointF.Empty, format);
         }
 
         var width = (int)Math.Ceiling(textSize.Width) + Padding * 2;
@@ -233,7 +228,7 @@ public class BitmapLabel : BaseComponent, IDisposable
 
         // Render white text so SpriteBatch tinting can apply TextColor and Border.Color at draw time
         using var brush = new SolidBrush(System.Drawing.Color.White);
-        graphics.DrawString(_text, _font, brush, Padding, Padding, format);
+        graphics.DrawString(Text, _font, brush, Padding, Padding, format);
 
         // Convert bitmap to Texture2D
         _texture?.Dispose();
@@ -250,24 +245,24 @@ public class BitmapLabel : BaseComponent, IDisposable
 
         try
         {
-            var fontPath = ResolveFontPath(_fontFamily);
+            var fontPath = ResolveFontPath(FontFamily);
 
             if (!string.IsNullOrEmpty(fontPath) && System.IO.File.Exists(fontPath))
             {
                 var collection = new PrivateFontCollection();
                 collection.AddFontFile(fontPath);
-                _font = new Font(collection.Families[0], _fontSize, _fontStyle, GraphicsUnit.Pixel);
+                _font = new Font(collection.Families[0], FontSize, FontStyle, GraphicsUnit.Pixel);
             }
             else
             {
                 // Use as system font family name
-                _font = new Font(_fontFamily, _fontSize, _fontStyle, GraphicsUnit.Pixel);
+                _font = new Font(FontFamily, FontSize, FontStyle, GraphicsUnit.Pixel);
             }
         }
         catch
         {
             // Fallback to Arial
-            _font = new Font("Arial", _fontSize, _fontStyle, GraphicsUnit.Pixel);
+            _font = new Font("Arial", FontSize, FontStyle, GraphicsUnit.Pixel);
         }
     }
 

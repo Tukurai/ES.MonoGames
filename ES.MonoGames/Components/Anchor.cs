@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 
 namespace Components;
 
@@ -21,14 +20,14 @@ public class Anchor(Vector2 position, Anchor? relative = null)
     /// </summary>
     /// <returns>A <see cref="Vector2"/> representing the sum of this instance's position and any relative positions. If there
     /// are no relative positions, returns this instance's position.</returns>
-    public Vector2 GetVector2() 
+    public Vector2 GetVector2()
         => _relative is not null ? _position + _relative.GetVector2() : _position;
 
     /// <summary>
     /// Gets the current anchor, if one is set.
     /// </summary>
     /// <returns>The current <see cref="Anchor"/> if available; otherwise, <see langword="null"/>.</returns>
-    public Anchor? GetAnchor() 
+    public Anchor? GetAnchor()
         => _relative;
 
     /// <summary>
@@ -38,6 +37,6 @@ public class Anchor(Vector2 position, Anchor? relative = null)
     public void TransformPosition(Vector2 transformation)
         => _position += transformation;
 
-    internal void UpdateRelative(Vector2 newRelative) 
+    internal void UpdateRelative(Vector2 newRelative)
         => _position = newRelative;
 }

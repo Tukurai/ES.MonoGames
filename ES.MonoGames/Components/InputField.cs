@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Runtime.InteropServices;
-using Helpers;
+﻿using Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Components;
 
@@ -483,7 +483,7 @@ public class InputField(
             case Keys.Home:
                 if (shiftHeld)
                 {
-                    if (!HasSelection) 
+                    if (!HasSelection)
                         _selectionStart = _cursorPosition;
                     _selectionEnd = 0;
                 }
@@ -493,7 +493,7 @@ public class InputField(
             case Keys.End:
                 if (shiftHeld)
                 {
-                    if (!HasSelection) 
+                    if (!HasSelection)
                         _selectionStart = _cursorPosition;
                     _selectionEnd = Text.Length;
                 }
@@ -509,7 +509,7 @@ public class InputField(
                         int newPos = GetPositionFromLineColumn(currentLine - 1, column);
                         if (shiftHeld)
                         {
-                            if (!HasSelection) 
+                            if (!HasSelection)
                                 _selectionStart = _cursorPosition;
                             _selectionEnd = newPos;
                         }
@@ -530,7 +530,7 @@ public class InputField(
                         int newPos = GetPositionFromLineColumn(currentLine + 1, column);
                         if (shiftHeld)
                         {
-                            if (!HasSelection) 
+                            if (!HasSelection)
                                 _selectionStart = _cursorPosition;
                             _selectionEnd = newPos;
                         }

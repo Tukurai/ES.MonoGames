@@ -175,7 +175,7 @@ public class SpriteButton(string? name = null, Anchor? position = null, Vector2?
             result.AtlasEntry.FrameY,
             result.AtlasEntry.FrameWidth,
             result.AtlasEntry.FrameHeight
-        ); 
+        );
     }
 
     private void UpdateSizeFromSprite()

@@ -1,4 +1,3 @@
-using Components;
 using Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
