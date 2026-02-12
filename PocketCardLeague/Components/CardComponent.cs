@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 
 namespace PocketCardLeague.Components;
 
-public class Card : Panel
+public class CardComponent : Panel
 {
     public string CardName { get; set; } = string.Empty;
     [JsonIgnore] public TextureResult? BackSprite { get; set; }

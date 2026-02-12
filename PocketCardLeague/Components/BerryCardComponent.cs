@@ -10,13 +10,13 @@ using System.Collections.Generic;
 
 namespace PocketCardLeague.Components;
 
-public class BerryCard : Card
+public class BerryCardComponent : CardComponent
 {
     public List<BerryEnergyType> BerryTypes { get; set; } = [BerryEnergyType.Green];
     public List<BerryEffectType> BerryEffects { get; set; } = [BerryEffectType.None];
     public string? BerrySpriteId { get; set; } = null;
 
-    public BerryCard() : base()
+    public BerryCardComponent() : base()
     {
     }
 

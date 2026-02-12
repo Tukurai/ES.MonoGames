@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Helpers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Helpers;
 
 namespace Components;
 

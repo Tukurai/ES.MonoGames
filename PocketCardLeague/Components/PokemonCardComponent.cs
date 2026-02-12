@@ -2,17 +2,15 @@
 using Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PocketCardLeague.Consts;
 using PocketCardLeague.Enums;
 using PocketCardLeague.Helpers;
 using PocketCardLeague.SpriteMaps;
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace PocketCardLeague.Components;
 
-public class PokemonCard : Card
+public class PokemonCardComponent : CardComponent
 {
     public int Level { get; set; } = 1;
     public int InnatePower { get; set; } = 0;

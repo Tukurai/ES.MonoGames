@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Helpers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Helpers;
 using System.Text.Json.Serialization;
 
 namespace Components;
