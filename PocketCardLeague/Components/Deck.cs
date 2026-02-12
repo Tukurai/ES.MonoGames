@@ -1,14 +1,13 @@
 ﻿using Components;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using PocketCardLeague.Enums;
-using Microsoft.Xna.Framework.Graphics;
-using System.Runtime.InteropServices.Swift;
 using PocketCardLeague.Consts;
+using PocketCardLeague.Enums;
+using PocketCardLeague.Helpers;
 using PocketCardLeague.SpriteMaps;
 using Helpers;
 
@@ -20,6 +19,9 @@ public class Deck : Panel
     public List<PokemonCard> MainDeck { get; set; } = [];
     public List<BerryCard> SideDeck { get; set; } = [];
     public PokemonCard? FaceCard { get; set; }
+
+    [JsonIgnore] public bool AutoBuild { get; set; } = false;
+    private bool _needsBuild = false;
 
     /// <summary>
     /// Gives you a tuple with the minimum and maximum level of the Pokemon cards in the main deck. If the main deck is empty, both values will be 0.
@@ -59,14 +61,15 @@ public class Deck : Panel
     {
         DeckName = deckName;
 
+        var layout = CardLayoutLoader.DeckBoxLayout;
         _deckLabel = new BitmapLabel($"deckbox_name_{deckName}")
         {
             Text = deckName,
             FontFamily = Fonts.M6x11,
-            FontSize = 36,
+            FontSize = (int)layout.NameLabelFontSize,
             TextColor = Color.White,
             Alignment = TextAlignment.Center,
-            MaxWidth = 228,
+            MaxWidth = (int)layout.NameLabelMaxWidth,
         };
         Children.Add(_deckLabel);
 
@@ -74,6 +77,18 @@ public class Deck : Panel
         Border = new Border(4, Color.Gray);
 
         OnPositionChanged += RepositionChildren;
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        if (AutoBuild && !_needsBuild)
+        {
+            _needsBuild = true;
+            AutoBuild = false;
+            BuildVisuals();
+        }
+
+        base.Update(gameTime);
     }
 
     /// <summary>
@@ -87,27 +102,30 @@ public class Deck : Panel
             Children.Remove(component);
         _overlays.Clear();
 
+        var layout = CardLayoutLoader.DeckBoxLayout;
         var boxWidth = (int)Size.X;
         var boxHeight = (int)Size.Y;
 
         // Face card sprite centered in the deckbox
-        if (FaceCard is not null)
+        if (FaceCard is not null && FaceCard.SpriteIdentifier is not null)
         {
             var result = ContentHelper.GetTextureResult<PokemonSpriteAtlas>(FaceCard.SpriteIdentifier);
             if (result is not null)
             {
-                var spriteScale = 4f;
+                var spriteScale = layout.FaceCardScale;
                 var scaledW = result.AtlasEntry.FrameWidth * spriteScale;
                 var scaledH = result.AtlasEntry.FrameHeight * spriteScale;
                 var faceSprite = new Sprite($"deck_face_{DeckName}")
                 {
                     Scale = new Vector2(spriteScale, spriteScale),
                     Bob = BobDirection.Up,
-                    BobDistance = 8,
+                    BobDistance = layout.FaceCardBobDistance,
                 };
                 faceSprite.SetFromAtlas(result);
                 faceSprite.Origin = Vector2.Zero;
-                AddOverlay(faceSprite, new Vector2((boxWidth - scaledW) / 2f, 20 + (200 - scaledH) / 2f));
+                AddOverlay(faceSprite, new Vector2(
+                    (boxWidth - scaledW) / 2f,
+                    layout.FaceCardOffsetY + (layout.FaceCardAreaHeight - scaledH) / 2f));
             }
         }
 
@@ -120,21 +138,21 @@ public class Deck : Panel
             {
                 Text = lvText,
                 FontFamily = Fonts.M6x11,
-                FontSize = 32,
+                FontSize = (int)layout.LevelLabelFontSize,
                 TextColor = Color.White,
                 Alignment = TextAlignment.Right,
-                MaxWidth = boxWidth - 24,
-                Border = new Border(2, new Color(25, 25, 25, 200)),
+                MaxWidth = (int)(boxWidth - layout.LevelLabelX * 2),
+                Border = new Border((int)layout.LevelLabelBorderWidth, new Color(25, 25, 25, 200)),
             };
-            AddOverlay(lvLabel, new Vector2(12, 8));
+            AddOverlay(lvLabel, new Vector2(layout.LevelLabelX, layout.LevelLabelY));
         }
 
         // Types row — bottom, left to right
-        var typeIconScale = 4f;
+        var typeIconScale = layout.TypesIconScale;
         var typeIconW = (int)(12 * typeIconScale);
         var typeIconH = (int)(11 * typeIconScale);
-        var typeSpacing = 4;
-        var typeY = boxHeight - 12 - typeIconH;
+        var typeSpacing = layout.TypesSpacing;
+        var typeY = boxHeight - layout.TypesMarginBottom - typeIconH;
 
         for (int i = 0; i < Types.Count; i++)
         {
@@ -148,15 +166,15 @@ public class Deck : Panel
                 };
                 typeSprite.SetFromAtlas(typeResult);
                 typeSprite.Origin = Vector2.Zero;
-                AddOverlay(typeSprite, new Vector2(12 + i * (typeIconW + typeSpacing), typeY));
+                AddOverlay(typeSprite, new Vector2(layout.TypesMarginX + i * (typeIconW + typeSpacing), typeY));
             }
         }
 
         // Costs row — above types, left to right
-        var dotScale = 4f;
+        var dotScale = layout.CostsDotScale;
         var dotSize = (int)(5 * dotScale);
-        var dotSpacing = 4;
-        var dotY = typeY - dotSize - 8;
+        var dotSpacing = layout.CostsSpacing;
+        var dotY = typeY - dotSize - layout.CostsGapAboveTypes;
 
         for (int i = 0; i < Costs.Count; i++)
         {
@@ -170,7 +188,7 @@ public class Deck : Panel
                 };
                 costSprite.SetFromAtlas(berryResult);
                 costSprite.Origin = Vector2.Zero;
-                AddOverlay(costSprite, new Vector2(12 + i * (dotSize + dotSpacing), dotY));
+                AddOverlay(costSprite, new Vector2(layout.CostsMarginX + i * (dotSize + dotSpacing), dotY));
             }
         }
     }
@@ -184,7 +202,7 @@ public class Deck : Panel
 
     private void RepositionChildren()
     {
-        _deckLabel.Position = new Anchor(new Vector2(0, 320), Position);
+        _deckLabel.Position = new Anchor(new Vector2(0, CardLayoutLoader.DeckBoxLayout.NameLabelY), Position);
         foreach (var (component, offset) in _overlays)
             component.Position = new Anchor(offset, Position);
     }

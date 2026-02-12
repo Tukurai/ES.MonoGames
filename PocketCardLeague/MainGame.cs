@@ -71,6 +71,10 @@ public class MainGame : Game
             pointerOrigin: new Vector2(3, 1),
             grabOrigin: new Vector2(3, 1));
 
+        // Initialize card layout loader and register card component factories
+        CardLayoutLoader.Initialize();
+        CardComponentFactory.Register();
+
         // Load saved games
         GameStateManager.LoadAll();
 

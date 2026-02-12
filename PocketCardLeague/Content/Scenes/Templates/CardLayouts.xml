@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CardLayouts>
+
+  <PokemonCard Width="57" Height="80"
+               FrontSprite="CardParts.card_common"
+               BackSprite="CardParts.back_mon">
+    <PokemonSprite X="3" Y="7" AreaWidth="51" AreaHeight="0" Align="Left" />
+    <LevelBar X="3" Y="55" Align="Left" />
+    <Types X="2" Y="2" Spacing="-1" Align="Left" />
+    <Costs X="3" Y="35" Spacing="1" Align="Left" />
+    <Glyphs X="2" Y="2" Spacing="-1" Align="Right" />
+    <DexIdLabel X="8" Y="23" FontSize="16" Align="Left" />
+    <NameLabel X="0" Y="38" FontSize="16" Align="Left" />
+    <LevelLabel X="0" Y="49" FontSize="16" Align="Left" />
+    <HpLabel X="0" Y="54" FontSize="16" Align="Right" />
+    <AtkLabel X="0" Y="60" FontSize="16" Align="Left" />
+    <DefLabel X="0" Y="60" FontSize="16" Align="Right" />
+  </PokemonCard>
+
+  <BerryCard Width="57" Height="80"
+             FrontSprite="CardParts.card_berry"
+             BackSprite="CardParts.back_berry">
+    <BerrySprite X="3" Y="5" AreaWidth="51" AreaHeight="40" Align="Left" />
+    <NameLabel X="0" Y="38" FontSize="16" Align="Left" />
+    <BerryDots X="26" Y="56" Spacing="1" Align="Left" />
+  </BerryCard>
+
+  <DeckBox>
+    <FaceCard SpriteScale="4" BobDistance="8" OffsetY="20" AreaHeight="200" />
+    <NameLabel FontSize="36" MaxWidth="228" Y="320" />
+    <LevelLabel FontSize="32" BorderWidth="2" X="12" Y="8" />
+    <Types IconScale="4" Spacing="4" MarginX="12" MarginBottom="12" />
+    <Costs DotScale="4" Spacing="4" GapAboveTypes="8" MarginX="12" />
+  </DeckBox>
+
+</CardLayouts>

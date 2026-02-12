@@ -23,6 +23,19 @@ public static class SceneLoader
     private static Dictionary<string, BaseComponent> _namedComponents = new();
 
     /// <summary>
+    /// Custom component factories registered by game code.
+    /// </summary>
+    private static readonly Dictionary<string, Func<XElement, IScene, BaseComponent?>> _customFactories = new();
+
+    /// <summary>
+    /// Register a custom component factory for use in XML scenes.
+    /// </summary>
+    public static void RegisterComponentFactory(string elementName, Func<XElement, IScene, BaseComponent?> factory)
+    {
+        _customFactories[elementName] = factory;
+    }
+
+    /// <summary>
     /// Parse XML string and create components, binding events to scene instance.
     /// </summary>
     public static List<BaseComponent> ParseXml(string xmlContent, IScene scene)
@@ -135,7 +148,9 @@ public static class SceneLoader
             "PixelLabel" => CreatePixelLabel(element),
             "BitmapLabel" => CreateBitmapLabel(element),
             "Include" => CreateInclude(element, scene),
-            _ => null
+            _ => _customFactories.TryGetValue(element.Name.LocalName, out var factory)
+                ? factory(element, scene)
+                : null
         };
 
         if (component is null)
@@ -1059,7 +1074,7 @@ public static class SceneLoader
     /// <summary>
     /// Parse a Vector2 from string (e.g., "100,200" or "100" for uniform).
     /// </summary>
-    private static Vector2? ParseVector2(string? value)
+    public static Vector2? ParseVector2(string? value)
     {
         if (string.IsNullOrEmpty(value))
             return null;
@@ -1096,7 +1111,7 @@ public static class SceneLoader
     /// <summary>
     /// Parse a Color from string (e.g., "Red", "255,128,0", "255,128,0,255", or "#FF8000").
     /// </summary>
-    private static Color? ParseColor(string? value)
+    public static Color? ParseColor(string? value)
     {
         if (string.IsNullOrEmpty(value))
             return null;
@@ -1160,7 +1175,7 @@ public static class SceneLoader
     /// <summary>
     /// Parse a sprite from atlas notation (e.g., "Arrows.Arrow_left").
     /// </summary>
-    private static TextureResult? ParseSprite(string value)
+    public static TextureResult? ParseSprite(string value)
     {
         if (string.IsNullOrEmpty(value))
             return null;
@@ -1229,7 +1244,7 @@ public static class SceneLoader
     /// <summary>
     /// Parse an enum attribute.
     /// </summary>
-    private static T ParseAttribute<T>(XElement element, string attributeName, T defaultValue)
+    public static T ParseAttribute<T>(XElement element, string attributeName, T defaultValue)
     {
         var value = element.Attribute(attributeName)?.Value;
         if (string.IsNullOrEmpty(value))
@@ -1245,7 +1260,7 @@ public static class SceneLoader
         return defaultValue;
     }
 
-    private static float? ParseFloat(string? value)
+    public static float? ParseFloat(string? value)
     {
         if (string.IsNullOrEmpty(value))
             return null;
@@ -1254,10 +1269,10 @@ public static class SceneLoader
         return null;
     }
 
-    private static float ParseFloat(string? value, float defaultValue)
+    public static float ParseFloat(string? value, float defaultValue)
         => ParseFloat(value) ?? defaultValue;
 
-    private static int? ParseInt(string? value)
+    public static int? ParseInt(string? value)
     {
         if (string.IsNullOrEmpty(value))
             return null;
@@ -1266,7 +1281,7 @@ public static class SceneLoader
         return null;
     }
 
-    private static bool? ParseBool(string? value)
+    public static bool? ParseBool(string? value)
     {
         if (string.IsNullOrEmpty(value))
             return null;
