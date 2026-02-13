@@ -30,7 +30,7 @@ public class TitleScene() : Scene<SceneType>(SceneType.Title)
         // Animated sprite example - cycling through Pokemon
         var animatedPokemon = new AnimatedSprite("animated_pokemon", new Anchor(new Vector2(448, 8)))
         {
-            FrameDelayMs = 250f,
+            FrameDelayMs = 500f,
             Loop = true,
             Scale = new Vector2(16f, 16f)
         };
@@ -99,6 +99,12 @@ public class TitleScene() : Scene<SceneType>(SceneType.Title)
         if (altHeld && pressedKeys.Contains(Keys.Home))
         {
             SceneManager.SetActiveScene(SceneType.Debug, new FadeTransition());
+            return;
+        }
+
+        if (altHeld && pressedKeys.Contains(Keys.End))
+        {
+            SceneManager.SetActiveScene(SceneType.CardDebug, new FadeTransition());
             return;
         }
 

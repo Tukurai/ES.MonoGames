@@ -89,6 +89,7 @@ public class MainGame : Game
         SceneManager.AddScene(new DebugScene());
         SceneManager.AddScene(new MainScene());
         SceneManager.AddScene(new DecksScene());
+        SceneManager.AddScene(new CardDebugScene());
         SceneManager.AddScene(new DeckBuilderScene());
         SceneManager.AddScene(new CardsScene());
 

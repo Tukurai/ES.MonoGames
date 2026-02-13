@@ -2,9 +2,10 @@
 
 public enum SceneType
 {
+    Debug,
+    CardDebug,
     Title,
     Options,
-    Debug,
     Main,
     Decks,
     Cards,
