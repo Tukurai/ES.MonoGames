@@ -32,6 +32,11 @@
              BerrySpriteId="sitrus"
              Position="600,440" Scale="4,4" />
 
+  <!-- Example face-down card -->
+  <BerryCard Name="berry_sitrus" CardName="Sitrus Berry" BerryTypes="Green"
+             BerrySpriteId="sitrus" FaceUp="false"
+             Position="860,440" Scale="4,4" />
+
   <!-- Example Decks -->
   <Deck Name="deck_fire" DeckName="Fire Starter" Position="1200,80" Size="228,380">
     <FaceCard SpriteId="0004_000_mf_n_00000000_n" Level="5" />
