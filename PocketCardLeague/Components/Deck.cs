@@ -33,7 +33,7 @@ public class Deck : Panel
     /// Gets a list of unique types in the main deck, ordered by frequency (most common first).
     /// </summary>
     [JsonIgnore]
-    public List<PokemonType> Types => [.. MainDeck.SelectMany(c => c.Types).GroupBy(t => t).OrderByDescending(g => g.Count()).Select(g => g.Key)];
+    public List<PokemonType> Types => [.. MainDeck.SelectMany(c => c.Card?.BasePokemon?.Types ?? Enumerable.Empty<PokemonType>()).GroupBy(t => t).OrderByDescending(g => g.Count()).Select(g => g.Key)];
 
     /// <summary>
     /// Gets a list of unique costs in the main deck, ordered by the frequency of their occurrence (most common first).
@@ -42,7 +42,7 @@ public class Deck : Panel
     /// the distinct costs sorted by how many cards have that cost. For example, if you have 10 cards
     /// that cost Green and 5 cards that cost Red, the list will be [Green, Red], not [Green x10, Red x5].</remarks>
     [JsonIgnore]
-    public List<BerryEnergyType> Costs => [.. MainDeck.SelectMany(c => c.Cost).GroupBy(t => t).OrderByDescending(g => g.Count()).Select(g => g.Key)];
+    public List<BerryEnergyType> Costs => [.. MainDeck.SelectMany(c => c.Card?.Cost ?? Enumerable.Empty<BerryEnergyType>()).GroupBy(t => t).OrderByDescending(g => g.Count()).Select(g => g.Key)];
 
     /// <summary>
     /// Gets a list of berry types, ordered by their frequency across all side decks.

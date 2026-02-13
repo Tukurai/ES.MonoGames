@@ -2,24 +2,21 @@
 <Scene BackgroundColor="25,25,25" BackgroundSprite="Locations.Hideout_2" BackgroundOpacity="0.25" SceneTrack="ms_league">
 
   <!-- Example Pokemon Cards -->
-  <PokemonCard Name="card_charmander" CardName="Charmander" DexId="4" Level="5"
-               Type1="Fire" Cost="Red,Void" HP="40" Atk="12" Def="8"
-               Glyphs="berserk,courage"
+  <PokemonCard Name="card_charmander" SpriteId="0004_000_mf_n_00000000_n" Level="5"
+               Cost="Red,Void" Glyphs="berserk,courage"
                Position="80,80" Scale="4,4" />
 
-  <PokemonCard Name="card_squirtle" CardName="Squirtle" DexId="7" Level="5"
-               Type1="Water" Cost="Blue,Void" HP="44" Atk="10" Def="12"
-               Glyphs="bulwark,shield"
+  <PokemonCard Name="card_squirtle" SpriteId="0007_000_mf_n_00000000_n" Level="5"
+               Cost="Blue,Void" Glyphs="bulwark,shield"
                Position="340,80" Scale="4,4" />
 
-  <PokemonCard Name="card_bulbasaur" CardName="Bulbasaur" DexId="1" Level="5"
-               Type1="Grass" Type2="Poison" Cost="Green,Void" HP="45" Atk="11" Def="11"
-               Glyphs="recovery,medic"
+  <PokemonCard Name="card_bulbasaur" SpriteId="0001_000_mf_n_00000000_n" Level="5"
+               Cost="Green,Void" Glyphs="recovery,medic"
                Position="600,80" Scale="4,4" />
 
   <!-- Example face-down card -->
-  <PokemonCard Name="card_facedown" CardName="Mystery" DexId="25" Level="3"
-               Type1="Electric" Cost="Yellow,Void" FaceUp="false"
+  <PokemonCard Name="card_facedown" SpriteId="0025_000_mf_n_00000000_n" Level="3"
+               Cost="Yellow,Void" FaceUp="false"
                Position="860,80" Scale="4,4" />
 
   <!-- Example Berry Cards -->
@@ -37,12 +34,12 @@
 
   <!-- Example Decks -->
   <Deck Name="deck_fire" DeckName="Fire Starter" Position="1200,80" Size="228,380">
-    <FaceCard DexId="4" Level="5" Type1="Fire" CardName="Charmander" />
+    <FaceCard SpriteId="0004_000_mf_n_00000000_n" Level="5" />
     <MainDeck>
-      <PokemonCard CardName="Charmander" Level="5" Type1="Fire" DexId="4" Cost="Red,Void" />
-      <PokemonCard CardName="Vulpix" Level="5" Type1="Fire" DexId="37" Cost="Red,Void" />
-      <PokemonCard CardName="Growlithe" Level="8" Type1="Fire" DexId="58" Cost="Red,Red,Void" />
-      <PokemonCard CardName="Ponyta" Level="6" Type1="Fire" DexId="77" Cost="Red,Void" />
+      <PokemonCard SpriteId="0004_000_mf_n_00000000_n" Level="5" Cost="Red,Void" />
+      <PokemonCard SpriteId="0037_000_mf_n_00000000_n" Level="5" Cost="Red,Void" />
+      <PokemonCard SpriteId="0058_000_mf_n_00000000_n" Level="8" Cost="Red,Red,Void" />
+      <PokemonCard SpriteId="0077_000_mf_n_00000000_n" Level="6" Cost="Red,Void" />
     </MainDeck>
     <SideDeck>
       <BerryCard CardName="Rawst Berry" BerryTypes="Red" />
@@ -51,12 +48,12 @@
   </Deck>
 
   <Deck Name="deck_water" DeckName="Water Starter" Position="1480,80" Size="228,380">
-    <FaceCard DexId="7" Level="5" Type1="Water" CardName="Squirtle" />
+    <FaceCard SpriteId="0007_000_mf_n_00000000_n" Level="5" />
     <MainDeck>
-      <PokemonCard CardName="Squirtle" Level="5" Type1="Water" DexId="7" Cost="Blue,Void" />
-      <PokemonCard CardName="Psyduck" Level="5" Type1="Water" DexId="54" Cost="Blue,Void" />
-      <PokemonCard CardName="Poliwag" Level="8" Type1="Water" DexId="60" Cost="Blue,Blue,Void" />
-      <PokemonCard CardName="Staryu" Level="6" Type1="Water" DexId="120" Cost="Blue,Void" />
+      <PokemonCard SpriteId="0007_000_mf_n_00000000_n" Level="5" Cost="Blue,Void" />
+      <PokemonCard SpriteId="0054_000_mf_n_00000000_n" Level="5" Cost="Blue,Void" />
+      <PokemonCard SpriteId="0060_000_mf_n_00000000_n" Level="8" Cost="Blue,Blue,Void" />
+      <PokemonCard SpriteId="0120_000_uk_n_00000000_n" Level="6" Cost="Blue,Void" />
     </MainDeck>
     <SideDeck>
       <BerryCard CardName="Oran Berry" BerryTypes="Blue" />
@@ -65,12 +62,12 @@
   </Deck>
 
   <Deck Name="deck_grass" DeckName="Grass Starter" Position="1760,80" Size="228,380">
-    <FaceCard DexId="1" Level="5" Type1="Grass" Type2="Poison" CardName="Bulbasaur" />
+    <FaceCard SpriteId="0001_000_mf_n_00000000_n" Level="5" />
     <MainDeck>
-      <PokemonCard CardName="Bulbasaur" Level="5" Type1="Grass" Type2="Poison" DexId="1" Cost="Green,Void" />
-      <PokemonCard CardName="Oddish" Level="5" Type1="Grass" Type2="Poison" DexId="43" Cost="Green,Void" />
-      <PokemonCard CardName="Bellsprout" Level="8" Type1="Grass" Type2="Poison" DexId="69" Cost="Green,Green,Void" />
-      <PokemonCard CardName="Tangela" Level="6" Type1="Grass" DexId="114" Cost="Green,Void" />
+      <PokemonCard SpriteId="0001_000_mf_n_00000000_n" Level="5" Cost="Green,Void" />
+      <PokemonCard SpriteId="0043_000_mf_n_00000000_n" Level="5" Cost="Green,Void" />
+      <PokemonCard SpriteId="0069_000_mf_n_00000000_n" Level="8" Cost="Green,Green,Void" />
+      <PokemonCard SpriteId="0114_000_mf_n_00000000_n" Level="6" Cost="Green,Void" />
     </MainDeck>
     <SideDeck>
       <BerryCard CardName="Sitrus Berry" BerryTypes="Green" />

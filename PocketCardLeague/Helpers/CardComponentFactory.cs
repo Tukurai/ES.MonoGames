@@ -1,6 +1,7 @@
 using Components;
 using Helpers;
 using PocketCardLeague.Components;
+using PocketCardLeague.Consts;
 using PocketCardLeague.Enums;
 using System;
 using System.Linq;
@@ -57,27 +58,28 @@ public static class CardComponentFactory
         return deck;
     }
 
-    internal static PokemonCard ParsePokemonCardData(XElement element)
+    internal static PokemonCardComponent ParsePokemonCardData(XElement element)
     {
-        var card = new PokemonCard();
+        var cardComponent = new PokemonCardComponent();
 
-        var cardName = element.Attribute("CardName")?.Value;
-        if (!string.IsNullOrEmpty(cardName))
-            card.CardName = cardName;
+        // Look up PokeDexEntry by identity string (SpriteIdentifier format)
+        var spriteId = element.Attribute("SpriteId")?.Value;
+        PokeDexEntry? dexEntry = null;
+        if (!string.IsNullOrEmpty(spriteId))
+            dexEntry = PokeDex.Entries.Find(e => e.SpriteIdentifier == spriteId);
+        dexEntry ??= new PokeDexEntry();
 
-        var dexId = SceneLoader.ParseInt(element.Attribute("DexId")?.Value);
-        if (dexId.HasValue)
-            card.DexId = dexId.Value;
+        var level = SceneLoader.ParseInt(element.Attribute("Level")?.Value) ?? 1;
+        var innatePower = SceneLoader.ParseInt(element.Attribute("InnatePower")?.Value) ?? 0;
+        var nickname = element.Attribute("Nickname")?.Value;
 
-        var level = SceneLoader.ParseInt(element.Attribute("Level")?.Value);
-        if (level.HasValue)
-            card.Level = level.Value;
-
-        card.Type1 = SceneLoader.ParseAttribute<PokemonType>(element, "Type1", PokemonType.Normal);
-
-        var type2Str = element.Attribute("Type2")?.Value;
-        if (!string.IsNullOrEmpty(type2Str) && Enum.TryParse<PokemonType>(type2Str, true, out var type2))
-            card.Type2 = type2;
+        var card = new PokeCard(dexEntry, level, innatePower, nickname)
+        {
+            HP = dexEntry.Hp,
+            MaxHP = dexEntry.Hp,
+            Atk = dexEntry.Attack,
+            Def = dexEntry.Defense,
+        };
 
         var costStr = element.Attribute("Cost")?.Value;
         if (!string.IsNullOrEmpty(costStr))
@@ -85,40 +87,23 @@ public static class CardComponentFactory
                 .Select(s => Enum.TryParse<BerryEnergyType>(s.Trim(), true, out var c) ? c : BerryEnergyType.Void)
                 .ToList();
 
-        var faceUp = SceneLoader.ParseBool(element.Attribute("FaceUp")?.Value);
-        if (faceUp.HasValue)
-            card.FaceUp = faceUp.Value;
-
-        var innatePower = SceneLoader.ParseInt(element.Attribute("InnatePower")?.Value);
-        if (innatePower.HasValue)
-            card.InnatePower = innatePower.Value;
-
-        var nickname = element.Attribute("Nickname")?.Value;
-        if (!string.IsNullOrEmpty(nickname))
-            card.Nickname = nickname;
-
-        var hp = SceneLoader.ParseInt(element.Attribute("HP")?.Value);
-        if (hp.HasValue)
-            card.HP = hp.Value;
-
-        var atk = SceneLoader.ParseInt(element.Attribute("Atk")?.Value);
-        if (atk.HasValue)
-            card.Atk = atk.Value;
-
-        var def = SceneLoader.ParseInt(element.Attribute("Def")?.Value);
-        if (def.HasValue)
-            card.Def = def.Value;
-
         var glyphsStr = element.Attribute("Glyphs")?.Value;
         if (!string.IsNullOrEmpty(glyphsStr))
-            card.Glyphs = glyphsStr.Split(',').Select(s => s.Trim()).ToList();
+            card.Glyphs = [.. glyphsStr.Split(',').Select(s => s.Trim())];
 
-        return card;
+        cardComponent.Card = card;
+        cardComponent.CardName = nickname ?? dexEntry.Name;
+
+        var faceUp = SceneLoader.ParseBool(element.Attribute("FaceUp")?.Value);
+        if (faceUp.HasValue)
+            cardComponent.FaceUp = faceUp.Value;
+
+        return cardComponent;
     }
 
-    internal static BerryCard ParseBerryCardData(XElement element)
+    internal static BerryCardComponent ParseBerryCardData(XElement element)
     {
-        var card = new BerryCard();
+        var card = new BerryCardComponent();
 
         var cardName = element.Attribute("CardName")?.Value;
         if (!string.IsNullOrEmpty(cardName))

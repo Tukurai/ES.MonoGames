@@ -2,42 +2,29 @@
 using Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PocketCardLeague.Consts;
 using PocketCardLeague.Enums;
 using PocketCardLeague.Helpers;
 using PocketCardLeague.SpriteMaps;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PocketCardLeague.Components;
 
 public class PokemonCardComponent : CardComponent
 {
-    public int Level { get; set; } = 1;
-    public int InnatePower { get; set; } = 0;
-    public string? Nickname { get; set; } = null;
-    public int DexId { get; set; } = 0;
-    public PokemonType Type1 { get; set; } = PokemonType.Normal;
-    public PokemonType? Type2 { get; set; } = null;
-    public PokeDexEntry? BasePokemon { get; set; } = null;
-    public int HP { get; set; } = 0;
-    public int Atk { get; set; } = 0;
-    public int Def { get; set; } = 0;
-    public List<string> Glyphs { get; set; } = [];
-
-    public List<BerryEnergyType> Cost { get; set; } = [BerryEnergyType.Green, BerryEnergyType.Green, BerryEnergyType.Void];
-
-    [JsonIgnore]
-    public List<PokemonType> Types => Type2 is null ? [Type1] : [Type1, Type2.Value];
+    public PokeCard? Card { get; set; }
 
     [JsonIgnore]
     public string? SpriteIdentifier
     {
         get
         {
-            if (BasePokemon is not null)
-                return BasePokemon.SpriteIdentifier;
-            if (DexId > 0)
-                return PokeDex.Entries.Find(e => e.Id == DexId)?.SpriteIdentifier;
+            if (Card?.BasePokemon is not null)
+                return Card.BasePokemon.SpriteIdentifier;
+            if (Card?.BasePokemon.Id > 0)
+                return PokeDex.Entries.Find(e => e.Id == Card.BasePokemon.Id)?.SpriteIdentifier;
             return null;
         }
     }
@@ -55,6 +42,7 @@ public class PokemonCardComponent : CardComponent
         if (!FaceUp) return;
 
         var s = Scale;
+        var layers = new List<(BaseComponent Component, Vector2 Offset, float Layer)>();
 
         // Pokemon image sprite centered in the sprite area
         var spriteId = SpriteIdentifier;
@@ -75,15 +63,15 @@ public class PokemonCardComponent : CardComponent
                 var spriteW = result.AtlasEntry.FrameWidth;
                 var spriteH = result.AtlasEntry.FrameHeight;
                 var areaX = AlignX(area.X, area.AreaWidth, area.Align);
-                AddOverlay(pokemonSprite, new Vector2(
+                layers.Add((pokemonSprite, new Vector2(
                     (areaX + (area.AreaWidth - spriteW) / 2f) * s.X,
                     (area.Y + (area.AreaHeight - spriteH) / 2f) * s.Y
-                ));
+                ), area.Layer));
             }
         }
 
         // Level bar
-        var lvlIndex = Math.Clamp(Level, 0, 10);
+        var lvlIndex = Math.Clamp(Card?.Level ?? 0, 0, 10);
         var lvlName = $"level_{lvlIndex}_back";
         var lvlResult = ContentHelper.GetTextureResult<CardPartsSpriteAtlas>(lvlName);
         if (lvlResult is not null)
@@ -110,13 +98,13 @@ public class PokemonCardComponent : CardComponent
             }
 
             var lvlX = AlignX(layout.LevelBar.X, lvlW, layout.LevelBar.Align);
-            AddOverlay(lvlSprite, new Vector2(lvlX * s.X, layout.LevelBar.Y * s.Y));
+            layers.Add((lvlSprite, new Vector2(lvlX * s.X, layout.LevelBar.Y * s.Y), layout.LevelBar.Layer));
         }
 
         // Type icons — vertical stack
-        for (int i = 0; i < Types.Count; i++)
+        for (int i = 0; i < Card?.BasePokemon.Types.Count; i++)
         {
-            var typeName = Types[i].ToString().ToLowerInvariant();
+            var typeName = Card.BasePokemon.Types[i].ToString().ToLowerInvariant();
             var typeResult = ContentHelper.GetTextureResult<TypesSpriteAtlas>(typeName);
             if (typeResult is not null)
             {
@@ -130,17 +118,17 @@ public class PokemonCardComponent : CardComponent
                 var typeW = typeResult.AtlasEntry.FrameWidth;
                 var typeH = typeResult.AtlasEntry.FrameHeight;
                 var typeX = AlignX(layout.Types.X, typeW, layout.Types.Align);
-                AddOverlay(typeSprite, new Vector2(
+                layers.Add((typeSprite, new Vector2(
                     typeX * s.X,
                     (layout.Types.Y + i * (typeH + layout.Types.Spacing)) * s.Y
-                ));
+                ), layout.Types.Layer));
             }
         }
 
         // Cost dots — small berry dots, left-aligned
-        for (int i = 0; i < Cost.Count; i++)
+        for (int i = 0; i < Card?.Cost.Count; i++)
         {
-            var berryName = "berry_" + Cost[i].ToString().ToLowerInvariant() + "_small";
+            var berryName = "berry_" + Card?.Cost[i].ToString().ToLowerInvariant() + "_small";
             var berryResult = ContentHelper.GetTextureResult<BerriesSpriteAtlas>(berryName);
             if (berryResult is not null)
             {
@@ -153,17 +141,17 @@ public class PokemonCardComponent : CardComponent
 
                 var dotW = berryResult.AtlasEntry.FrameWidth;
                 var costsX = AlignX(layout.Costs.X, dotW, layout.Costs.Align);
-                AddOverlay(costSprite, new Vector2(
+                layers.Add((costSprite, new Vector2(
                     (costsX + i * (dotW + layout.Costs.Spacing)) * s.X,
                     layout.Costs.Y * s.Y
-                ));
+                ), layout.Costs.Layer));
             }
         }
 
         // Glyphs — vertical stack, opposite side of types
-        for (int i = 0; i < Glyphs.Count; i++)
+        for (int i = 0; i < Card?.Glyphs.Count; i++)
         {
-            var glyphName = Glyphs[i].ToLowerInvariant();
+            var glyphName = Card.Glyphs[i].ToLowerInvariant();
             var glyphResult = ContentHelper.GetTextureResult<GlyphsSpriteAtlas>(glyphName);
             if (glyphResult is not null)
             {
@@ -177,41 +165,117 @@ public class PokemonCardComponent : CardComponent
                 var glyphW = glyphResult.AtlasEntry.FrameWidth;
                 var glyphH = glyphResult.AtlasEntry.FrameHeight;
                 var glyphX = AlignX(layout.Glyphs.X, glyphW, layout.Glyphs.Align);
-                AddOverlay(glyphSprite, new Vector2(
+                layers.Add((glyphSprite, new Vector2(
                     glyphX * s.X,
                     (layout.Glyphs.Y + i * (glyphH + layout.Glyphs.Spacing)) * s.Y
-                ));
+                ), layout.Glyphs.Layer));
+            }
+        }
+
+        // Type background bars (overlaid, behind name)
+        var type1Color = TypeColors.Get(Card?.BasePokemon.Type1 ?? PokemonType.Normal);
+        var type2Color = Card?.BasePokemon.Type2 is not null
+            ? TypeColors.Get(Card.BasePokemon.Type2.Value)
+            : Color.White;
+        AddTypeBack("type_2_back", type2Color, layout.TypeBacks, s, layers, false);
+        AddTypeBack("type_1_back", type1Color, layout.TypeBacks, s, layers, true);
+
+        // Custom overlays from XML
+        foreach (var overlay in layout.Overlays)
+        {
+            if (string.IsNullOrEmpty(overlay.Sprite))
+                continue;
+            var overlayResult = SceneLoader.ParseSprite(overlay.Sprite);
+            if (overlayResult is not null)
+            {
+                var overlaySprite = new Sprite($"card_overlay_{overlay.Sprite}_{CardName}")
+                {
+                    Scale = new Vector2(overlay.ScaleX * s.X, overlay.ScaleY * s.Y),
+                    Tint = Color.White * overlay.Opacity,
+                };
+                overlaySprite.SetFromAtlas(overlayResult);
+                overlaySprite.Origin = Vector2.Zero;
+
+                var overlayW = overlayResult.AtlasEntry.FrameWidth * overlay.ScaleX;
+                var overlayX = AlignX(overlay.X, (float)overlayW, overlay.Align);
+                layers.Add((overlaySprite, new Vector2(overlayX * s.X, overlay.Y * s.Y), overlay.Layer));
             }
         }
 
         // Labels
-        AddCardLabel($"card_name_{CardName}", CardName, layout.NameLabel, s);
-        if (DexId > 0)
-            AddCardLabel($"card_dex_{CardName}", $"{DexId}", layout.DexIdLabel, s);
-        AddCardLabel($"card_lv_{CardName}", $"Lv.{Level}", layout.LevelLabel, s);
-        if (HP > 0)
-            AddCardLabel($"card_hp_{CardName}", $"{HP}", layout.HpLabel, s);
-        if (Atk > 0)
-            AddCardLabel($"card_atk_{CardName}", $"{Atk}", layout.AtkLabel, s);
-        if (Def > 0)
-            AddCardLabel($"card_def_{CardName}", $"{Def}", layout.DefLabel, s);
+        AddCardLabel($"card_name_{CardName}", CardName, layout.NameLabel, s, layers);
+        if (Card?.BasePokemon.Id > 0)
+            AddCardLabel($"card_dex_{CardName}", $"{Card.BasePokemon.Id}", layout.DexIdLabel, s, layers);
+        AddCardLabel($"card_lv_{CardName}", $"lv {Card?.Level}", layout.LevelLabel, s, layers);
+        if (Card?.HP > 0)
+            AddCardLabel($"card_hp_{CardName}", $"{Card?.HP}", layout.HpLabel, s, layers);
+        if (Card?.Atk > 0)
+            AddCardLabel($"card_atk_{CardName}", $"{Card?.Atk}", layout.AtkLabel, s, layers);
+        if (Card?.Def > 0)
+            AddCardLabel($"card_def_{CardName}", $"{Card?.Def}", layout.DefLabel, s, layers);
+
+        // Sort by layer and commit
+        layers.Sort((a, b) => a.Layer.CompareTo(b.Layer));
+        foreach (var (component, offset, _) in layers)
+            AddOverlay(component, offset);
     }
 
-    private void AddCardLabel(string name, string text, LabelLayout layout, Vector2 scale)
+    private void AddTypeBack(string spriteName, Color tint, TypeBackLayout layout,
+        Vector2 scale, List<(BaseComponent, Vector2, float)> layers, bool flip)
+    {
+        var result = ContentHelper.GetTextureResult<CardPartsSpriteAtlas>(spriteName);
+        if (result is null) return;
+
+        var sprite = new Sprite($"card_{spriteName}_{CardName}")
+        {
+            Scale = scale,
+            Tint = tint * layout.Opacity,
+        };
+        sprite.SetFromAtlas(result);
+
+        if (result.AtlasEntry.Rotated)
+        {
+            sprite.Rotation = MathF.PI / 2f;
+            sprite.Origin = new Vector2(0, result.AtlasEntry.FrameHeight);
+        }
+        else
+            sprite.Origin = Vector2.Zero;
+
+        if (flip)
+            sprite.Effects = result.AtlasEntry.Rotated
+                ? SpriteEffects.FlipVertically
+                : SpriteEffects.FlipHorizontally;
+
+        layers.Add((sprite, new Vector2(layout.X * scale.X, layout.Y * scale.Y), layout.Layer));
+    }
+
+    private void AddCardLabel(string name, string text, LabelLayout layout, Vector2 scale,
+        List<(BaseComponent, Vector2, float)> layers)
     {
         var label = new BitmapLabel(name)
         {
             Text = text,
             FontFamily = Fonts.M3x6,
             FontSize = (int)layout.FontSize,
-            TextColor = Color.White,
-            Border = new Border(4, Color.Black),
+            TextColor = layout.TextColor ?? Color.White,
+            Border = new Border(layout.BorderWidth, layout.BorderColor ?? Color.Black),
             Scale = scale,
         };
-        // Estimate label width for alignment (FontSize * chars * ~0.5 ratio for m3x6)
-        var estimatedWidth = text.Length * layout.FontSize * 0.5f;
-        var labelX = AlignX(layout.X, (float)estimatedWidth, layout.Align);
-        AddOverlay(label, new Vector2(labelX * scale.X, layout.Y * scale.Y));
+
+        if (layout.Align.Equals("Center", StringComparison.OrdinalIgnoreCase))
+        {
+            label.Alignment = TextAlignment.Center;
+            label.MaxWidth = (int)(Size.X * scale.X);
+            layers.Add((label, new Vector2(0, layout.Y * scale.Y), layout.Layer));
+        }
+        else if (layout.Align.Equals("Right", StringComparison.OrdinalIgnoreCase))
+        {
+            label.Alignment = TextAlignment.Right;
+            label.MaxWidth = (int)((Size.X - layout.X) * scale.X);
+            layers.Add((label, new Vector2(0, layout.Y * scale.Y), layout.Layer));
+        }
+        else
+            layers.Add((label, new Vector2(layout.X * scale.X, layout.Y * scale.Y), layout.Layer));
     }
 
     public override void Update(GameTime gameTime)

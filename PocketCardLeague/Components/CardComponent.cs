@@ -25,7 +25,7 @@ public class CardComponent : Panel
     private bool _needsBuild = false;
     private readonly List<(BaseComponent Component, Vector2 Offset)> _overlays = [];
 
-    public Card(string? name = null) : base(name)
+    public CardComponent(string? name = null) : base(name)
     {
         Size = new Vector2(57, 80);
         OnPositionChanged += RepositionOverlays;
@@ -86,6 +86,8 @@ public class CardComponent : Panel
     {
         if (align.Equals("Right", StringComparison.OrdinalIgnoreCase))
             return Size.X - x - elementWidth;
+        if (align.Equals("Center", StringComparison.OrdinalIgnoreCase))
+            return (Size.X - elementWidth) / 2f;
         return x;
     }
 
