@@ -16,7 +16,7 @@ public class Button(string? name = null, string text = "Button", SpriteFont? fon
     public bool QuickDraw { get; set; } = false;
     public int PressDepth { get; set; } = 0;
 
-    private SpriteFont? Font { get; set; } = font;
+    public SpriteFont? Font { get; set; } = font;
 
     private float _lengthCache = -1f;
     private float _heightCache = -1f;

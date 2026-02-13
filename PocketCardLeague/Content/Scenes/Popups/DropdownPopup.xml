@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Panel Name="dropdown_content" Background="Transparent">
+    <Children>
+      <BitmapLabel Name="prompt_label" Text="Select an option:"
+                   FontFamily="m3x6.ttf" FontSize="20" TextColor="White"
+                   Position="16,48"/>
+
+      <Dropdown Name="popup_dropdown" Position="16,80" Size="368,36"
+                Background="40,45,55" TextColor="White" Padding="6"
+                MaxVisibleItems="8">
+        <Border Thickness="2" Color="70,75,90"/>
+        <FocusedBorder Thickness="2" Color="120,140,180"/>
+      </Dropdown>
+    </Children>
+  </Panel>
+</Template>

@@ -96,6 +96,13 @@ public abstract class BaseComponent
     public float BobInterval { get; set; } = 650f;
 
     /// <summary>
+    /// Whether this component is visible and processes input. Default is true.
+    /// When false, Update() and Draw() are skipped entirely for this component and its children.
+    /// </summary>
+    [JsonIgnore]
+    public bool Show { get; set; } = true;
+
+    /// <summary>
     /// Opacity of this component (0f = fully transparent, 1f = fully opaque). Default is 1f.
     /// Children inherit their parent's effective opacity multiplicatively.
     /// </summary>
@@ -195,6 +202,9 @@ public abstract class BaseComponent
 
     public virtual void Update(GameTime gameTime)
     {
+        if (!Show)
+            return;
+
         // Check if mouse is blocked by an overlay (dropdown, popup, etc.)
         var mousePos = ControlState.GetMousePosition();
         var isBlockedByOverlay = OverlayManager.IsPointBlocked(mousePos);
@@ -296,6 +306,9 @@ public abstract class BaseComponent
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
+        if (!Show)
+            return;
+
         foreach (var child in Children)
         {
             child._parentOpacity = EffectiveOpacity;

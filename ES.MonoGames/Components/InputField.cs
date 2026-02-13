@@ -173,7 +173,7 @@ public class InputField(
     // Rasterizer state for scissor clipping
     private static readonly RasterizerState _scissorRasterizer = new() { ScissorTestEnable = true };
 
-    private SpriteFont? Font { get; set; } = font;
+    public SpriteFont? Font { get; set; } = font;
 
     // Events
     public event Action<string>? OnTextChanged;

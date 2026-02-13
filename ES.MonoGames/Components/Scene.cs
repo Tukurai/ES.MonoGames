@@ -180,7 +180,8 @@ public abstract class Scene<T> : IScene where T : Enum
         OverlayManager.Clear();
         ToolTipManager.Clear();
 
-        Components.ForEach(c => c.Update(gameTime));
+        foreach (var c in Components.ToArray())
+            c.Update(gameTime);
         OnSceneUpdated?.Invoke();
     }
 
@@ -192,7 +193,8 @@ public abstract class Scene<T> : IScene where T : Enum
 
     public void DrawContent(SpriteBatch spriteBatch)
     {
-        Components.ForEach(c => c.Draw(spriteBatch));
+        foreach (var c in Components.ToArray())
+            c.Draw(spriteBatch);
 
         // Draw overlays (dropdowns, popups) on top of everything
         OverlayManager.DrawOverlays(spriteBatch);

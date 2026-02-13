@@ -1,5 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Scene BackgroundColor="25,25,25" BackgroundSprite="Locations.Hideout_2" BackgroundOpacity="0.25" SceneTrack="ms_league">
 
+  <SpriteButton Name="btn_back" Position="30,16" Scale="4"
+                NormalSprite="Arrows.Arrow_left"
+                PressedSprite="Arrows.Arrow_left_active"
+                Opacity="0.8">
+    <Children>
+      <Label Name="back_label" Text="Back" Font="HeaderFont"
+             Position="44,0,btn_back">
+        <Border Thickness="4" Color="25,25,25,170"/>
+      </Label>
+    </Children>
+  </SpriteButton>
+
+  <InputField Name="deck_name_input" Position="200,16" Size="400,40"
+              Font="m3Default" Placeholder="Deck Name..." TextColor="White"
+              Background="40,45,55" Padding="8">
+    <Border Thickness="2" Color="70,75,90"/>
+    <FocusedBorder Thickness="2" Color="120,140,180"/>
+  </InputField>
+
+  <Button Name="tab_pokemon" Text="Pokemon" Font="m3Default"
+          Position="680,16" Size="160,40" Centered="true"
+          TextColor="White" Background="80,90,120" Padding="10">
+    <Border Thickness="2" Color="120,140,180"/>
+  </Button>
+
+  <Button Name="tab_berry" Text="Berries" Font="m3Default"
+          Position="850,16" Size="160,40" Centered="true"
+          TextColor="170,170,180" Background="45,50,62" Padding="10">
+    <Border Thickness="2" Color="60,65,75"/>
+  </Button>
+
+  <!-- Pokemon filter bar (visible by default) -->
+  <Panel Name="pokemon_filter_bar" Position="30,70" Size="1988,60"
+         Background="Transparent" Show="true">
+    <Children>
+      <Dropdown Name="filter_type" Position="0,4,pokemon_filter_bar" Size="200,64"
+                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
+                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
+        <Border Thickness="4" Color="60,65,75"/>
+        <FocusedBorder Thickness="4" Color="100,120,160"/>
+      </Dropdown>
+
+      <Dropdown Name="filter_gen" Position="162,4,pokemon_filter_bar" Size="120,36"
+                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
+        <Border Thickness="4" Color="60,65,75"/>
+        <FocusedBorder Thickness="4" Color="100,120,160"/>
+      </Dropdown>
+
+      <Checkbox Name="filter_mega" Position="294,4,pokemon_filter_bar" Size="36"
+                BoxBackground="40,45,55" BoxBorderColor="70,75,90"
+                CheckmarkColor="120,200,140" BoxSize="36" BoxBorderThickness="4">
+        <Children>
+          <BitmapLabel Text="Mega" FontFamily="m3x6.ttf" FontSize="48"
+                       TextColor="White" Position="44,-4,filter_mega">
+            <Border Thickness="4" Color="25,25,25,170"/>
+          </BitmapLabel>
+        </Children>
+      </Checkbox>
+
+      <Checkbox Name="filter_gmax" Position="406,4,pokemon_filter_bar" Size="36"
+                BoxBackground="40,45,55" BoxBorderColor="70,75,90"
+                CheckmarkColor="120,200,140" BoxSize="36" BoxBorderThickness="4">
+        <Children>
+          <BitmapLabel Text="Gmax" FontFamily="m3x6.ttf" FontSize="48"
+                       TextColor="White" Position="44,-4,filter_gmax">
+            <Border Thickness="4" Color="25,25,25,170"/>
+          </BitmapLabel>
+        </Children>
+      </Checkbox>
+
+      <Checkbox Name="filter_shiny" Position="518,4,pokemon_filter_bar" Size="36"
+                BoxBackground="40,45,55" BoxBorderColor="70,75,90"
+                CheckmarkColor="120,200,140" BoxSize="36" BoxBorderThickness="4">
+        <Children>
+          <BitmapLabel Text="Shiny" FontFamily="m3x6.ttf" FontSize="48"
+                       TextColor="White" Position="44,-4,filter_shiny">
+            <Border Thickness="4" Color="25,25,25,170"/>
+          </BitmapLabel>
+        </Children>
+      </Checkbox>
+
+      <Dropdown Name="filter_lvl" Position="630,4,pokemon_filter_bar" Size="130,36"
+                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
+        <Border Thickness="2" Color="60,65,75"/>
+        <FocusedBorder Thickness="2" Color="100,120,160"/>
+      </Dropdown>
+
+      <Dropdown Name="filter_innate" Position="772,4,pokemon_filter_bar" Size="130,36"
+                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
+        <Border Thickness="2" Color="60,65,75"/>
+        <FocusedBorder Thickness="2" Color="100,120,160"/>
+      </Dropdown>
+
+      <Dropdown Name="filter_cost_total" Position="914,4,pokemon_filter_bar" Size="120,36"
+                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
+        <Border Thickness="2" Color="60,65,75"/>
+        <FocusedBorder Thickness="2" Color="100,120,160"/>
+      </Dropdown>
+
+      <Dropdown Name="filter_cost_color" Position="1046,4,pokemon_filter_bar" Size="130,36"
+                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
+        <Border Thickness="2" Color="60,65,75"/>
+        <FocusedBorder Thickness="2" Color="100,120,160"/>
+      </Dropdown>
+    </Children>
+  </Panel>
+
+  <!-- Berry filter bar (hidden by default) -->
+  <Panel Name="berry_filter_bar" Position="30,70" Size="1960,60"
+         Background="Transparent" Show="false">
+    <Children>
+      <Dropdown Name="filter_berry_color" Position="0,4" Size="160,36"
+                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
+        <Border Thickness="2" Color="60,65,75"/>
+        <FocusedBorder Thickness="2" Color="100,120,160"/>
+      </Dropdown>
+    </Children>
+  </Panel>
+
+  <!-- Card browser area -->
+  <Panel Name="browser_area" Position="30,140" Size="1540,1060"
+         Background="Transparent"/>
+
+  <!-- Deck pile area -->
+  <Panel Name="pile_area" Position="1598,140" Size="420,960"
+         Background="Transparent"/>
+
+  <Button Name="save_btn" Text="Save" Font="m6Default"
+          Position="1880,1090" Size="140,44" Centered="true"
+          TextColor="White" Background="50,120,70" Padding="10">
+    <Border Thickness="2" Color="80,170,100"/>
+  </Button>
 
 </Scene>

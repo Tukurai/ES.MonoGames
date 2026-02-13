@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Panel Name="input_content" Background="Transparent">
+    <Children>
+      <BitmapLabel Name="prompt_label" Text="Enter value:"
+                   FontFamily="m3x6.ttf" FontSize="20" TextColor="White"
+                   Position="16,48"/>
+
+      <InputField Name="popup_input" Position="16,80" Size="368,36"
+                  TextColor="White" Background="40,45,55" Padding="8">
+        <Border Thickness="2" Color="70,75,90"/>
+        <FocusedBorder Thickness="2" Color="120,140,180"/>
+      </InputField>
+    </Children>
+  </Panel>
+</Template>

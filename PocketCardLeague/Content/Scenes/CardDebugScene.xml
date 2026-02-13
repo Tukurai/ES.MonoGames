@@ -80,4 +80,27 @@
     </SideDeck>
   </Deck>
 
+  <!-- Popup test buttons -->
+  <Label Name="popup_section_label" Text="Popup Examples" Font="HeaderFont"
+         Position="80,820" TextColor="White">
+    <Border Thickness="4" Color="25,25,25,170"/>
+  </Label>
+
+  <Button Name="btn_test_input" Text="Input Popup" Font="m3Default"
+          Position="80,870" Size="200,40" Centered="true"
+          TextColor="White" Background="60,70,100" Padding="10">
+    <Border Thickness="2" Color="90,100,140"/>
+  </Button>
+
+  <Button Name="btn_test_dropdown" Text="Dropdown Popup" Font="m3Default"
+          Position="300,870" Size="200,40" Centered="true"
+          TextColor="White" Background="60,70,100" Padding="10">
+    <Border Thickness="2" Color="90,100,140"/>
+  </Button>
+
+  <Label Name="popup_result_label" Text="" Font="m3Default"
+         Position="80,930" TextColor="200,200,200">
+    <Border Thickness="4" Color="25,25,25,170"/>
+  </Label>
+
 </Scene>

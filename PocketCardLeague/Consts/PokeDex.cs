@@ -18,6 +18,7 @@ public class PokeDexEntry
     public string VariationName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public bool Shiny { get; set; } = false;
+    public bool Mega { get; set; } = false;
     public bool Gigantamax { get; set; } = false;
     public GenderCode Gender { get; set; } = GenderCode.MF;
     public int VariantId { get; set; } = 0;

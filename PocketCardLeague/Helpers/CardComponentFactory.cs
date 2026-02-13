@@ -16,6 +16,30 @@ public static class CardComponentFactory
         SceneLoader.RegisterComponentFactory("PokemonCard", CreatePokemonCard);
         SceneLoader.RegisterComponentFactory("BerryCard", CreateBerryCard);
         SceneLoader.RegisterComponentFactory("Deck", CreateDeck);
+        SceneLoader.RegisterComponentFactory("Popup", CreatePopup);
+    }
+
+    private static BaseComponent? CreatePopup(XElement element, IScene scene)
+    {
+        var title = element.Attribute("Title")?.Value ?? "Popup";
+        var width = SceneLoader.ParseInt(element.Attribute("Width")?.Value) ?? 600;
+        var height = SceneLoader.ParseInt(element.Attribute("Height")?.Value) ?? 400;
+
+        var popup = new Popup
+        {
+            Title = title,
+            ContentSize = new Microsoft.Xna.Framework.Vector2(width, height),
+        };
+
+        var okText = element.Attribute("OkText")?.Value;
+        if (!string.IsNullOrEmpty(okText))
+            popup.OkText = okText;
+
+        var cancelText = element.Attribute("CancelText")?.Value;
+        if (!string.IsNullOrEmpty(cancelText))
+            popup.CancelText = cancelText;
+
+        return popup;
     }
 
     private static BaseComponent? CreatePokemonCard(XElement element, IScene scene)

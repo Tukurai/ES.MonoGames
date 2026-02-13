@@ -64,10 +64,9 @@ public static class OverlayManager
     /// </summary>
     public static void DrawOverlays(SpriteBatch spriteBatch)
     {
-        foreach (var drawAction in _overlayDrawActions)
-        {
+        var actions = _overlayDrawActions.ToArray();
+        foreach (var drawAction in actions)
             drawAction(spriteBatch);
-        }
     }
 
     /// <summary>

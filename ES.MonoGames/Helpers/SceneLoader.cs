@@ -211,6 +211,11 @@ public static class SceneLoader
         if (rotation.HasValue)
             component.Rotation = MathHelper.ToRadians(rotation.Value);
 
+        // Show
+        var show = ParseBool(element.Attribute("Show")?.Value);
+        if (show.HasValue)
+            component.Show = show.Value;
+
         // Opacity
         var opacity = ParseFloat(element.Attribute("Opacity")?.Value);
         if (opacity.HasValue)
@@ -411,23 +416,6 @@ public static class SceneLoader
         var boxBorderThickness = ParseInt(element.Attribute("BoxBorderThickness")?.Value);
         if (boxBorderThickness.HasValue)
             checkbox.BoxBorderThickness = boxBorderThickness.Value;
-
-        // Label
-        var label = element.Attribute("Label")?.Value;
-        if (!string.IsNullOrEmpty(label))
-            checkbox.Label = label;
-
-        var fontName = element.Attribute("Font")?.Value;
-        if (!string.IsNullOrEmpty(fontName))
-            checkbox.Font = ContentHelper.LoadFont(fontName);
-
-        var labelColor = ParseColor(element.Attribute("LabelColor")?.Value);
-        if (labelColor.HasValue)
-            checkbox.LabelColor = labelColor.Value;
-
-        var labelSpacing = ParseInt(element.Attribute("LabelSpacing")?.Value);
-        if (labelSpacing.HasValue)
-            checkbox.LabelSpacing = labelSpacing.Value;
 
         return checkbox;
     }

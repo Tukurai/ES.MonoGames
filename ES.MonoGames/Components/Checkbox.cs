@@ -78,27 +78,6 @@ public class Checkbox : BaseComponent
     /// </summary>
     public int BoxBorderThickness { get; set; } = 2;
 
-    // Label properties
-    /// <summary>
-    /// Optional label text displayed to the right of the checkbox.
-    /// </summary>
-    public string? Label { get; set; }
-
-    /// <summary>
-    /// Font for the label.
-    /// </summary>
-    public SpriteFont? Font { get; set; }
-
-    /// <summary>
-    /// Color of the label text.
-    /// </summary>
-    public Color LabelColor { get; set; } = Color.White;
-
-    /// <summary>
-    /// Space between the checkbox and the label in pixels.
-    /// </summary>
-    public int LabelSpacing { get; set; } = 8;
-
     // Rendering properties
     /// <summary>
     /// Tint color applied to sprites.
@@ -295,23 +274,6 @@ public class Checkbox : BaseComponent
             DrawSpriteMode(spriteBatch, pos);
         else
             DrawBoxMode(spriteBatch, pos);
-
-        // Draw label if set
-        if (Label is not null && Font is not null)
-        {
-            var checkboxWidth = HasSprites() ? Size.X : BoxSize;
-            var checkboxHeight = HasSprites() ? Size.Y : BoxSize;
-
-            var labelX = pos.X + checkboxWidth + LabelSpacing;
-            var labelY = pos.Y + checkboxHeight / 2 - Font.LineSpacing / 2;
-
-            spriteBatch.DrawString(
-                Font,
-                Label,
-                new Vector2(labelX, labelY),
-                IsEnabled ? LabelColor : DisabledTint
-            );
-        }
 
         base.Draw(spriteBatch);
     }

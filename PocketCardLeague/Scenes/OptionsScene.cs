@@ -95,17 +95,21 @@ public class OptionsScene() : Scene<SceneType>(SceneType.Options)
         // Fullscreen checkbox - bound to SettingsManager
         var fullscreenCheckbox = new Checkbox("fullscreen_checkbox", new Anchor(new Vector2(0, 80), scaleDropdown.Position))
         {
-            Label = "Fullscreen",
-            Font = Fonts.Default,
-            LabelColor = Color.White,
             IsChecked = SettingsManager.Current.Fullscreen,
             BoxBackground = new Color(60, 60, 60),
             BoxBorderColor = Color.Gray,
             CheckmarkColor = Color.LimeGreen,
             BoxSize = 40,
             BoxBorderThickness = 4,
-            LabelSpacing = 20
         };
+        fullscreenCheckbox.Children.Add(new BitmapLabel("fullscreen_label")
+        {
+            Text = "Fullscreen",
+            FontFamily = "m3x6.ttf",
+            FontSize = 20,
+            TextColor = Color.White,
+            Position = new Anchor(new Vector2(60, 10), fullscreenCheckbox.Position),
+        });
         fullscreenCheckbox.OnCheckedChanged += () =>
         {
             SettingsManager.SetFullscreen(fullscreenCheckbox.IsChecked);

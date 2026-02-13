@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Panel Name="picker_content" Background="Transparent">
+    <Children>
+      <BitmapLabel Name="prompt_label" Text="Select a card:"
+                   FontFamily="m3x6.ttf" FontSize="20" TextColor="White"
+                   Position="16,48"/>
+
+      <Panel Name="picker_filter_bar" Position="16,80" Size="968,50"
+             Background="Transparent"/>
+
+      <Panel Name="picker_browser_area" Position="16,140" Size="968,500"
+             Background="Transparent"/>
+    </Children>
+  </Panel>
+</Template>
