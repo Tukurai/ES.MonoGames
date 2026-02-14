@@ -7,103 +7,79 @@
                 Opacity="0.8">
     <Children>
       <Label Name="back_label" Text="Back" Font="HeaderFont"
-             Position="44,0,btn_back">
+             Position="44,-4,btn_back">
         <Border Thickness="4" Color="25,25,25,170"/>
       </Label>
     </Children>
   </SpriteButton>
 
-  <InputField Name="deck_name_input" Position="200,16" Size="400,40"
-              Font="m3Default" Placeholder="Deck Name..." TextColor="White"
-              Background="40,45,55" Padding="8">
-    <Border Thickness="2" Color="70,75,90"/>
-    <FocusedBorder Thickness="2" Color="120,140,180"/>
-  </InputField>
-
   <Button Name="tab_pokemon" Text="Pokemon" Font="m3Default"
-          Position="680,16" Size="160,40" Centered="true"
+          Position="1596,16" Size="160,48" Centered="true"
           TextColor="White" Background="80,90,120" Padding="10">
-    <Border Thickness="2" Color="120,140,180"/>
+    <Border Thickness="4" Color="120,140,180"/>
   </Button>
 
   <Button Name="tab_berry" Text="Berries" Font="m3Default"
-          Position="850,16" Size="160,40" Centered="true"
+          Position="168,0,tab_pokemon" Size="160,48" Centered="true"
           TextColor="170,170,180" Background="45,50,62" Padding="10">
-    <Border Thickness="2" Color="60,65,75"/>
+    <Border Thickness="4" Color="60,65,75"/>
   </Button>
 
+  <InputField Name="deck_name_input" Position="0,60,tab_pokemon" Size="420,60"
+              Font="m3Default" Placeholder="Deck Name..." TextColor="White"
+              Background="40,45,55" Padding="8">
+    <Border Thickness="4" Color="70,75,90"/>
+    <FocusedBorder Thickness="8" Color="120,140,180"/>
+  </InputField>
+
   <!-- Pokemon filter bar (visible by default) -->
-  <Panel Name="pokemon_filter_bar" Position="30,70" Size="1988,60"
-         Background="Transparent" Show="true">
+  <Panel Name="pokemon_filter_bar" Position="200,12" Size="1372,60"
+         Background="transparent" Show="true">
     <Children>
-      <Dropdown Name="filter_type" Position="0,4,pokemon_filter_bar" Size="200,64"
+      <Dropdown Name="filter_type" Position="0,0,pokemon_filter_bar" Size="180,64"
                 ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
                 Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
         <Border Thickness="4" Color="60,65,75"/>
         <FocusedBorder Thickness="4" Color="100,120,160"/>
       </Dropdown>
 
-      <Dropdown Name="filter_gen" Position="162,4,pokemon_filter_bar" Size="120,36"
+      <Dropdown Name="filter_gen" Position="188,0,filter_type" Size="180,64"
+                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
                 Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
         <Border Thickness="4" Color="60,65,75"/>
         <FocusedBorder Thickness="4" Color="100,120,160"/>
       </Dropdown>
 
-      <Checkbox Name="filter_mega" Position="294,4,pokemon_filter_bar" Size="36"
-                BoxBackground="40,45,55" BoxBorderColor="70,75,90"
-                CheckmarkColor="120,200,140" BoxSize="36" BoxBorderThickness="4">
-        <Children>
-          <BitmapLabel Text="Mega" FontFamily="m3x6.ttf" FontSize="48"
-                       TextColor="White" Position="44,-4,filter_mega">
-            <Border Thickness="4" Color="25,25,25,170"/>
-          </BitmapLabel>
-        </Children>
-      </Checkbox>
+      <Checkbox Name="filter_mega" Position="188,0,filter_gen" Scale="4" Size="36" UncheckedSprite="Buttons.m" CheckedSprite="Buttons.m_active"/>
+      <Checkbox Name="filter_gmax" Position="68,0,filter_mega" Scale="4" Size="36" UncheckedSprite="Buttons.g" CheckedSprite="Buttons.g_active"/>
+      <Checkbox Name="filter_shiny" Position="68,0,filter_gmax" Scale="4" Size="36" UncheckedSprite="Buttons.shiny" CheckedSprite="Buttons.shiny_active"/>
 
-      <Checkbox Name="filter_gmax" Position="406,4,pokemon_filter_bar" Size="36"
-                BoxBackground="40,45,55" BoxBorderColor="70,75,90"
-                CheckmarkColor="120,200,140" BoxSize="36" BoxBorderThickness="4">
-        <Children>
-          <BitmapLabel Text="Gmax" FontFamily="m3x6.ttf" FontSize="48"
-                       TextColor="White" Position="44,-4,filter_gmax">
-            <Border Thickness="4" Color="25,25,25,170"/>
-          </BitmapLabel>
-        </Children>
-      </Checkbox>
-
-      <Checkbox Name="filter_shiny" Position="518,4,pokemon_filter_bar" Size="36"
-                BoxBackground="40,45,55" BoxBorderColor="70,75,90"
-                CheckmarkColor="120,200,140" BoxSize="36" BoxBorderThickness="4">
-        <Children>
-          <BitmapLabel Text="Shiny" FontFamily="m3x6.ttf" FontSize="48"
-                       TextColor="White" Position="44,-4,filter_shiny">
-            <Border Thickness="4" Color="25,25,25,170"/>
-          </BitmapLabel>
-        </Children>
-      </Checkbox>
-
-      <Dropdown Name="filter_lvl" Position="630,4,pokemon_filter_bar" Size="130,36"
+      <Dropdown Name="filter_lvl" Position="68,0,filter_shiny" Size="120,64"
+                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
                 Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
-        <Border Thickness="2" Color="60,65,75"/>
-        <FocusedBorder Thickness="2" Color="100,120,160"/>
+        <Border Thickness="4" Color="60,65,75"/>
+        <FocusedBorder Thickness="4" Color="100,120,160"/>
       </Dropdown>
 
-      <Dropdown Name="filter_innate" Position="772,4,pokemon_filter_bar" Size="130,36"
+      <Dropdown Name="filter_innate" Position="128,0,filter_lvl" Size="120,64"
+                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
                 Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
-        <Border Thickness="2" Color="60,65,75"/>
-        <FocusedBorder Thickness="2" Color="100,120,160"/>
+        <Border Thickness="4" Color="60,65,75"/>
+        <FocusedBorder Thickness="4" Color="100,120,160"/>
       </Dropdown>
 
-      <Dropdown Name="filter_cost_total" Position="914,4,pokemon_filter_bar" Size="120,36"
+      <Dropdown Name="filter_cost_total" Position="128,0,filter_innate" Size="120,64"
+                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
                 Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
-        <Border Thickness="2" Color="60,65,75"/>
-        <FocusedBorder Thickness="2" Color="100,120,160"/>
+        <Border Thickness="4" Color="60,65,75"/>
+        <FocusedBorder Thickness="4" Color="100,120,160"/>
       </Dropdown>
 
-      <Dropdown Name="filter_cost_color" Position="1046,4,pokemon_filter_bar" Size="130,36"
+      <Dropdown Name="filter_cost_color" Position="128,0,filter_cost_total" Size="120,64"
+                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
                 Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
-        <Border Thickness="2" Color="60,65,75"/>
-        <FocusedBorder Thickness="2" Color="100,120,160"/>
+        <Border Thickness="4" Color="60,65,75"/>
+        <FocusedBorder Thickness="4" Color="100,120,160"/>
       </Dropdown>
     </Children>
   </Panel>
@@ -121,7 +97,7 @@
   </Panel>
 
   <!-- Card browser area -->
-  <Panel Name="browser_area" Position="30,140" Size="1540,1060"
+  <Panel Name="browser_area" Position="30,84" Size="1540,1060"
          Background="Transparent"/>
 
   <!-- Deck pile area -->

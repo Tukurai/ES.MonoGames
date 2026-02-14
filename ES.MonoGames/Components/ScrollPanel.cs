@@ -2,6 +2,7 @@ using Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Linq;
 
 namespace Components;
 
@@ -200,7 +201,7 @@ public class ScrollPanel(string? name = null) : Panel(name)
         var previousOffset = ControlState.MouseOffset;
         ControlState.MouseOffset = _scrollOffset;
 
-        foreach (var child in Children)
+        foreach (var child in Children.ToArray())
         {
             child.Update(gameTime);
         }
@@ -328,7 +329,7 @@ public class ScrollPanel(string? name = null) : Panel(name)
         );
 
         // Draw children - the transform matrix handles the offset
-        foreach (var child in Children)
+        foreach (var child in Children.ToArray())
         {
             child.Draw(spriteBatch);
         }
@@ -338,7 +339,7 @@ public class ScrollPanel(string? name = null) : Panel(name)
         graphicsDevice.ScissorRectangle = previousScissor;
 
         // Resume normal drawing for scrollbars
-        spriteBatch.Begin();
+        spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
         // Draw scrollbars
         if (showVerticalScrollbar)

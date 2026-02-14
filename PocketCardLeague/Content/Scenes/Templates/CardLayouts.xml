@@ -7,7 +7,7 @@
     <Types X="2" Y="2" Spacing="-1" Align="Left" Layer="10" />
     <Glyphs X="2" Y="2" Spacing="-1" Align="Right" Layer="10" />
     <DexIdLabel X="8" Y="23" FontSize="16" Align="Left" Layer="15"
-                TextColor="White" BorderColor="Black" BorderWidth="4" />
+                TextColor="170,170,170" BorderColor="Transparent" BorderWidth="4" />
     <PokemonSprite X="3" Y="7" AreaWidth="51" AreaHeight="0" Align="Left" Layer="20" />
     <Costs X="3" Y="35" Spacing="1" Align="Left" Layer="30" />
     <LevelBar X="3" Y="55" Align="Left" Layer="40" />

@@ -38,6 +38,7 @@ public class CardPageBrowser : Panel
     private List<List<CardComponent>> _cardGroups = [];
     private readonly Dictionary<int, int> _variantIndex = [];
     private readonly List<BaseComponent> _gridChildren = [];
+    private readonly Dictionary<CardComponent, Action> _clickHandlers = [];
 
     private BitmapLabel? _pageLabel;
     private SpriteButton? _btnPrev;
@@ -220,9 +221,13 @@ public class CardPageBrowser : Panel
             // Rebuild visuals at the new scale
             card.BuildVisuals();
 
-            // Wire click event (remove previous to avoid duplicates)
+            // Wire click event (unsubscribe previous to avoid duplicates from prior refreshes)
             var capturedCard = card;
-            card.OnClicked += () => OnCardClicked?.Invoke(capturedCard);
+            if (_clickHandlers.TryGetValue(card, out var oldHandler))
+                card.OnClicked -= oldHandler;
+            Action handler = () => OnCardClicked?.Invoke(capturedCard);
+            card.OnClicked += handler;
+            _clickHandlers[card] = handler;
 
             _gridChildren.Add(card);
             _gridPanel.Children.Add(card);

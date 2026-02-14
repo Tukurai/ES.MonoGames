@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Scene BackgroundColor="25,25,25" BackgroundSprite="Locations.Hideout_2" BackgroundOpacity="0.25">
+
+  <SpriteButton Name="btn_back" Position="30,16" Scale="4"
+                NormalSprite="Arrows.Arrow_left"
+                PressedSprite="Arrows.Arrow_left_active"
+                Opacity="0.8">
+    <Children>
+      <Label Name="back_label" Text="Back" Font="HeaderFont"
+             Position="44,0,btn_back">
+        <Border Thickness="4" Color="25,25,25,170"/>
+      </Label>
+    </Children>
+  </SpriteButton>
+
+  <Dropdown Name="filter_gen" Position="200,16" Size="200,64"
+            ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
+            Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="10">
+    <Border Thickness="4" Color="60,65,75"/>
+    <FocusedBorder Thickness="4" Color="100,120,160"/>
+  </Dropdown>
+
+  <Button Name="btn_get_pack" Text="Get Pack" Font="m6Default"
+          Position="430,16" Size="200,44" Centered="true"
+          TextColor="White" Background="80,90,120" Padding="10">
+    <Border Thickness="2" Color="120,140,180"/>
+  </Button>
+
+  <Button Name="btn_get_berry_pack" Text="Get Berry Pack" Font="m6Default"
+          Position="650,16" Size="240,44" Centered="true"
+          TextColor="White" Background="60,100,60" Padding="10">
+    <Border Thickness="2" Color="80,170,100"/>
+  </Button>
+
+  <!-- Card display area -->
+  <Panel Name="card_area" Position="200,120" Size="1600,900"
+         Background="Transparent"/>
+
+  <Label Name="status_label" Text="" Font="m6Default"
+         Position="200,1050" TextColor="120,200,140">
+    <Border Thickness="4" Color="25,25,25,170"/>
+  </Label>
+
+</Scene>

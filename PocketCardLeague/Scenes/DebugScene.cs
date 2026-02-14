@@ -4,6 +4,7 @@ using Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using PocketCardLeague.Enums;
+using PocketCardLeague.Helpers;
 
 namespace PocketCardLeague.Scenes;
 
@@ -87,6 +88,20 @@ public class DebugScene() : XmlScene<SceneType>(SceneType.Debug)
         {
             button.OnHoveredEnter += () => button.Background = new Color(70, 85, 110);
             button.OnHoveredExit += () => button.Background = new Color(50, 60, 80);
+        }
+
+        var deleteSave = TryBind<Button>("p1_delete_save");
+        if (deleteSave is not null)
+        {
+            deleteSave.OnHoveredEnter += () => deleteSave.Background = new Color(150, 50, 50);
+            deleteSave.OnHoveredExit += () => deleteSave.Background = new Color(120, 40, 40);
+            deleteSave.OnClicked += () =>
+            {
+                var save = GameStateManager.ActiveSave;
+                GameStateManager.Delete(save);
+                GameStateManager.ActiveSave = new GameSave();
+                deleteSave.Text = "Save Deleted!";
+            };
         }
     }
 

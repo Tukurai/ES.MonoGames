@@ -15,4 +15,19 @@
     </Children>
   </SpriteButton>
 
+
+  <!-- Left navigation button (to Booster Debug) -->
+  <SpriteButton Name="btn_left" Position="140,508" Scale="4,4"
+                NormalSprite="Arrows.Arrow_left"
+                HoveredSprite="Arrows.Arrow_left"
+                PressedSprite="Arrows.Arrow_left_active"
+                Bob="Left" Opacity="0.8">
+    <Children>
+      <Label Name="booster_debug_label" Text="Booster Debug" Font="HeaderFont"
+             Position="16,60,btn_left" Center="true">
+        <Border Thickness="4" Color="25,25,25,170"/>
+      </Label>
+    </Children>
+  </SpriteButton>
+
 </Scene>

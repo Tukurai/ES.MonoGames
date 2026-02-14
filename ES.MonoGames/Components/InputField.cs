@@ -846,7 +846,7 @@ public class InputField(
             );
 
             // Begin new batch with scissor test enabled
-            spriteBatch.Begin(rasterizerState: _scissorRasterizer);
+            spriteBatch.Begin(samplerState: SamplerState.PointClamp, rasterizerState: _scissorRasterizer);
 
             if (Multiline)
             {
@@ -970,7 +970,7 @@ public class InputField(
             graphicsDevice.ScissorRectangle = previousScissor;
 
             // Resume normal drawing
-            spriteBatch.Begin();
+            spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         }
 
         base.Draw(spriteBatch);

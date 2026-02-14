@@ -10,4 +10,5 @@ public enum SceneType
     Decks,
     Cards,
     DeckBuilder,
+    BoosterDebug,
 }

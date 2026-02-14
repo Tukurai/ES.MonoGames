@@ -92,6 +92,7 @@ public class MainGame : Game
         SceneManager.AddScene(new CardDebugScene());
         SceneManager.AddScene(new DeckBuilderScene());
         SceneManager.AddScene(new CardsScene());
+        SceneManager.AddScene(new BoosterDebugScene());
 
         SceneManager.SetActiveScene(SceneType.Title, new FadeTransition());
 

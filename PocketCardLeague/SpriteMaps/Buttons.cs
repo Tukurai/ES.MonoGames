@@ -9,7 +9,7 @@ public class ButtonsSpriteAtlas : SpriteAtlas
         Atlas = [new("Buttons")
         {
             Name = "Buttons",
-            SmartUpdateKey = "$TexturePacker:SmartUpdate:10b0f5138dba0f3d5b0c939bfa9ac821:53f064d5085bcd478b93c191a6611b97:a68c7291fd959d506666c9fd9a7121a4$",
+            SmartUpdateKey = "$TexturePacker:SmartUpdate:7bd20e20f840b676e504a32e88da13b0:70a93f8eb131b7ddf768646ec95d0024:a68c7291fd959d506666c9fd9a7121a4$",
             SpriteAtlas =
             {
                 new("blue_pass_large", false, 0, 0, 31, 24, 31, 24, 0.5f, 0.5f),
@@ -32,42 +32,48 @@ public class ButtonsSpriteAtlas : SpriteAtlas
                 new("five_active", false, 16, 224, 16, 16, 16, 16, 0.5f, 0.5f),
                 new("four", false, 0, 240, 16, 16, 16, 16, 0.5f, 0.5f),
                 new("four_active", false, 16, 240, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("green_check", false, 0, 256, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("green_check_active", false, 16, 256, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("green_check_large", false, 0, 272, 31, 24, 31, 24, 0.5f, 0.5f),
-                new("green_check_large_active", false, 0, 296, 31, 24, 31, 24, 0.5f, 0.5f),
-                new("green_down", false, 0, 320, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("green_down_active", false, 16, 320, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("grey_up_large", false, 0, 336, 31, 24, 31, 24, 0.5f, 0.5f),
-                new("grey_up_large_active", false, 0, 360, 31, 24, 31, 24, 0.5f, 0.5f),
-                new("one", false, 0, 384, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("one_active", false, 16, 384, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("questionmark", false, 0, 400, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("questionmark_active", false, 16, 400, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("red_cycle", false, 0, 416, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("red_cycle_active", false, 16, 416, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("red_dots_large", false, 0, 432, 31, 24, 31, 24, 0.5f, 0.5f),
-                new("red_dots_large_active", false, 0, 456, 31, 24, 31, 24, 0.5f, 0.5f),
-                new("red_exclaim", false, 0, 480, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("red_exclaim_active", false, 16, 480, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("red_out", false, 0, 496, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("red_out_active", false, 16, 496, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("sword", false, 0, 512, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("sword_active", false, 16, 512, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("three", false, 0, 528, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("three_active", false, 16, 528, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("toggle_atk_off", false, 0, 544, 15, 16, 15, 16, 0.5f, 0.5f),
-                new("toggle_atk_on", false, 15, 544, 15, 16, 15, 16, 0.5f, 0.5f),
-                new("toggle_def_off", false, 0, 560, 15, 16, 15, 16, 0.5f, 0.5f),
-                new("toggle_def_on", false, 15, 560, 15, 16, 15, 16, 0.5f, 0.5f),
-                new("toggle_dex_off", false, 0, 576, 15, 16, 15, 16, 0.5f, 0.5f),
-                new("toggle_dex_on", false, 15, 576, 15, 16, 15, 16, 0.5f, 0.5f),
-                new("toggle_innate_off", false, 0, 592, 15, 16, 15, 16, 0.5f, 0.5f),
-                new("toggle_innate_on", false, 15, 592, 15, 16, 15, 16, 0.5f, 0.5f),
-                new("toggle_level_off", false, 0, 608, 15, 16, 15, 16, 0.5f, 0.5f),
-                new("toggle_level_on", false, 15, 608, 15, 16, 15, 16, 0.5f, 0.5f),
-                new("two", false, 0, 624, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("two_active", false, 16, 624, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("g", false, 0, 256, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("g_active", false, 15, 256, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("green_check", false, 0, 272, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("green_check_active", false, 16, 272, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("green_check_large", false, 0, 288, 31, 24, 31, 24, 0.5f, 0.5f),
+                new("green_check_large_active", false, 0, 312, 31, 24, 31, 24, 0.5f, 0.5f),
+                new("green_down", false, 0, 336, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("green_down_active", false, 16, 336, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("grey_up_large", false, 0, 352, 31, 24, 31, 24, 0.5f, 0.5f),
+                new("grey_up_large_active", false, 0, 376, 31, 24, 31, 24, 0.5f, 0.5f),
+                new("m", false, 0, 400, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("m_active", false, 15, 400, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("one", false, 0, 416, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("one_active", false, 16, 416, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("questionmark", false, 0, 432, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("questionmark_active", false, 16, 432, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("red_cycle", false, 0, 448, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("red_cycle_active", false, 16, 448, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("red_dots_large", false, 0, 464, 31, 24, 31, 24, 0.5f, 0.5f),
+                new("red_dots_large_active", false, 0, 488, 31, 24, 31, 24, 0.5f, 0.5f),
+                new("red_exclaim", false, 0, 512, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("red_exclaim_active", false, 16, 512, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("red_out", false, 0, 528, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("red_out_active", false, 16, 528, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("shiny", false, 0, 544, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("shiny_active", false, 15, 544, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("sword", false, 0, 560, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("sword_active", false, 16, 560, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("three", false, 0, 576, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("three_active", false, 16, 576, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("toggle_atk_off", false, 0, 592, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("toggle_atk_on", false, 15, 592, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("toggle_def_off", false, 0, 608, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("toggle_def_on", false, 15, 608, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("toggle_dex_off", false, 0, 624, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("toggle_dex_on", false, 15, 624, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("toggle_innate_off", false, 0, 640, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("toggle_innate_on", false, 15, 640, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("toggle_level_off", false, 0, 656, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("toggle_level_on", false, 15, 656, 15, 16, 15, 16, 0.5f, 0.5f),
+                new("two", false, 0, 672, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("two_active", false, 16, 672, 16, 16, 16, 16, 0.5f, 0.5f),
 
             }
         }];
@@ -93,6 +99,8 @@ public class ButtonsSpriteAtlas : SpriteAtlas
     public static TextureResult Five_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("five_active")!;
     public static TextureResult Four => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("four")!;
     public static TextureResult Four_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("four_active")!;
+    public static TextureResult G => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("g")!;
+    public static TextureResult G_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("g_active")!;
     public static TextureResult Green_check => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("green_check")!;
     public static TextureResult Green_check_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("green_check_active")!;
     public static TextureResult Green_check_large => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("green_check_large")!;
@@ -101,6 +109,8 @@ public class ButtonsSpriteAtlas : SpriteAtlas
     public static TextureResult Green_down_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("green_down_active")!;
     public static TextureResult Grey_up_large => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("grey_up_large")!;
     public static TextureResult Grey_up_large_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("grey_up_large_active")!;
+    public static TextureResult M => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("m")!;
+    public static TextureResult M_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("m_active")!;
     public static TextureResult One => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("one")!;
     public static TextureResult One_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("one_active")!;
     public static TextureResult Questionmark => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("questionmark")!;
@@ -113,6 +123,8 @@ public class ButtonsSpriteAtlas : SpriteAtlas
     public static TextureResult Red_exclaim_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("red_exclaim_active")!;
     public static TextureResult Red_out => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("red_out")!;
     public static TextureResult Red_out_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("red_out_active")!;
+    public static TextureResult Shiny => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("shiny")!;
+    public static TextureResult Shiny_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("shiny_active")!;
     public static TextureResult Sword => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("sword")!;
     public static TextureResult Sword_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("sword_active")!;
     public static TextureResult Three => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("three")!;

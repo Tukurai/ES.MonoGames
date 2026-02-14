@@ -47,6 +47,10 @@ public static class GameStateManager
     /// </summary>
     public static void Save(GameSave save)
     {
+        // Ensure save is tracked in the saves list
+        if (!Saves.Contains(save))
+            Saves.Add(save);
+
         Directory.CreateDirectory(SaveDirectory);
         var path = Path.Combine(SaveDirectory, $"{save.Id}{SaveExtension}");
         var json = JsonSerializer.Serialize(save, JsonOptions);
@@ -99,6 +103,10 @@ public static class GameStateManager
             if (save is not null)
                 Saves.Add(save);
         }
+
+        // Restore the active save from loaded saves (use first available)
+        if (Saves.Count > 0)
+            ActiveSave = Saves[0];
     }
 
     /// <summary>

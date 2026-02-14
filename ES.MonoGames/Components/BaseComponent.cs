@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Components;
@@ -295,7 +296,7 @@ public abstract class BaseComponent
             }
         }
 
-        foreach (var child in Children)
+        foreach (var child in Children.ToArray())
         {
             child._parentOpacity = EffectiveOpacity;
             child.Update(gameTime);
@@ -309,7 +310,7 @@ public abstract class BaseComponent
         if (!Show)
             return;
 
-        foreach (var child in Children)
+        foreach (var child in Children.ToArray())
         {
             child._parentOpacity = EffectiveOpacity;
             child.Draw(spriteBatch);
