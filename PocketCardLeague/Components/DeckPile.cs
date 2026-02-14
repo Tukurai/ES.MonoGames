@@ -21,17 +21,54 @@ public class DeckPile : Panel
     public event Action<CardComponent>? OnCardClicked;
     public event Action<CardComponent>? OnCardFeatured;
 
+    // Header
+    public string HeaderText { get; set; } = "Deck";
+    public string HeaderFont { get; set; } = Fonts.M6x11;
+    public int HeaderFontSize { get; set; } = 28;
+    public Color HeaderColor { get; set; } = Color.White;
+    public float HeaderOffsetY { get; set; } = 8;
+
+    // Count label
+    public string CountFont { get; set; } = Fonts.M3x6;
+    public int CountFontSize { get; set; } = 20;
+    public Color CountColor { get; set; } = new(170, 170, 180);
+    public float CountOffsetY { get; set; } = 38;
+
+    // Scroll panel
+    public Color ScrollPanelBg { get; set; } = new(30, 33, 42);
+    public Border? ScrollPanelBorder { get; set; } = new Border(2, new Color(55, 60, 70));
+    public float ScrollSpeed { get; set; } = 40;
+    public int ScrollbarWidth { get; set; } = 10;
+    public int ScrollbarPadding { get; set; } = 2;
+    public Color ScrollbarThumb { get; set; } = new(80, 90, 110);
+    public Color ScrollbarThumbHovered { get; set; } = new(110, 120, 145);
+    public float ScrollTopOffset { get; set; } = 60;
+
+    // Featured card area
+    public Color FeaturedBg { get; set; } = new(30, 33, 42);
+    public Border? FeaturedBorder { get; set; } = new Border(2, new Color(55, 60, 70));
+    public float FeaturedScale { get; set; } = 3.5f;
+    public string FeaturedLabelFont { get; set; } = Fonts.M3x6;
+    public int FeaturedLabelFontSize { get; set; } = 18;
+    public Color FeaturedLabelColor { get; set; } = new(170, 170, 180);
+
+    // Card list items
+    public float CardListScale { get; set; } = 2f;
+    public float CardItemHeight { get; set; } = 40;
+    public float CardItemSpacing { get; set; } = 4;
+    public Color CardItemBg { get; set; } = new(45, 50, 62);
+    public Color CardItemHoverBg { get; set; } = new(60, 68, 85);
+    public Border? CardItemBorder { get; set; } = new Border(1, new Color(70, 75, 90));
+    public string CardItemFont { get; set; } = Fonts.M3x6;
+    public int CardItemFontSize { get; set; } = 20;
+    public Color CardItemColor { get; set; } = Color.White;
+
     private ScrollPanel? _scrollPanel;
     private Panel? _featuredPanel;
     private BitmapLabel? _countLabel;
     private BitmapLabel? _headerLabel;
     private readonly List<BaseComponent> _cardItems = [];
     private readonly List<(BaseComponent Component, Vector2 Offset)> _featuredOverlays = [];
-
-    private const float CardListScale = 2f;
-    private const float CardItemHeight = 40;
-    private const float CardItemSpacing = 4;
-    private const float FeaturedScale = 3.5f;
 
     public DeckPile(string name = "deck_pile") : base(name)
     {
@@ -53,13 +90,13 @@ public class DeckPile : Panel
         // Header label
         _headerLabel = new BitmapLabel("pile_header")
         {
-            Text = "Deck",
-            FontFamily = Fonts.M6x11,
-            FontSize = 28,
-            TextColor = Color.White,
+            Text = HeaderText,
+            FontFamily = HeaderFont,
+            FontSize = HeaderFontSize,
+            TextColor = HeaderColor,
             Alignment = TextAlignment.Center,
             MaxWidth = (int)pileW,
-            Position = new Anchor(new Vector2(0, 8), Position),
+            Position = new Anchor(new Vector2(0, HeaderOffsetY), Position),
         };
         Children.Add(_headerLabel);
 
@@ -67,42 +104,41 @@ public class DeckPile : Panel
         _countLabel = new BitmapLabel("pile_count")
         {
             Text = "0 cards",
-            FontFamily = Fonts.M3x6,
-            FontSize = 20,
-            TextColor = new Color(170, 170, 180),
+            FontFamily = CountFont,
+            FontSize = CountFontSize,
+            TextColor = CountColor,
             Alignment = TextAlignment.Center,
             MaxWidth = (int)pileW,
-            Position = new Anchor(new Vector2(0, 38), Position),
+            Position = new Anchor(new Vector2(0, CountOffsetY), Position),
         };
         Children.Add(_countLabel);
 
         // Scrollable card list
-        var scrollTop = 60f;
         var featuredH = 80 * FeaturedScale + 30;
-        var scrollH = Size.Y - scrollTop - featuredH - 10;
+        var scrollH = Size.Y - ScrollTopOffset - featuredH - 10;
 
         _scrollPanel = new ScrollPanel("pile_scroll")
         {
-            Position = new Anchor(new Vector2(8, scrollTop), Position),
+            Position = new Anchor(new Vector2(8, ScrollTopOffset), Position),
             Size = new Vector2(pileW - 16, scrollH),
-            Background = new Color(30, 33, 42),
-            Border = new Border(2, new Color(55, 60, 70)),
-            ScrollSpeed = 40,
-            ScrollbarWidth = 10,
-            ScrollbarPadding = 2,
-            ScrollbarThumb = new Color(80, 90, 110),
-            ScrollbarThumbHovered = new Color(110, 120, 145),
+            Background = ScrollPanelBg,
+            Border = ScrollPanelBorder,
+            ScrollSpeed = ScrollSpeed,
+            ScrollbarWidth = ScrollbarWidth,
+            ScrollbarPadding = ScrollbarPadding,
+            ScrollbarThumb = ScrollbarThumb,
+            ScrollbarThumbHovered = ScrollbarThumbHovered,
         };
         Children.Add(_scrollPanel);
 
         // Featured card area at bottom
-        var featuredY = scrollTop + scrollH + 8;
+        var featuredY = ScrollTopOffset + scrollH + 8;
         _featuredPanel = new Panel("pile_featured")
         {
             Position = new Anchor(new Vector2(8, featuredY), Position),
             Size = new Vector2(pileW - 16, featuredH),
-            Background = new Color(30, 33, 42),
-            Border = new Border(2, new Color(55, 60, 70)),
+            Background = FeaturedBg,
+            Border = FeaturedBorder,
         };
         Children.Add(_featuredPanel);
 
@@ -127,13 +163,15 @@ public class DeckPile : Panel
         {
             var card = DeckCards[i];
             var y = i * (CardItemHeight + CardItemSpacing);
+            var itemBg = CardItemBg;
+            var itemHoverBg = CardItemHoverBg;
 
             var itemPanel = new Panel($"pile_item_{i}")
             {
                 Position = new Anchor(new Vector2(4, y + 4), _scrollPanel.Position),
                 Size = new Vector2(_scrollPanel.Size.X - 24, CardItemHeight),
-                Background = new Color(45, 50, 62),
-                Border = new Border(1, new Color(70, 75, 90)),
+                Background = itemBg,
+                Border = CardItemBorder,
             };
 
             // Card name label
@@ -144,9 +182,9 @@ public class DeckPile : Panel
             var nameLabel = new BitmapLabel($"pile_name_{i}")
             {
                 Text = nameText,
-                FontFamily = Fonts.M3x6,
-                FontSize = 20,
-                TextColor = Color.White,
+                FontFamily = CardItemFont,
+                FontSize = CardItemFontSize,
+                TextColor = CardItemColor,
                 Position = new Anchor(new Vector2(8, 10), itemPanel.Position),
             };
             itemPanel.Children.Add(nameLabel);
@@ -156,8 +194,8 @@ public class DeckPile : Panel
             itemPanel.OnClicked += () => OnCardClicked?.Invoke(capturedCard);
 
             // Hover effect
-            itemPanel.OnHoveredEnter += () => itemPanel.Background = new Color(60, 68, 85);
-            itemPanel.OnHoveredExit += () => itemPanel.Background = new Color(45, 50, 62);
+            itemPanel.OnHoveredEnter += () => itemPanel.Background = itemHoverBg;
+            itemPanel.OnHoveredExit += () => itemPanel.Background = itemBg;
 
             // Right-click to feature
             itemPanel.OnPressed += () =>
@@ -209,18 +247,18 @@ public class DeckPile : Panel
         var label = new BitmapLabel("featured_label")
         {
             Text = $"Featured: {FeaturedCard.CardName}",
-            FontFamily = Fonts.M3x6,
-            FontSize = 18,
-            TextColor = new Color(170, 170, 180),
+            FontFamily = FeaturedLabelFont,
+            FontSize = FeaturedLabelFontSize,
+            TextColor = FeaturedLabelColor,
             Position = new Anchor(new Vector2(8, 4), _featuredPanel.Position),
         };
         _featuredOverlays.Add((label, new Vector2(8, 4)));
         _featuredPanel.Children.Add(label);
 
         // Show the card sprite if it's a Pokemon card
-        if (FeaturedCard is PokemonCardComponent pc && pc.SpriteIdentifier is not null)
+        if (FeaturedCard is PokemonCardComponent featuredPc && featuredPc.SpriteIdentifier is not null)
         {
-            var result = ContentHelper.GetTextureResult<PokemonSpriteAtlas>(pc.Card?.BasePokemon.SpriteIdentifier ?? "");
+            var result = ContentHelper.GetTextureResult<PokemonSpriteAtlas>(featuredPc.Card?.BasePokemon.SpriteIdentifier ?? "");
             if (result is not null)
             {
                 var sprite = new Sprite("featured_sprite")

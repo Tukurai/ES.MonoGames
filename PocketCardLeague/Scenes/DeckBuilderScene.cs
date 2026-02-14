@@ -27,12 +27,14 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
     private Button _saveBtn = null!;
     private Panel _pokemonFilterBar = null!;
     private Panel _berryFilterBar = null!;
-    private Panel _browserArea = null!;
-    private Panel _pileArea = null!;
 
-    // Components (code-built)
+    // Components (XML-bound custom)
     private CardPageBrowser _browser = null!;
     private DeckPile _deckPile = null!;
+
+    // Tab styles captured from XML initial state
+    private (Color Background, Color TextColor, Border? Border) _tabActiveStyle;
+    private (Color Background, Color TextColor, Border? Border) _tabInactiveStyle;
 
     // Filters (Pokemon mode — XML-bound)
     private Dropdown _filterType = null!;
@@ -79,6 +81,10 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         _tabBerry = Bind<Button>("tab_berry");
         _tabBerry.OnClicked += () => SwitchTab(false);
 
+        // Capture tab styles from XML initial state (pokemon tab is active by default)
+        _tabActiveStyle = (_tabPokemon.Background, _tabPokemon.TextColor, _tabPokemon.Border);
+        _tabInactiveStyle = (_tabBerry.Background, _tabBerry.TextColor, _tabBerry.Border);
+
         _saveBtn = Bind<Button>("save_btn");
         _saveBtn.OnClicked += SaveDeck;
 
@@ -86,9 +92,14 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         _pokemonFilterBar = Bind<Panel>("pokemon_filter_bar");
         _berryFilterBar = Bind<Panel>("berry_filter_bar");
 
-        // Bind layout areas
-        _browserArea = Bind<Panel>("browser_area");
-        _pileArea = Bind<Panel>("pile_area");
+        // Bind custom components from XML
+        _browser = Bind<CardPageBrowser>("card_browser");
+        _browser.OnCardClicked += OnBrowserCardClicked;
+        _browser.BuildLayout();
+
+        _deckPile = Bind<DeckPile>("deck_pile");
+        _deckPile.OnCardClicked += OnPileCardClicked;
+        _deckPile.BuildLayout();
 
         // Bind and populate Pokemon filters
         BindPokemonFilters();
@@ -96,8 +107,8 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         // Bind and populate Berry filters
         BindBerryFilters();
 
-        // Build dynamic components using XML-defined positions
-        BuildDynamicUI();
+        // Initial load
+        ApplyFiltersAndRefresh();
     }
 
     private void BindPokemonFilters()
@@ -183,42 +194,6 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         ApplyFiltersAndRefresh();
     }
 
-    private void BuildDynamicUI()
-    {
-        // Card page browser — use XML-defined browser_area for position/size
-        var browserPos = _browserArea.Position;
-        var browserSize = _browserArea.Size;
-
-        _browser = new CardPageBrowser("deck_browser")
-        {
-            Position = browserPos,
-            Size = browserSize,
-            Columns = 6,
-            Rows = 3,
-            CardScale = new Vector2(4, 4),
-            CardSpacing = new Vector2(20, 20),
-        };
-        _browser.OnCardClicked += OnBrowserCardClicked;
-        _browser.BuildLayout();
-        AddComponent(_browser);
-
-        // Deck pile — use XML-defined pile_area for position/size
-        var pilePos = _pileArea.Position;
-        var pileSize = _pileArea.Size;
-
-        _deckPile = new DeckPile("deck_pile")
-        {
-            Position = pilePos,
-            Size = pileSize,
-        };
-        _deckPile.OnCardClicked += OnPileCardClicked;
-        _deckPile.BuildLayout();
-        AddComponent(_deckPile);
-
-        // Initial load
-        ApplyFiltersAndRefresh();
-    }
-
     private void SwitchTab(bool isMainDeck)
     {
         if (_isMainDeck == isMainDeck)
@@ -230,24 +205,24 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         _pokemonFilterBar.Show = _isMainDeck;
         _berryFilterBar.Show = !_isMainDeck;
 
-        // Update tab visuals
+        // Update tab visuals using captured XML styles
         if (_isMainDeck)
         {
-            _tabPokemon.Background = new Color(80, 90, 120);
-            _tabPokemon.TextColor = Color.White;
-            _tabPokemon.Border = new Border(2, new Color(120, 140, 180));
-            _tabBerry.Background = new Color(45, 50, 62);
-            _tabBerry.TextColor = new Color(170, 170, 180);
-            _tabBerry.Border = new Border(2, new Color(60, 65, 75));
+            _tabPokemon.Background = _tabActiveStyle.Background;
+            _tabPokemon.TextColor = _tabActiveStyle.TextColor;
+            _tabPokemon.Border = _tabActiveStyle.Border;
+            _tabBerry.Background = _tabInactiveStyle.Background;
+            _tabBerry.TextColor = _tabInactiveStyle.TextColor;
+            _tabBerry.Border = _tabInactiveStyle.Border;
         }
         else
         {
-            _tabBerry.Background = new Color(80, 90, 120);
-            _tabBerry.TextColor = Color.White;
-            _tabBerry.Border = new Border(2, new Color(120, 140, 180));
-            _tabPokemon.Background = new Color(45, 50, 62);
-            _tabPokemon.TextColor = new Color(170, 170, 180);
-            _tabPokemon.Border = new Border(2, new Color(60, 65, 75));
+            _tabBerry.Background = _tabActiveStyle.Background;
+            _tabBerry.TextColor = _tabActiveStyle.TextColor;
+            _tabBerry.Border = _tabActiveStyle.Border;
+            _tabPokemon.Background = _tabInactiveStyle.Background;
+            _tabPokemon.TextColor = _tabInactiveStyle.TextColor;
+            _tabPokemon.Border = _tabInactiveStyle.Border;
         }
 
         // Update deck pile header

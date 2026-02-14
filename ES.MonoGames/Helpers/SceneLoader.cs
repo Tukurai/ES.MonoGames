@@ -121,6 +121,11 @@ public static class SceneLoader
         "ListBorder" => true,
         "Children" => true,
         "SubScenes" => true,
+        "PageLabelBorder" => true,
+        "VariantLabelBorder" => true,
+        "ScrollPanelBorder" => true,
+        "FeaturedBorder" => true,
+        "CardItemBorder" => true,
         _ => false
     };
 
@@ -465,6 +470,14 @@ public static class SceneLoader
         if (thumbColor.HasValue)
             slider.ThumbColor = thumbColor.Value;
 
+        var thumbHoveredColor = ParseColor(element.Attribute("ThumbHoveredColor")?.Value);
+        if (thumbHoveredColor.HasValue)
+            slider.ThumbHoveredColor = thumbHoveredColor.Value;
+
+        var thumbDraggedColor = ParseColor(element.Attribute("ThumbDraggedColor")?.Value);
+        if (thumbDraggedColor.HasValue)
+            slider.ThumbDraggedColor = thumbDraggedColor.Value;
+
         // Value display
         var showValue = ParseBool(element.Attribute("ShowValue")?.Value);
         if (showValue.HasValue)
@@ -671,6 +684,18 @@ public static class SceneLoader
         var scrollbarPadding = ParseInt(element.Attribute("ScrollbarPadding")?.Value);
         if (scrollbarPadding.HasValue)
             scrollPanel.ScrollbarPadding = scrollbarPadding.Value;
+
+        var scrollbarThumb = ParseColor(element.Attribute("ScrollbarThumb")?.Value);
+        if (scrollbarThumb.HasValue)
+            scrollPanel.ScrollbarThumb = scrollbarThumb.Value;
+
+        var scrollbarThumbHovered = ParseColor(element.Attribute("ScrollbarThumbHovered")?.Value);
+        if (scrollbarThumbHovered.HasValue)
+            scrollPanel.ScrollbarThumbHovered = scrollbarThumbHovered.Value;
+
+        var scrollbarBackground = ParseColor(element.Attribute("ScrollbarBackground")?.Value);
+        if (scrollbarBackground.HasValue)
+            scrollPanel.ScrollbarBackground = scrollbarBackground.Value;
 
         return scrollPanel;
     }
@@ -1216,7 +1241,7 @@ public static class SceneLoader
     /// <summary>
     /// Parse a Border from a child element.
     /// </summary>
-    private static Border? ParseBorder(XElement parent, string elementName = "Border")
+    public static Border? ParseBorder(XElement parent, string elementName = "Border")
     {
         var borderElement = parent.Element(elementName);
         if (borderElement is null)

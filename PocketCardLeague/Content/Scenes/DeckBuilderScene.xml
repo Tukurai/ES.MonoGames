@@ -96,13 +96,33 @@
     </Children>
   </Panel>
 
-  <!-- Card browser area -->
-  <Panel Name="browser_area" Position="30,84" Size="1540,1060"
-         Background="Transparent"/>
+  <!-- Card browser -->
+  <CardPageBrowser Name="card_browser" Position="30,84" Size="1540,1060"
+      Columns="6" Rows="3" CardScale="4,4" CardSpacing="20,20"
+      NavGap="20" ArrowScale="3,3" ArrowOpacity="0.8"
+      SliderOffset="100,10" SliderTrackColor="60,65,75" SliderTrackFillColor="100,120,160"
+      SliderThumbColor="140,160,200" SliderThumbHoveredColor="170,190,230" SliderThumbSize="20,30"
+      PageLabelFont="m6x11.ttf" PageLabelFontSize="28" PageLabelColor="White">
+    <PageLabelBorder Thickness="2" Color="25,25,25,170"/>
+  </CardPageBrowser>
 
-  <!-- Deck pile area -->
-  <Panel Name="pile_area" Position="1598,140" Size="420,960"
-         Background="Transparent"/>
+  <!-- Deck pile -->
+  <DeckPile Name="deck_pile" Position="1598,140" Size="420,960"
+      Background="35,38,48" HeaderText="Deck"
+      HeaderFont="m6x11.ttf" HeaderFontSize="28" HeaderColor="White" HeaderOffsetY="8"
+      CountFont="m3x6.ttf" CountFontSize="20" CountColor="170,170,180" CountOffsetY="38"
+      ScrollPanelBg="30,33,42" ScrollSpeed="40" ScrollbarWidth="10" ScrollbarPadding="2"
+      ScrollbarThumb="80,90,110" ScrollbarThumbHovered="110,120,145" ScrollTopOffset="60"
+      FeaturedBg="30,33,42" FeaturedScale="3.5"
+      FeaturedLabelFont="m3x6.ttf" FeaturedLabelFontSize="18" FeaturedLabelColor="170,170,180"
+      CardItemHeight="40" CardItemSpacing="4"
+      CardItemBg="45,50,62" CardItemHoverBg="60,68,85"
+      CardItemFont="m3x6.ttf" CardItemFontSize="20" CardItemColor="White">
+    <Border Thickness="3" Color="70,75,90"/>
+    <ScrollPanelBorder Thickness="2" Color="55,60,70"/>
+    <FeaturedBorder Thickness="2" Color="55,60,70"/>
+    <CardItemBorder Thickness="1" Color="70,75,90"/>
+  </DeckPile>
 
   <Button Name="save_btn" Text="Save" Font="m6Default"
           Position="1880,1090" Size="140,44" Centered="true"

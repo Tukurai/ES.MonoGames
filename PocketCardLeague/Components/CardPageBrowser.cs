@@ -21,6 +21,38 @@ public class CardPageBrowser : Panel
     public Vector2 CardScale { get; set; } = new(4, 4);
     public Vector2 CardSpacing { get; set; } = new(20, 20);
 
+    // Navigation layout
+    public float NavGap { get; set; } = 20;
+    public Vector2 ArrowScale { get; set; } = new(3, 3);
+    public float ArrowOpacity { get; set; } = 0.8f;
+    public Vector2 SliderOffset { get; set; } = new(100, 10);
+    public Vector2? SliderSize { get; set; }
+
+    // Slider appearance
+    public Color SliderTrackColor { get; set; } = new(60, 65, 75);
+    public Color SliderTrackFillColor { get; set; } = new(100, 120, 160);
+    public Color SliderThumbColor { get; set; } = new(140, 160, 200);
+    public Color SliderThumbHoveredColor { get; set; } = new(170, 190, 230);
+    public Vector2 SliderThumbSize { get; set; } = new(20, 30);
+
+    // Page label
+    public string PageLabelFont { get; set; } = Fonts.M6x11;
+    public int PageLabelFontSize { get; set; } = 28;
+    public Color PageLabelColor { get; set; } = Color.White;
+    public Border? PageLabelBorder { get; set; } = new Border(2, new Color(25, 25, 25, 170));
+
+    // Variant label
+    public string VariantLabelFont { get; set; } = Fonts.M3x6;
+    public int VariantLabelFontSize { get; set; } = 20;
+    public Color VariantLabelColor { get; set; } = new(200, 200, 200);
+    public Border? VariantLabelBorder { get; set; } = new Border(2, new Color(25, 25, 25, 200));
+
+    // Variant buttons
+    public Color VariantBtnColor { get; set; } = Color.White;
+    public Color VariantBtnBackground { get; set; } = new(40, 45, 55, 180);
+    public Vector2 VariantBtnSize { get; set; } = new(24, 24);
+    public int VariantBtnPadding { get; set; } = 2;
+
     public int CurrentPage
     {
         get;
@@ -74,7 +106,7 @@ public class CardPageBrowser : Panel
         Children.Add(_gridPanel);
 
         // Navigation bar below the grid
-        var navY = gridH + 20;
+        var navY = gridH + NavGap;
 
         // Previous page button
         var arrowResult = ContentHelper.GetTextureResult<SpriteMaps.ArrowsSpriteAtlas>("Arrow_left");
@@ -84,15 +116,15 @@ public class CardPageBrowser : Panel
             _btnPrev = new SpriteButton("browser_prev")
             {
                 Position = new Anchor(new Vector2(0, navY), Position),
-                Scale = new Vector2(3, 3),
-                Opacity = 0.8f,
+                Scale = ArrowScale,
+                Opacity = ArrowOpacity,
             };
             _btnPrev.SetNormalSprite(arrowResult);
             if (arrowActiveResult is not null)
                 _btnPrev.SetPressedSprite(arrowActiveResult);
             _btnPrev.OnClicked += () => { if (CurrentPage > 0) CurrentPage--; };
             _btnPrev.OnHoveredEnter += () => _btnPrev.Opacity = 1f;
-            _btnPrev.OnHoveredExit += () => _btnPrev.Opacity = 0.8f;
+            _btnPrev.OnHoveredExit += () => _btnPrev.Opacity = ArrowOpacity;
             Children.Add(_btnPrev);
         }
 
@@ -104,31 +136,32 @@ public class CardPageBrowser : Panel
             _btnNext = new SpriteButton("browser_next")
             {
                 Position = new Anchor(new Vector2(gridW - 80, navY), Position),
-                Scale = new Vector2(3, 3),
-                Opacity = 0.8f,
+                Scale = ArrowScale,
+                Opacity = ArrowOpacity,
             };
             _btnNext.SetNormalSprite(arrowRightResult);
             if (arrowRightActiveResult is not null)
                 _btnNext.SetPressedSprite(arrowRightActiveResult);
             _btnNext.OnClicked += () => { if (CurrentPage < TotalPages - 1) CurrentPage++; };
             _btnNext.OnHoveredEnter += () => _btnNext.Opacity = 1f;
-            _btnNext.OnHoveredExit += () => _btnNext.Opacity = 0.8f;
+            _btnNext.OnHoveredExit += () => _btnNext.Opacity = ArrowOpacity;
             Children.Add(_btnNext);
         }
 
         // Page slider in the middle
+        var sliderSize = SliderSize ?? new Vector2(gridW - 280, 30);
         _pageSlider = new Slider("browser_slider")
         {
-            Position = new Anchor(new Vector2(100, navY + 10), Position),
-            Size = new Vector2(gridW - 280, 30),
+            Position = new Anchor(new Vector2(SliderOffset.X, navY + SliderOffset.Y), Position),
+            Size = sliderSize,
             MinValue = 0,
             MaxValue = Math.Max(0, TotalPages - 1),
             Value = 0,
-            TrackColor = new Color(60, 65, 75),
-            TrackFillColor = new Color(100, 120, 160),
-            ThumbColor = new Color(140, 160, 200),
-            ThumbHoveredColor = new Color(170, 190, 230),
-            ThumbSize = new Vector2(20, 30),
+            TrackColor = SliderTrackColor,
+            TrackFillColor = SliderTrackFillColor,
+            ThumbColor = SliderThumbColor,
+            ThumbHoveredColor = SliderThumbHoveredColor,
+            ThumbSize = SliderThumbSize,
         };
         _pageSlider.OnValueChanged += v =>
         {
@@ -141,10 +174,10 @@ public class CardPageBrowser : Panel
         _pageLabel = new BitmapLabel("browser_page_label")
         {
             Text = "Page 1 / 1",
-            FontFamily = Fonts.M6x11,
-            FontSize = 28,
-            TextColor = Color.White,
-            Border = new Border(2, new Color(25, 25, 25, 170)),
+            FontFamily = PageLabelFont,
+            FontSize = PageLabelFontSize,
+            TextColor = PageLabelColor,
+            Border = PageLabelBorder,
             Position = new Anchor(new Vector2(gridW - 170, navY + 4), Position),
         };
         Children.Add(_pageLabel);
@@ -239,10 +272,10 @@ public class CardPageBrowser : Panel
                 var variantLabel = new BitmapLabel($"variant_{groupIndex}")
                 {
                     Text = $"{vi + 1}/{group.Count}",
-                    FontFamily = Fonts.M3x6,
-                    FontSize = 20,
-                    TextColor = new Color(200, 200, 200),
-                    Border = new Border(2, new Color(25, 25, 25, 200)),
+                    FontFamily = VariantLabelFont,
+                    FontSize = VariantLabelFontSize,
+                    TextColor = VariantLabelColor,
+                    Border = VariantLabelBorder,
                     Position = new Anchor(
                         new Vector2(col * (cardW + CardSpacing.X), row * (cardH + CardSpacing.Y) + cardH - 24),
                         _gridPanel.Position),
@@ -253,10 +286,10 @@ public class CardPageBrowser : Panel
                 // Left variant arrow
                 var leftBtn = new Button($"var_left_{groupIndex}", "<", Fonts.M3Default)
                 {
-                    TextColor = Color.White,
-                    Background = new Color(40, 45, 55, 180),
-                    Padding = 2,
-                    Size = new Vector2(24, 24),
+                    TextColor = VariantBtnColor,
+                    Background = VariantBtnBackground,
+                    Padding = VariantBtnPadding,
+                    Size = VariantBtnSize,
                     Position = new Anchor(
                         new Vector2(col * (cardW + CardSpacing.X) - 2, row * (cardH + CardSpacing.Y) + cardH / 2 - 12),
                         _gridPanel.Position),
@@ -273,10 +306,10 @@ public class CardPageBrowser : Panel
                 // Right variant arrow
                 var rightBtn = new Button($"var_right_{groupIndex}", ">", Fonts.M3Default)
                 {
-                    TextColor = Color.White,
-                    Background = new Color(40, 45, 55, 180),
-                    Padding = 2,
-                    Size = new Vector2(24, 24),
+                    TextColor = VariantBtnColor,
+                    Background = VariantBtnBackground,
+                    Padding = VariantBtnPadding,
+                    Size = VariantBtnSize,
                     Position = new Anchor(
                         new Vector2(col * (cardW + CardSpacing.X) + cardW - 22, row * (cardH + CardSpacing.Y) + cardH / 2 - 12),
                         _gridPanel.Position),
