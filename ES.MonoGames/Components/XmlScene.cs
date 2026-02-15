@@ -46,6 +46,10 @@ public abstract class XmlScene<T> : Scene<T> where T : Enum
 
     public override void Initialize()
     {
+        // Allow derived class to clean up event bindings before components are cleared
+        if (XmlLoadedSuccessfully)
+            OnBeforeReload();
+
         NamedComponents.Clear();
         XmlLoadedSuccessfully = false;
         XmlLoadException = null;
@@ -80,6 +84,14 @@ public abstract class XmlScene<T> : Scene<T> where T : Enum
         if (XmlLoadedSuccessfully)
             OnXmlLoaded();
     }
+
+    /// <summary>
+    /// Called before a reload clears components. Override to unsubscribe event handlers
+    /// from persistent objects (e.g. card instances in save data) that would otherwise
+    /// accumulate stale handlers across reloads.
+    /// Only called on subsequent reloads, not the initial load.
+    /// </summary>
+    protected virtual void OnBeforeReload() { }
 
     /// <summary>
     /// Called after XML is successfully loaded. Override to bind additional events

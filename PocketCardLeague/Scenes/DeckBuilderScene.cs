@@ -50,6 +50,12 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
     // Filters (Berry mode — XML-bound)
     private Dropdown _filterBerryColor = null!;
 
+    protected override void OnBeforeReload()
+    {
+        // Clean up click handlers on persistent card objects before components are cleared
+        _browser?.ClearCardHandlers();
+    }
+
     protected override void OnXmlLoaded()
     {
         // Load or create editing deck
@@ -99,6 +105,7 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
 
         _deckPile = Bind<DeckPile>("deck_pile");
         _deckPile.OnCardClicked += OnPileCardClicked;
+        _deckPile.OnFaceCardChanged += OnFaceCardChanged;
         _deckPile.BuildLayout();
 
         // Bind and populate Pokemon filters
@@ -345,9 +352,7 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
             _deckPile.SetHeader("Berry Deck");
         }
 
-        if (_isMainDeck && _editingDeck.FaceCard is not null)
-            _deckPile.FeaturedCard = _editingDeck.FaceCard;
-
+        _deckPile.FaceCard = _editingDeck.FaceCard;
         _deckPile.RefreshCardList();
     }
 
@@ -364,6 +369,14 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
             _editingDeck.SideDeck.Add(berryCard);
 
         ApplyFiltersAndRefresh();
+    }
+
+    private void OnFaceCardChanged(CardComponent card)
+    {
+        if (_deckPile.FaceCard is PokemonCardComponent pc)
+            _editingDeck.FaceCard = pc;
+        else
+            _editingDeck.FaceCard = _editingDeck.MainDeck.FirstOrDefault();
     }
 
     private void OnPileCardClicked(CardComponent card)

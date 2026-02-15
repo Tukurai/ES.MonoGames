@@ -121,11 +121,11 @@ public static class SceneLoader
         "ListBorder" => true,
         "Children" => true,
         "SubScenes" => true,
-        "PageLabelBorder" => true,
-        "VariantLabelBorder" => true,
-        "ScrollPanelBorder" => true,
-        "FeaturedBorder" => true,
         "CardItemBorder" => true,
+        "ScrollbarTrackBorder" => true,
+        "ScrollbarThumbBorder" => true,
+        "VariantNameBorder" => true,
+        "VariantLabelBorder" => true,
         _ => false
     };
 
@@ -321,6 +321,15 @@ public static class SceneLoader
         var textBorder = ParseBorder(element, "TextBorder");
         if (textBorder is not null)
             button.TextBorder = textBorder;
+
+        // BitmapLabel-based text rendering
+        var fontFamily = element.Attribute("FontFamily")?.Value;
+        if (!string.IsNullOrEmpty(fontFamily))
+            button.FontFamily = fontFamily;
+
+        var bitmapFontSize = ParseFloat(element.Attribute("BitmapFontSize")?.Value);
+        if (bitmapFontSize.HasValue)
+            button.BitmapFontSize = bitmapFontSize.Value;
 
         return button;
     }
@@ -574,6 +583,10 @@ public static class SceneLoader
         if (listBorder is not null)
             dropdown.ListBorder = listBorder;
 
+        // Default font so text always renders
+        if (dropdown.Font is null)
+            dropdown.Font = ContentHelper.LoadFont("m3Default");
+
         return dropdown;
     }
 
@@ -607,7 +620,7 @@ public static class SceneLoader
         if (placeholderColor.HasValue)
             inputField.PlaceholderColor = placeholderColor.Value;
 
-        var padding = ParseInt(element.Attribute("Padding")?.Value);
+        var padding = ParseThickness(element.Attribute("Padding")?.Value);
         if (padding.HasValue)
             inputField.Padding = padding.Value;
 
@@ -696,6 +709,14 @@ public static class SceneLoader
         var scrollbarBackground = ParseColor(element.Attribute("ScrollbarBackground")?.Value);
         if (scrollbarBackground.HasValue)
             scrollPanel.ScrollbarBackground = scrollbarBackground.Value;
+
+        var scrollbarTrackBorder = ParseBorder(element, "ScrollbarTrackBorder");
+        if (scrollbarTrackBorder is not null)
+            scrollPanel.ScrollbarTrackBorder = scrollbarTrackBorder;
+
+        var scrollbarThumbBorder = ParseBorder(element, "ScrollbarThumbBorder");
+        if (scrollbarThumbBorder is not null)
+            scrollPanel.ScrollbarThumbBorder = scrollbarThumbBorder;
 
         return scrollPanel;
     }
@@ -1290,6 +1311,35 @@ public static class SceneLoader
             return null;
         if (int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result))
             return result;
+        return null;
+    }
+
+    /// <summary>
+    /// Parse a Thickness from string. Supports:
+    /// "8" (uniform), "8,12,8,12" (left, top, right, bottom).
+    /// </summary>
+    public static Thickness? ParseThickness(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return null;
+
+        var parts = value.Split(',');
+        if (parts.Length == 1)
+        {
+            var uniform = ParseInt(parts[0]);
+            if (uniform.HasValue)
+                return new Thickness(uniform.Value);
+        }
+        else if (parts.Length == 4)
+        {
+            var left = ParseInt(parts[0]);
+            var top = ParseInt(parts[1]);
+            var right = ParseInt(parts[2]);
+            var bottom = ParseInt(parts[3]);
+            if (left.HasValue && top.HasValue && right.HasValue && bottom.HasValue)
+                return new Thickness(left.Value, top.Value, right.Value, bottom.Value);
+        }
+
         return null;
     }
 

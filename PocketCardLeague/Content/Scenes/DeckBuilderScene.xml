@@ -1,44 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Scene BackgroundColor="25,25,25" BackgroundSprite="Locations.Hideout_2" BackgroundOpacity="0.25" SceneTrack="ms_league">
 
-  <SpriteButton Name="btn_back" Position="30,16" Scale="4"
-                NormalSprite="Arrows.Arrow_left"
-                PressedSprite="Arrows.Arrow_left_active"
-                Opacity="0.8">
-    <Children>
-      <Label Name="back_label" Text="Back" Font="HeaderFont"
-             Position="44,-4,btn_back">
-        <Border Thickness="4" Color="25,25,25,170"/>
-      </Label>
-    </Children>
-  </SpriteButton>
-
   <Button Name="tab_pokemon" Text="Pokemon" Font="m3Default"
-          Position="1596,16" Size="160,48" Centered="true"
+          Position="1596,16" Size="208,48" Centered="true"
           TextColor="White" Background="80,90,120" Padding="10">
     <Border Thickness="4" Color="120,140,180"/>
+    <TextBorder Thickness="4" Color="40,40,40"/>
   </Button>
 
   <Button Name="tab_berry" Text="Berries" Font="m3Default"
-          Position="168,0,tab_pokemon" Size="160,48" Centered="true"
+          Position="220,0,tab_pokemon" Size="200,48" Centered="true"
           TextColor="170,170,180" Background="45,50,62" Padding="10">
     <Border Thickness="4" Color="60,65,75"/>
+    <TextBorder Thickness="4" Color="40,40,40"/>
   </Button>
 
-  <InputField Name="deck_name_input" Position="0,60,tab_pokemon" Size="420,60"
+  <InputField Name="deck_name_input" Position="0,60,tab_pokemon" Size="420,48"
               Font="m3Default" Placeholder="Deck Name..." TextColor="White"
-              Background="40,45,55" Padding="8">
+              Background="40,45,55" Padding="16,0,16,0" CursorWidth="4" CursorHeight="28">
     <Border Thickness="4" Color="70,75,90"/>
-    <FocusedBorder Thickness="8" Color="120,140,180"/>
+    <FocusedBorder Thickness="4" Color="120,140,180"/>
   </InputField>
 
   <!-- Pokemon filter bar (visible by default) -->
-  <Panel Name="pokemon_filter_bar" Position="200,12" Size="1372,60"
+  <Panel Name="pokemon_filter_bar" Position="32,12" Size="1372,60"
          Background="transparent" Show="true">
     <Children>
       <Dropdown Name="filter_type" Position="0,0,pokemon_filter_bar" Size="180,64"
                 ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
-                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
+                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8"
+                Items="Option A,Option B,Option C,Option D,Option E">
         <Border Thickness="4" Color="60,65,75"/>
         <FocusedBorder Thickness="4" Color="100,120,160"/>
       </Dropdown>
@@ -85,49 +76,79 @@
   </Panel>
 
   <!-- Berry filter bar (hidden by default) -->
-  <Panel Name="berry_filter_bar" Position="30,70" Size="1960,60"
+  <Panel Name="berry_filter_bar" Position="32,12" Size="1372,60"
          Background="Transparent" Show="false">
     <Children>
-      <Dropdown Name="filter_berry_color" Position="0,4" Size="160,36"
+      <Dropdown Name="filter_berry_color" Position="0,0,berry_filter_bar" Size="180,64"
+                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
                 Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
-        <Border Thickness="2" Color="60,65,75"/>
-        <FocusedBorder Thickness="2" Color="100,120,160"/>
+        <Border Thickness="4" Color="60,65,75"/>
+        <FocusedBorder Thickness="4" Color="100,120,160"/>
       </Dropdown>
     </Children>
   </Panel>
 
   <!-- Card browser -->
-  <CardPageBrowser Name="card_browser" Position="30,84" Size="1540,1060"
-      Columns="6" Rows="3" CardScale="4,4" CardSpacing="20,20"
-      NavGap="20" ArrowScale="3,3" ArrowOpacity="0.8"
-      SliderOffset="100,10" SliderTrackColor="60,65,75" SliderTrackFillColor="100,120,160"
-      SliderThumbColor="140,160,200" SliderThumbHoveredColor="170,190,230" SliderThumbSize="20,30"
-      PageLabelFont="m6x11.ttf" PageLabelFontSize="28" PageLabelColor="White">
-    <PageLabelBorder Thickness="2" Color="25,25,25,170"/>
+  <CardPageBrowser Name="card_browser" Position="32,84" Size="1540,1060"
+      Columns="6" Rows="3" CardScale="4,4" CardSpacing="16,16"
+      NavGap="8" ArrowScale="4" ArrowOpacity="0.8"
+      SliderOffset="60,10">
+    <Children>
+      <Slider Name="browser_slider" Position="0,1016,card_browser" Size="1204,32" TrackColor="60,65,75" TrackFillColor="100,120,160"
+              ThumbColor="200,199,197" ThumbHoveredColor="230,230,230" ThumbSize="36,44">
+        <TrackBorder Thickness="4" Color="43,44,43"/>
+        <ThumbBorder Thickness="4" Color="43,44,43"/>
+      </Slider>
+      <SpriteButton Name="browser_prev" Position="1220,-12,browser_slider" NormalSprite="Arrows.Arrow_left" PressedSprite="Arrows.Arrow_left_active" Scale="4" Opacity="0.8"/>
+      <SpriteButton Name="browser_next" Position="196,0,browser_prev" NormalSprite="Arrows.Arrow_right" PressedSprite="Arrows.Arrow_right_active" Scale="4" Opacity="0.8"/>
+      <BitmapLabel Name="browser_page_label" Position="56,12,browser_prev" FontFamily="m6x11" FontSize="32" TextColor="White" Alignment="Center">
+        <Border Thickness="4" Color="25,25,25,170"/>
+      </BitmapLabel>
+    </Children>
   </CardPageBrowser>
 
   <!-- Deck pile -->
-  <DeckPile Name="deck_pile" Position="1598,140" Size="420,960"
-      Background="35,38,48" HeaderText="Deck"
-      HeaderFont="m6x11.ttf" HeaderFontSize="28" HeaderColor="White" HeaderOffsetY="8"
-      CountFont="m3x6.ttf" CountFontSize="20" CountColor="170,170,180" CountOffsetY="38"
-      ScrollPanelBg="30,33,42" ScrollSpeed="40" ScrollbarWidth="10" ScrollbarPadding="2"
-      ScrollbarThumb="80,90,110" ScrollbarThumbHovered="110,120,145" ScrollTopOffset="60"
-      FeaturedBg="30,33,42" FeaturedScale="3.5"
-      FeaturedLabelFont="m3x6.ttf" FeaturedLabelFontSize="18" FeaturedLabelColor="170,170,180"
-      CardItemHeight="40" CardItemSpacing="4"
+  <DeckPile Name="deck_pile" Position="1598,136" Size="420,940"
+      Background="35,38,48" ScrollTopOffset="68"
+      CardItemHeight="48" CardItemSpacing="-4"
       CardItemBg="45,50,62" CardItemHoverBg="60,68,85"
-      CardItemFont="m3x6.ttf" CardItemFontSize="20" CardItemColor="White">
-    <Border Thickness="3" Color="70,75,90"/>
-    <ScrollPanelBorder Thickness="2" Color="55,60,70"/>
-    <FeaturedBorder Thickness="2" Color="55,60,70"/>
-    <CardItemBorder Thickness="1" Color="70,75,90"/>
+      CardItemFont="m3x6" CardItemFontSize="32" CardItemColor="White"
+      FaceCardCheckedSprite="Buttons.shiny_active" FaceCardUncheckedSprite="Buttons.shiny"
+      FaceCardCheckboxScale="4" FaceCardCheckboxOffset="-20,4">
+    <Border Thickness="4" Color="70,75,90"/>
+    <CardItemBorder Thickness="4" Color="70,75,90"/>
+    <Children>
+      <BitmapLabel Name="pile_header" Text="Deck" Position="16,8,deck_pile" FontFamily="m6x11" FontSize="32" TextColor="White">
+        <Border Thickness="4" Color="25,25,25,170"/>
+      </BitmapLabel>
+      <BitmapLabel Name="pile_count" Position="-16,16,deck_pile" FontFamily="m3x6" FontSize="32" TextColor="170,170,180" Alignment="Right">
+        <Border Thickness="4" Color="25,25,25,170"/>
+      </BitmapLabel>
+      <ScrollPanel Name="pile_scroll" Position="-8,40,pile_header" Size="404,860" Background="30,33,42" ScrollSpeed="40"
+                   ScrollbarWidth="16" ScrollbarPadding="4" ScrollbarThumb="80,90,110" ScrollbarThumbHovered="110,120,145">
+        <Border Thickness="4" Color="55,60,70"/>
+      </ScrollPanel>
+    </Children>
   </DeckPile>
 
-  <Button Name="save_btn" Text="Save" Font="m6Default"
-          Position="1880,1090" Size="140,44" Centered="true"
-          TextColor="White" Background="50,120,70" Padding="10">
-    <Border Thickness="2" Color="80,170,100"/>
+
+  <SpriteButton Name="btn_back" Position="1600,1084" Scale="4"
+                NormalSprite="Arrows.Arrow_left"
+                PressedSprite="Arrows.Arrow_left_active"
+                Opacity="0.8">
+    <Children>
+      <Label Name="back_label" Text="Back" Font="HeaderFont"
+             Position="44,-4,btn_back">
+        <Border Thickness="4" Color="25,25,25,170"/>
+      </Label>
+    </Children>
+  </SpriteButton>
+
+  <Button Name="save_btn" Text="Save" Font="m3Default"
+          Position="1818,1090" Size="200,48" Centered="true"
+          TextColor="White" Background="50,120,70">
+    <TextBorder Thickness="4" Color="40,40,40"/>
+    <Border Thickness="4" Color="80,170,100"/>
   </Button>
 
 </Scene>

@@ -42,6 +42,8 @@ public class ScrollPanel(string? name = null) : Panel(name)
     public Color ScrollbarThumbHovered { get; set; } = new Color(140, 140, 140, 255);
     public int ScrollbarWidth { get; set; } = 12;
     public int ScrollbarPadding { get; set; } = 2;
+    public Border? ScrollbarTrackBorder { get; set; }
+    public Border? ScrollbarThumbBorder { get; set; }
 
     // Scroll behavior
     public float ScrollSpeed { get; set; } = 40f; // Pixels per scroll wheel notch
@@ -371,6 +373,8 @@ public class ScrollPanel(string? name = null) : Panel(name)
 
         // Draw track
         spriteBatch.Draw(RendererHelper.WhitePixel, track, ScrollbarBackground);
+        if (ScrollbarTrackBorder is not null)
+            RendererHelper.Draw(spriteBatch, ScrollbarTrackBorder, new Vector2(track.X, track.Y), new Vector2(track.Width, track.Height), Vector2.One);
 
         // Draw thumb
         if (thumb != Rectangle.Empty)
@@ -379,6 +383,8 @@ public class ScrollPanel(string? name = null) : Panel(name)
                 ? ScrollbarThumbHovered
                 : ScrollbarThumb;
             spriteBatch.Draw(RendererHelper.WhitePixel, thumb, thumbColor);
+            if (ScrollbarThumbBorder is not null)
+                RendererHelper.Draw(spriteBatch, ScrollbarThumbBorder, new Vector2(thumb.X, thumb.Y), new Vector2(thumb.Width, thumb.Height), Vector2.One);
         }
     }
 
@@ -388,6 +394,8 @@ public class ScrollPanel(string? name = null) : Panel(name)
 
         // Draw track
         spriteBatch.Draw(RendererHelper.WhitePixel, track, ScrollbarBackground);
+        if (ScrollbarTrackBorder is not null)
+            RendererHelper.Draw(spriteBatch, ScrollbarTrackBorder, new Vector2(track.X, track.Y), new Vector2(track.Width, track.Height), Vector2.One);
 
         // Draw thumb
         if (thumb != Rectangle.Empty)
@@ -396,6 +404,8 @@ public class ScrollPanel(string? name = null) : Panel(name)
                 ? ScrollbarThumbHovered
                 : ScrollbarThumb;
             spriteBatch.Draw(RendererHelper.WhitePixel, thumb, thumbColor);
+            if (ScrollbarThumbBorder is not null)
+                RendererHelper.Draw(spriteBatch, ScrollbarThumbBorder, new Vector2(thumb.X, thumb.Y), new Vector2(thumb.Width, thumb.Height), Vector2.One);
         }
     }
 

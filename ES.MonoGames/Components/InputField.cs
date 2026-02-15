@@ -130,7 +130,7 @@ public class InputField(
     public Color Background { get; set; } = Color.DarkGray;
     public Border Border { get; set; } = new Border(1, Color.Gray);
     public Border FocusedBorder { get; set; } = new Border(2, Color.White);
-    public int Padding { get; set; } = 5;
+    public Thickness Padding { get; set; } = 5;
     public bool QuickDraw { get; set; } = false;
 
     // Focus state
@@ -644,7 +644,7 @@ public class InputField(
         if (Font is null || string.IsNullOrEmpty(Text)) return 0;
 
         var pos = Position.GetVector2();
-        var textStartX = pos.X + Padding - _scrollOffset;
+        var textStartX = pos.X + Padding.Left - _scrollOffset;
         var relativeX = pixelX - textStartX;
 
         if (relativeX <= 0) return 0;
@@ -790,8 +790,8 @@ public class InputField(
         // Draw text or placeholder with clipping
         if (Font is not null)
         {
-            var visibleWidth = Size.X - (Padding * 2);
-            var visibleHeight = Size.Y - (Padding * 2);
+            var visibleWidth = Size.X - Padding.Horizontal;
+            var visibleHeight = Size.Y - Padding.Vertical;
             var showPlaceholder = string.IsNullOrEmpty(Text) && !IsFocused;
             var displayText = showPlaceholder ? PlaceholderText : Text;
             var textColor = showPlaceholder ? PlaceholderColor : TextColor;
@@ -839,8 +839,8 @@ public class InputField(
             // Set up scissor rectangle for text area
             var previousScissor = graphicsDevice.ScissorRectangle;
             graphicsDevice.ScissorRectangle = new Rectangle(
-                (int)(pos.X + Padding),
-                (int)(pos.Y + Padding),
+                (int)(pos.X + Padding.Left),
+                (int)(pos.Y + Padding.Top),
                 (int)visibleWidth,
                 (int)visibleHeight
             );
@@ -859,11 +859,11 @@ public class InputField(
                     int displayLine = i - _verticalScrollOffset;
                     if (displayLine < 0) continue;
 
-                    var lineY = pos.Y + Padding + (displayLine * lineHeight);
+                    var lineY = pos.Y + Padding.Top + (displayLine * lineHeight);
                     if (lineY > pos.Y + Size.Y) break;
 
                     var lineText = lines[i];
-                    var linePos = new Vector2(pos.X + Padding, lineY);
+                    var linePos = new Vector2(pos.X + Padding.Left, lineY);
 
                     // Draw selection for this line if applicable
                     if (HasSelection && !showPlaceholder)
@@ -907,10 +907,10 @@ public class InputField(
                     int displayLine = cursorLine - _verticalScrollOffset;
                     if (displayLine >= 0)
                     {
-                        var cursorY = pos.Y + Padding + (displayLine * lineHeight);
+                        var cursorY = pos.Y + Padding.Top + (displayLine * lineHeight);
                         int lineStart = GetLineStart(cursorLine);
                         var textBeforeCursor = Text.Substring(lineStart, _cursorPosition - lineStart);
-                        var cursorX = pos.X + Padding + (string.IsNullOrEmpty(textBeforeCursor) ? 0 : Font.MeasureString(textBeforeCursor).X);
+                        var cursorX = pos.X + Padding.Left + (string.IsNullOrEmpty(textBeforeCursor) ? 0 : Font.MeasureString(textBeforeCursor).X);
 
                         spriteBatch.Draw(
                             RendererHelper.WhitePixel,
@@ -923,7 +923,7 @@ public class InputField(
             else
             {
                 // Single line rendering
-                var textPos = new Vector2(pos.X + Padding - _scrollOffset, pos.Y + Padding);
+                var textPos = new Vector2(pos.X + Padding.Left - _scrollOffset, pos.Y + Padding.Top);
 
                 // Draw selection highlight
                 if (HasSelection && !string.IsNullOrEmpty(Text))

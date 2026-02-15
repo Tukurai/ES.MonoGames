@@ -1,4 +1,4 @@
-﻿using Helpers;
+using Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -17,6 +17,12 @@ public class Button(string? name = null, string text = "Button", SpriteFont? fon
     public int PressDepth { get; set; } = 0;
 
     public SpriteFont? Font { get; set; } = font;
+
+    // BitmapLabel-based text rendering
+    public string? FontFamily { get; set; }
+    public float BitmapFontSize { get; set; } = 16;
+
+    private BitmapLabel? _bitmapLabel;
 
     private float _lengthCache = -1f;
     private float _heightCache = -1f;
@@ -70,7 +76,45 @@ public class Button(string? name = null, string text = "Button", SpriteFont? fon
 
         RendererHelper.Draw(spriteBatch, Border, Position.GetVector2(), Size, Scale);
 
-        if (Font is not null)
+        if (FontFamily is not null)
+        {
+            // BitmapLabel path
+            if (_bitmapLabel is null)
+            {
+                _bitmapLabel = new BitmapLabel();
+            }
+
+            _bitmapLabel.Text = Text;
+            _bitmapLabel.FontFamily = FontFamily;
+            _bitmapLabel.FontSize = BitmapFontSize;
+            _bitmapLabel.TextColor = TextColor;
+            _bitmapLabel.Border = TextBorder;
+
+            if (Centered)
+            {
+                _bitmapLabel.Alignment = TextAlignment.Center;
+                _bitmapLabel.MaxWidth = (int)Size.X;
+                var labelPos = Position.GetVector2();
+                labelPos.Y += (Size.Y - BitmapFontSize) / 2;
+                if (Pressed && PressDepth > 0)
+                    labelPos.Y += PressDepth;
+                _bitmapLabel.Position = new Anchor(labelPos);
+            }
+            else
+            {
+                _bitmapLabel.Alignment = TextAlignment.Left;
+                _bitmapLabel.MaxWidth = 0;
+                var labelPos = Position.GetVector2();
+                labelPos.X += Padding;
+                labelPos.Y += (Size.Y - BitmapFontSize) / 2;
+                if (Pressed && PressDepth > 0)
+                    labelPos.Y += PressDepth;
+                _bitmapLabel.Position = new Anchor(labelPos);
+            }
+
+            _bitmapLabel.Draw(spriteBatch);
+        }
+        else if (Font is not null)
         {
             var textPos = GetTextPosition();
             if (Pressed && PressDepth > 0)
