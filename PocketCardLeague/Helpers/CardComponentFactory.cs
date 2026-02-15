@@ -293,22 +293,12 @@ public static class CardComponentFactory
 
         // Look up PokeDexEntry by identity string (SpriteIdentifier format)
         var spriteId = element.Attribute("SpriteId")?.Value;
-        PokeDexEntry? dexEntry = null;
-        if (!string.IsNullOrEmpty(spriteId))
-            dexEntry = PokeDex.Entries.Find(e => e.SpriteIdentifier == spriteId);
-        dexEntry ??= new PokeDexEntry();
 
         var level = SceneLoader.ParseInt(element.Attribute("Level")?.Value) ?? 1;
         var innatePower = SceneLoader.ParseInt(element.Attribute("InnatePower")?.Value) ?? 0;
         var nickname = element.Attribute("Nickname")?.Value;
 
-        var card = new PokeCard(dexEntry, level, innatePower, nickname)
-        {
-            HP = dexEntry.Hp,
-            MaxHP = dexEntry.Hp,
-            Atk = dexEntry.Attack,
-            Def = dexEntry.Defense,
-        };
+        var card = new PokeCard(spriteId, level, innatePower, nickname);
 
         var costStr = element.Attribute("Cost")?.Value;
         if (!string.IsNullOrEmpty(costStr))
@@ -321,7 +311,7 @@ public static class CardComponentFactory
             card.Glyphs = [.. glyphsStr.Split(',').Select(s => s.Trim())];
 
         cardComponent.Card = card;
-        cardComponent.CardName = nickname ?? dexEntry.Name;
+        cardComponent.CardName = nickname ?? card.BasePokemon.Name;
 
         var faceUp = SceneLoader.ParseBool(element.Attribute("FaceUp")?.Value);
         if (faceUp.HasValue)

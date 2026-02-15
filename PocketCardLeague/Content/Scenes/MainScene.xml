@@ -29,4 +29,18 @@
     </Children>
   </SpriteButton>
 
+  <!-- Down navigation button (to Booster Debug) -->
+  <SpriteButton Name="btn_down" Position="996,1072" Scale="4,4"
+                NormalSprite="Arrows.Arrow_down"
+                HoveredSprite="Arrows.Arrow_down"
+                PressedSprite="Arrows.Arrow_down_active"
+                Bob="down" Opacity="0.8">
+    <Children>
+      <Label Name="booster_label" Text="Booster Debug" Font="HeaderFont"
+             Position="24,-80,btn_down" Center="true">
+        <Border Thickness="4" Color="25,25,25,170"/>
+      </Label>
+    </Children>
+  </SpriteButton>
+
 </Scene>

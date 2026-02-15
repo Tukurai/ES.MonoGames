@@ -37,8 +37,8 @@ public class DeckPile : Panel
     public Color CardItemColor { get; set; } = Color.White;
 
     // Face card checkbox properties
-    public string FaceCardCheckedSprite { get; set; } = "Buttons.shiny_active";
-    public string FaceCardUncheckedSprite { get; set; } = "Buttons.shiny";
+    public string FaceCardCheckedSprite { get; set; } = "Buttons.top_active";
+    public string FaceCardUncheckedSprite { get; set; } = "Buttons.top";
     public Vector2 FaceCardCheckboxScale { get; set; } = new(3, 3);
     public Vector2 FaceCardCheckboxOffset { get; set; } = new(-8, 4);
 
@@ -168,6 +168,13 @@ public class DeckPile : Panel
         _cardItems.Clear();
         _faceCardCheckboxes.Clear();
 
+        // Put the face card at the top of the list
+        if (FaceCard is not null)
+        {
+            DeckCards.Remove(FaceCard);
+            DeckCards.Insert(0, FaceCard);
+        }
+
         // Build list items
         for (int i = 0; i < DeckCards.Count; i++)
         {
@@ -188,7 +195,7 @@ public class DeckPile : Panel
             // Card name label
             var nameText = card.CardName;
             if (card is PokemonCardComponent pc && pc.Card is not null)
-                nameText = $"Lv.{pc.Card.Level} {pc.CardName}";
+                nameText = $"lv {pc.Card.Level} {pc.CardName}";
 
             var nameLabel = new BitmapLabel($"pile_name_{i}")
             {
@@ -211,6 +218,7 @@ public class DeckPile : Panel
                     Position = new Anchor(
                         new Vector2(itemW + FaceCardCheckboxOffset.X, FaceCardCheckboxOffset.Y),
                         itemPanel.Position),
+                    Opacity = 0
                 };
 
                 var checkedSprite = SceneLoader.ParseSprite(FaceCardCheckedSprite);
@@ -227,13 +235,11 @@ public class DeckPile : Panel
                     FaceCard = capturedCard;
                     // Uncheck all other checkboxes
                     foreach (var cb in _faceCardCheckboxes)
-                    {
                         if (cb != checkbox && cb.IsChecked)
-                        {
                             cb.IsChecked = false;
-                        }
-                    }
+
                     OnFaceCardChanged?.Invoke(capturedCard);
+                    RefreshCardList();
                 };
                 checkbox.OnUnchecked += () =>
                 {
@@ -244,6 +250,9 @@ public class DeckPile : Panel
                         OnFaceCardChanged?.Invoke(capturedCard);
                     }
                 };
+
+                itemPanel.OnHoveredEnter += () => checkbox.Opacity = 1;
+                itemPanel.OnHoveredExit += () => checkbox.Opacity = 0;
 
                 _faceCardCheckboxes.Add(checkbox);
                 itemPanel.Children.Add(checkbox);

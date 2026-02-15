@@ -9,7 +9,7 @@ public class ButtonsSpriteAtlas : SpriteAtlas
         Atlas = [new("Buttons")
         {
             Name = "Buttons",
-            SmartUpdateKey = "$TexturePacker:SmartUpdate:7bd20e20f840b676e504a32e88da13b0:70a93f8eb131b7ddf768646ec95d0024:a68c7291fd959d506666c9fd9a7121a4$",
+            SmartUpdateKey = "$TexturePacker:SmartUpdate:7d16bde0e7c360bc8900b2e9bc4903d9:b4f02e79120f1d99cd6752230eaef903:a68c7291fd959d506666c9fd9a7121a4$",
             SpriteAtlas =
             {
                 new("blue_pass_large", false, 0, 0, 31, 24, 31, 24, 0.5f, 0.5f),
@@ -72,8 +72,10 @@ public class ButtonsSpriteAtlas : SpriteAtlas
                 new("toggle_innate_on", false, 15, 640, 15, 16, 15, 16, 0.5f, 0.5f),
                 new("toggle_level_off", false, 0, 656, 15, 16, 15, 16, 0.5f, 0.5f),
                 new("toggle_level_on", false, 15, 656, 15, 16, 15, 16, 0.5f, 0.5f),
-                new("two", false, 0, 672, 16, 16, 16, 16, 0.5f, 0.5f),
-                new("two_active", false, 16, 672, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("top", false, 0, 672, 7, 9, 7, 9, 0.5f, 0.5f),
+                new("top_active", false, 7, 672, 7, 9, 7, 9, 0.5f, 0.5f),
+                new("two", false, 14, 672, 16, 16, 16, 16, 0.5f, 0.5f),
+                new("two_active", false, 0, 688, 16, 16, 16, 16, 0.5f, 0.5f),
 
             }
         }];
@@ -139,6 +141,8 @@ public class ButtonsSpriteAtlas : SpriteAtlas
     public static TextureResult Toggle_innate_on => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("toggle_innate_on")!;
     public static TextureResult Toggle_level_off => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("toggle_level_off")!;
     public static TextureResult Toggle_level_on => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("toggle_level_on")!;
+    public static TextureResult Top => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("top")!;
+    public static TextureResult Top_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("top_active")!;
     public static TextureResult Two => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("two")!;
     public static TextureResult Two_active => ContentHelper.GetTextureResult<ButtonsSpriteAtlas>("two_active")!;
 

@@ -89,12 +89,8 @@ public class BoosterDebugScene() : XmlScene<SceneType>(SceneType.BoosterDebug)
             var level = Random.Shared.Next(1, 6);
             var innate = Random.Shared.Next(0, 3);
 
-            var card = new PokeCard(entry, level, innate)
+            var card = new PokeCard(entry.SpriteIdentifier, level, innate)
             {
-                HP = entry.Hp,
-                MaxHP = entry.Hp,
-                Atk = entry.Attack,
-                Def = entry.Defense,
                 Cost = GetCostFromType(entry.Type1),
             };
 

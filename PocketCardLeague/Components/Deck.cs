@@ -33,7 +33,7 @@ public class Deck : Panel
     /// Gets a list of unique types in the main deck, ordered by frequency (most common first).
     /// </summary>
     [JsonIgnore]
-    public List<PokemonType> Types => [.. MainDeck.SelectMany(c => c.Card?.BasePokemon?.Types ?? Enumerable.Empty<PokemonType>()).GroupBy(t => t).OrderByDescending(g => g.Count()).Select(g => g.Key)];
+    public List<PokemonType> Types => [.. MainDeck.SelectMany(c => c.Card?.BasePokemon?.Types ?? Enumerable.Empty<PokemonType>()).GroupBy(t => t).OrderByDescending(g => g.Count()).Take(4).Select(g => g.Key)];
 
     /// <summary>
     /// Gets a list of unique costs in the main deck, ordered by the frequency of their occurrence (most common first).

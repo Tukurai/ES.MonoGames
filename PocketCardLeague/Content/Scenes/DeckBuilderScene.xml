@@ -26,52 +26,51 @@
   <Panel Name="pokemon_filter_bar" Position="32,12" Size="1372,60"
          Background="transparent" Show="true">
     <Children>
-      <Dropdown Name="filter_type" Position="0,0,pokemon_filter_bar" Size="180,64"
-                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
-                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8"
-                Items="Option A,Option B,Option C,Option D,Option E">
+      <Dropdown Name="filter_type" Position="0,0,pokemon_filter_bar" Size="200,48"
+                ArrowWidth="40" ArrowSize="20" TrianglePixelSize="4" ScrollbarWidth="12"
+                Background="40,45,55" TextColor="White" Padding="16,8,16,8" MaxVisibleItems="8">
         <Border Thickness="4" Color="60,65,75"/>
         <FocusedBorder Thickness="4" Color="100,120,160"/>
       </Dropdown>
 
-      <Dropdown Name="filter_gen" Position="188,0,filter_type" Size="180,64"
-                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
-                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
+      <Dropdown Name="filter_gen" Position="208,0,filter_type" Size="200,48"
+                ArrowWidth="40" ArrowSize="20" TrianglePixelSize="4" ScrollbarWidth="12"
+                Background="40,45,55" TextColor="White" Padding="16,8,16,8" MaxVisibleItems="8">
         <Border Thickness="4" Color="60,65,75"/>
         <FocusedBorder Thickness="4" Color="100,120,160"/>
       </Dropdown>
 
-      <Checkbox Name="filter_mega" Position="188,0,filter_gen" Scale="4" Size="36" UncheckedSprite="Buttons.m" CheckedSprite="Buttons.m_active"/>
+      <Dropdown Name="filter_lvl" Position="208,0,filter_gen" Size="200,48"
+                ArrowWidth="40" ArrowSize="20" TrianglePixelSize="4" ScrollbarWidth="12"
+                Background="40,45,55" TextColor="White" Padding="16,8,16,8" MaxVisibleItems="8">
+        <Border Thickness="4" Color="60,65,75"/>
+        <FocusedBorder Thickness="4" Color="100,120,160"/>
+      </Dropdown>
+
+      <Dropdown Name="filter_innate" Position="208,0,filter_lvl" Size="200,48"
+                ArrowWidth="40" ArrowSize="20" TrianglePixelSize="4" ScrollbarWidth="12"
+                Background="40,45,55" TextColor="White" Padding="16,8,16,8" MaxVisibleItems="8">
+        <Border Thickness="4" Color="60,65,75"/>
+        <FocusedBorder Thickness="4" Color="100,120,160"/>
+      </Dropdown>
+
+      <Dropdown Name="filter_cost_total" Position="208,0,filter_innate" Size="200,48"
+                ArrowWidth="40" ArrowSize="20" TrianglePixelSize="4" ScrollbarWidth="12"
+                Background="40,45,55" TextColor="White" Padding="16,8,16,8" MaxVisibleItems="8">
+        <Border Thickness="4" Color="60,65,75"/>
+        <FocusedBorder Thickness="4" Color="100,120,160"/>
+      </Dropdown>
+
+      <Dropdown Name="filter_cost_color" Position="208,0,filter_cost_total" Size="200,48"
+                ArrowWidth="40" ArrowSize="20" TrianglePixelSize="4" ScrollbarWidth="12"
+                Background="40,45,55" TextColor="White" Padding="16,8,16,8" MaxVisibleItems="8">
+        <Border Thickness="4" Color="60,65,75"/>
+        <FocusedBorder Thickness="4" Color="100,120,160"/>
+      </Dropdown>
+
+      <Checkbox Name="filter_mega" Position="208,0,filter_cost_color" Scale="4" Size="36" UncheckedSprite="Buttons.m" CheckedSprite="Buttons.m_active"/>
       <Checkbox Name="filter_gmax" Position="68,0,filter_mega" Scale="4" Size="36" UncheckedSprite="Buttons.g" CheckedSprite="Buttons.g_active"/>
       <Checkbox Name="filter_shiny" Position="68,0,filter_gmax" Scale="4" Size="36" UncheckedSprite="Buttons.shiny" CheckedSprite="Buttons.shiny_active"/>
-
-      <Dropdown Name="filter_lvl" Position="68,0,filter_shiny" Size="120,64"
-                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
-                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
-        <Border Thickness="4" Color="60,65,75"/>
-        <FocusedBorder Thickness="4" Color="100,120,160"/>
-      </Dropdown>
-
-      <Dropdown Name="filter_innate" Position="128,0,filter_lvl" Size="120,64"
-                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
-                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
-        <Border Thickness="4" Color="60,65,75"/>
-        <FocusedBorder Thickness="4" Color="100,120,160"/>
-      </Dropdown>
-
-      <Dropdown Name="filter_cost_total" Position="128,0,filter_innate" Size="120,64"
-                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
-                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
-        <Border Thickness="4" Color="60,65,75"/>
-        <FocusedBorder Thickness="4" Color="100,120,160"/>
-      </Dropdown>
-
-      <Dropdown Name="filter_cost_color" Position="128,0,filter_cost_total" Size="120,64"
-                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
-                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
-        <Border Thickness="4" Color="60,65,75"/>
-        <FocusedBorder Thickness="4" Color="100,120,160"/>
-      </Dropdown>
     </Children>
   </Panel>
 
@@ -79,9 +78,9 @@
   <Panel Name="berry_filter_bar" Position="32,12" Size="1372,60"
          Background="Transparent" Show="false">
     <Children>
-      <Dropdown Name="filter_berry_color" Position="0,0,berry_filter_bar" Size="180,64"
-                ArrowWidth="64" ArrowSize="24" TrianglePixelSize="4"
-                Background="40,45,55" TextColor="White" Padding="6" MaxVisibleItems="8">
+      <Dropdown Name="filter_berry_color" Position="0,0,berry_filter_bar" Size="180,48"
+                ArrowWidth="40" ArrowSize="20" TrianglePixelSize="4"
+                Background="40,45,55" TextColor="White" Padding="16,8,16,8" MaxVisibleItems="8">
         <Border Thickness="4" Color="60,65,75"/>
         <FocusedBorder Thickness="4" Color="100,120,160"/>
       </Dropdown>
@@ -113,8 +112,8 @@
       CardItemHeight="48" CardItemSpacing="-4"
       CardItemBg="45,50,62" CardItemHoverBg="60,68,85"
       CardItemFont="m3x6" CardItemFontSize="32" CardItemColor="White"
-      FaceCardCheckedSprite="Buttons.shiny_active" FaceCardUncheckedSprite="Buttons.shiny"
-      FaceCardCheckboxScale="4" FaceCardCheckboxOffset="-20,4">
+      FaceCardCheckedSprite="Buttons.top_active" FaceCardUncheckedSprite="Buttons.top"
+      FaceCardCheckboxScale="4" FaceCardCheckboxOffset="-40,8">
     <Border Thickness="4" Color="70,75,90"/>
     <CardItemBorder Thickness="4" Color="70,75,90"/>
     <Children>
@@ -131,24 +130,18 @@
     </Children>
   </DeckPile>
 
-
-  <SpriteButton Name="btn_back" Position="1600,1084" Scale="4"
-                NormalSprite="Arrows.Arrow_left"
-                PressedSprite="Arrows.Arrow_left_active"
-                Opacity="0.8">
-    <Children>
-      <Label Name="back_label" Text="Back" Font="HeaderFont"
-             Position="44,-4,btn_back">
-        <Border Thickness="4" Color="25,25,25,170"/>
-      </Label>
-    </Children>
-  </SpriteButton>
-
-  <Button Name="save_btn" Text="Save" Font="m3Default"
-          Position="1818,1090" Size="200,48" Centered="true"
+  <Button Name="btn_back" Text="Back" Font="m3Default"
+          Position="1598,1090" Size="200,48" Centered="true"
           TextColor="White" Background="50,120,70">
     <TextBorder Thickness="4" Color="40,40,40"/>
     <Border Thickness="4" Color="80,170,100"/>
+  </Button>
+
+  <Button Name="btn_delete" Text="Delete" Font="m3Default"
+          Position="1818,1090" Size="200,48" Centered="true"
+          TextColor="White" Background="120,50,50">
+    <TextBorder Thickness="4" Color="40,40,40"/>
+    <Border Thickness="4" Color="170,80,80"/>
   </Button>
 
 </Scene>

@@ -268,6 +268,9 @@ public class Checkbox : BaseComponent
 
     public override void Draw(SpriteBatch spriteBatch)
     {
+        if (Opacity <= 0)
+            return;
+
         var pos = Position.GetVector2();
 
         if (HasSprites())

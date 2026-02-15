@@ -23,6 +23,11 @@ public class MainScene() : XmlScene<SceneType>(SceneType.Main)
         btnRight.OnClicked += () => SceneManager.SetActiveScene(SceneType.Decks, new SlideTransition(SlideDirection.Left));
         btnRight.OnHoveredEnter += () => btnRight.Opacity = 1f;
         btnRight.OnHoveredExit += () => btnRight.Opacity = 0.8f;
+
+        var btnDown = Bind<SpriteButton>("btn_down");
+        btnDown.OnClicked += () => SceneManager.SetActiveScene(SceneType.BoosterDebug, new SlideTransition(SlideDirection.Up));
+        btnDown.OnHoveredEnter += () => btnDown.Opacity = 1f;
+        btnDown.OnHoveredExit += () => btnDown.Opacity = 0.8f;
     }
 
     public override void Update(GameTime gameTime)
@@ -42,7 +47,7 @@ public class MainScene() : XmlScene<SceneType>(SceneType.Main)
 
         if (pressedKeys.Contains(Keys.Down))
         {
-            SceneManager.SetActiveScene(SceneType.Title, new FadeTransition(0.8f));
+            SceneManager.SetActiveScene(SceneType.BoosterDebug, new SlideTransition(SlideDirection.Up));
             return;
         }
 

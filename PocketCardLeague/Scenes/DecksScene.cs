@@ -35,6 +35,13 @@ public class DecksScene() : XmlScene<SceneType>(SceneType.Decks)
         btnDown.OnHoveredEnter += () => btnDown.Opacity = 1f;
         btnDown.OnHoveredExit += () => btnDown.Opacity = 0.8f;
 
+        var btnNewDeck = Bind<Button>("new_deck_button");
+        btnNewDeck.OnClicked += () =>
+        {
+            GameStateManager.ActiveSave.EditingDeck = null;
+            SceneManager.SetActiveScene(SceneType.DeckBuilder, new SlideTransition(SlideDirection.Down));
+        };
+
         RefreshDecks();
     }
 
@@ -65,11 +72,13 @@ public class DecksScene() : XmlScene<SceneType>(SceneType.Decks)
             deck.Background = isActive ? SelectedDeckBackground : DefaultDeckBackground;
             deck.Border = isActive ? new Border(4, SelectedDeckBorderColor) : new Border(4, Color.Gray);
 
+            var capturedDeck = deck;
             deck.OnClicked += () =>
             {
-                GameStateManager.ActiveSave.ActiveDeck = deck;
-                GameStateManager.ActiveSave.EditingDeck = deck;
-                SceneManager.SetActiveScene(SceneType.DeckBuilder, new FadeTransition(0.8f));
+                GameStateManager.ActiveSave.ActiveDeck = capturedDeck;
+                GameStateManager.ActiveSave.EditingDeck = capturedDeck;
+                GameStateManager.Save(GameStateManager.ActiveSave);
+                SceneManager.SetActiveScene(SceneType.DeckBuilder, new SlideTransition(SlideDirection.Down));
             };
 
             PositionDeckInGrid(deck, i + 1); // +1 because empty deck is index 0

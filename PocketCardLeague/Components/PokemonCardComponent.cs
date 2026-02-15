@@ -15,6 +15,7 @@ namespace PocketCardLeague.Components;
 public class PokemonCardComponent : CardComponent
 {
     public PokeCard? Card { get; set; }
+    public bool ShowCurrentHp { get; set; } = false;
 
     [JsonIgnore]
     public string? SpriteIdentifier
@@ -207,11 +208,13 @@ public class PokemonCardComponent : CardComponent
         if (Card?.BasePokemon.Id > 0)
             AddCardLabel($"card_dex_{CardName}", $"{Card.BasePokemon.Id}", layout.DexIdLabel, s, layers);
         AddCardLabel($"card_lv_{CardName}", $"lv {Card?.Level}", layout.LevelLabel, s, layers);
-        if (Card?.HP > 0)
+        if (ShowCurrentHp && Card?.MaxHp is not null)
             AddCardLabel($"card_hp_{CardName}", $"{Card?.HP}", layout.HpLabel, s, layers);
-        if (Card?.Atk > 0)
+        else
+            AddCardLabel($"card_hp_{CardName}", $"{Card?.MaxHp}", layout.HpLabel, s, layers);
+        if (Card?.Atk is not null)
             AddCardLabel($"card_atk_{CardName}", $"{Card?.Atk}", layout.AtkLabel, s, layers);
-        if (Card?.Def > 0)
+        if (Card?.Def is not null)
             AddCardLabel($"card_def_{CardName}", $"{Card?.Def}", layout.DefLabel, s, layers);
 
         // Sort by layer and commit

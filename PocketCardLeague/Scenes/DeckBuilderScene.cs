@@ -24,7 +24,6 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
     private InputField _deckNameInput = null!;
     private Button _tabPokemon = null!;
     private Button _tabBerry = null!;
-    private Button _saveBtn = null!;
     private Panel _pokemonFilterBar = null!;
     private Panel _berryFilterBar = null!;
 
@@ -52,7 +51,6 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
 
     protected override void OnBeforeReload()
     {
-        // Clean up click handlers on persistent card objects before components are cleared
         _browser?.ClearCardHandlers();
     }
 
@@ -66,16 +64,25 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         {
             _editingDeck = new Deck("New Deck");
             save.EditingDeck = _editingDeck;
+            // Auto-add to decks list
+            if (!save.Decks.Any(d => d.Id == _editingDeck.Id))
+                save.Decks.Add(_editingDeck);
         }
 
         // Bind XML components
-        var btnBack = TryBind<SpriteButton>("btn_back");
+        var btnBack = TryBind<Button>("btn_back");
         if (btnBack is not null)
         {
-            btnBack.OnClicked += () => SceneManager.SetActiveScene(SceneType.Decks, new SlideTransition(SlideDirection.Left));
-            btnBack.OnHoveredEnter += () => btnBack.Opacity = 1f;
-            btnBack.OnHoveredExit += () => btnBack.Opacity = 0.8f;
+            btnBack.OnClicked += () =>
+            {
+                AutoSave();
+                SceneManager.SetActiveScene(SceneType.Decks, new SlideTransition(SlideDirection.Up));
+            };
         }
+
+        var btnDelete = TryBind<Button>("btn_delete");
+        if (btnDelete is not null)
+            btnDelete.OnClicked += DeleteDeck;
 
         _deckNameInput = Bind<InputField>("deck_name_input");
         _deckNameInput.Text = _editingDeck.DeckName;
@@ -90,9 +97,6 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         // Capture tab styles from XML initial state (pokemon tab is active by default)
         _tabActiveStyle = (_tabPokemon.Background, _tabPokemon.TextColor, _tabPokemon.Border);
         _tabInactiveStyle = (_tabBerry.Background, _tabBerry.TextColor, _tabBerry.Border);
-
-        _saveBtn = Bind<Button>("save_btn");
-        _saveBtn.OnClicked += SaveDeck;
 
         // Bind filter bars
         _pokemonFilterBar = Bind<Panel>("pokemon_filter_bar");
@@ -120,7 +124,6 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
 
     private void BindPokemonFilters()
     {
-        // Type filter
         _filterType = Bind<Dropdown>("filter_type");
         var typeItems = new List<string> { "All Types" };
         typeItems.AddRange(Enum.GetValues<PokemonType>().Where(t => t != PokemonType.UNK).Select(t => t.ToString()));
@@ -128,7 +131,6 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         _filterType.SelectedIndex = 0;
         _filterType.OnSelectionChanged += _ => ApplyFiltersAndRefresh();
 
-        // Generation filter
         _filterGen = Bind<Dropdown>("filter_gen");
         var genItems = new List<string> { "All Gens" };
         genItems.AddRange(Enumerable.Range(1, 9).Select(g => $"Gen {g}"));
@@ -136,7 +138,6 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         _filterGen.SelectedIndex = 0;
         _filterGen.OnSelectionChanged += _ => ApplyFiltersAndRefresh();
 
-        // Checkboxes
         _filterMega = Bind<Checkbox>("filter_mega");
         _filterMega.OnCheckedChanged += () => ApplyFiltersAndRefresh();
 
@@ -146,7 +147,6 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         _filterShiny = Bind<Checkbox>("filter_shiny");
         _filterShiny.OnCheckedChanged += () => ApplyFiltersAndRefresh();
 
-        // Card level filter
         _filterCardLevel = Bind<Dropdown>("filter_lvl");
         var lvlItems = new List<string> { "All Levels" };
         lvlItems.AddRange(Enumerable.Range(1, 10).Select(l => $"Lv. {l}"));
@@ -154,7 +154,6 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         _filterCardLevel.SelectedIndex = 0;
         _filterCardLevel.OnSelectionChanged += _ => ApplyFiltersAndRefresh();
 
-        // Innate power filter
         _filterInnatePower = Bind<Dropdown>("filter_innate");
         var innateItems = new List<string> { "All Innate" };
         innateItems.AddRange(Enumerable.Range(0, 6).Select(i => $"Innate {i}"));
@@ -162,7 +161,6 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         _filterInnatePower.SelectedIndex = 0;
         _filterInnatePower.OnSelectionChanged += _ => ApplyFiltersAndRefresh();
 
-        // Berry cost total filter
         _filterCostTotal = Bind<Dropdown>("filter_cost_total");
         var costTotalItems = new List<string> { "Any Cost" };
         costTotalItems.AddRange(Enumerable.Range(1, 6).Select(c => $"{c} Cost"));
@@ -170,7 +168,6 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         _filterCostTotal.SelectedIndex = 0;
         _filterCostTotal.OnSelectionChanged += _ => ApplyFiltersAndRefresh();
 
-        // Berry cost color filter
         _filterCostColor = Bind<Dropdown>("filter_cost_color");
         var costColorItems = new List<string> { "Any Color" };
         costColorItems.AddRange(Enum.GetValues<BerryEnergyType>().Select(b => b.ToString()));
@@ -193,10 +190,12 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
     {
         base.Start();
 
-        // Refresh when returning to this scene
         var save = GameStateManager.ActiveSave;
         if (save.EditingDeck is not null)
+        {
             _editingDeck = save.EditingDeck;
+            _deckNameInput.Text = _editingDeck.DeckName;
+        }
 
         ApplyFiltersAndRefresh();
     }
@@ -208,11 +207,9 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
 
         _isMainDeck = isMainDeck;
 
-        // Toggle filter bar visibility
         _pokemonFilterBar.Show = _isMainDeck;
         _berryFilterBar.Show = !_isMainDeck;
 
-        // Update tab visuals using captured XML styles
         if (_isMainDeck)
         {
             _tabPokemon.Background = _tabActiveStyle.Background;
@@ -232,13 +229,8 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
             _tabPokemon.Border = _tabInactiveStyle.Border;
         }
 
-        // Update deck pile header
-        _deckPile.SetHeader(_isMainDeck ? "Pokemon Deck" : "Berry Deck");
-
-        // Refresh deck pile cards for current mode
+        _deckPile.SetHeader(_isMainDeck ? "Main Deck" : "Side Deck");
         RefreshDeckPile();
-
-        // Refresh browser
         ApplyFiltersAndRefresh();
     }
 
@@ -264,14 +256,14 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
     {
         var save = GameStateManager.ActiveSave;
         var deckCardIds = new HashSet<Guid>(_editingDeck.MainDeck.Select(c => c.Id));
-        return save.PokemonCards.Where(c => !deckCardIds.Contains(c.Id)).ToList();
+        return [.. save.PokemonCards.Where(c => !deckCardIds.Contains(c.Id))];
     }
 
     private List<BerryCardComponent> GetAvailableBerryCards()
     {
         var save = GameStateManager.ActiveSave;
         var deckCardIds = new HashSet<Guid>(_editingDeck.SideDeck.Select(c => c.Id));
-        return save.BerryCards.Where(c => !deckCardIds.Contains(c.Id)).ToList();
+        return [.. save.BerryCards.Where(c => !deckCardIds.Contains(c.Id))];
     }
 
     private List<PokemonCardComponent> ApplyPokemonFilters(List<PokemonCardComponent> cards)
@@ -343,13 +335,13 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
     {
         if (_isMainDeck)
         {
-            _deckPile.DeckCards = _editingDeck.MainDeck.Cast<CardComponent>().ToList();
-            _deckPile.SetHeader("Pokemon Deck");
+            _deckPile.DeckCards = [.. _editingDeck.MainDeck.Cast<CardComponent>()];
+            _deckPile.SetHeader("Main Deck");
         }
         else
         {
-            _deckPile.DeckCards = _editingDeck.SideDeck.Cast<CardComponent>().ToList();
-            _deckPile.SetHeader("Berry Deck");
+            _deckPile.DeckCards = [.. _editingDeck.SideDeck.Cast<CardComponent>()];
+            _deckPile.SetHeader("Side Deck");
         }
 
         _deckPile.FaceCard = _editingDeck.FaceCard;
@@ -368,6 +360,7 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         else if (!_isMainDeck && card is BerryCardComponent berryCard)
             _editingDeck.SideDeck.Add(berryCard);
 
+        AutoSave();
         ApplyFiltersAndRefresh();
     }
 
@@ -377,6 +370,8 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
             _editingDeck.FaceCard = pc;
         else
             _editingDeck.FaceCard = _editingDeck.MainDeck.FirstOrDefault();
+
+        AutoSave();
     }
 
     private void OnPileCardClicked(CardComponent card)
@@ -391,22 +386,39 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         else if (!_isMainDeck && card is BerryCardComponent berryCard)
             _editingDeck.SideDeck.Remove(berryCard);
 
+        AutoSave();
         ApplyFiltersAndRefresh();
     }
 
-    private void SaveDeck()
+    private void AutoSave()
+    {
+        _editingDeck.DeckName = _deckNameInput.Text;
+        GameStateManager.Save(GameStateManager.ActiveSave);
+    }
+
+    private void DeleteDeck()
     {
         var save = GameStateManager.ActiveSave;
 
-        _editingDeck.DeckName = _deckNameInput.Text;
+        // Can't delete the only deck
+        if (save.Decks.Count <= 1)
+            return;
 
-        if (!save.Decks.Any(d => d.Id == _editingDeck.Id))
-            save.Decks.Add(_editingDeck);
+        // Return all cards to the pool (they're already in PokemonCards/BerryCards, just remove from deck)
+        _editingDeck.MainDeck.Clear();
+        _editingDeck.SideDeck.Clear();
+        _editingDeck.FaceCard = null;
+
+        save.Decks.Remove(_editingDeck);
+
+        // If this was the active deck, pick another
+        if (save.ActiveDeck?.Id == _editingDeck.Id)
+            save.ActiveDeck = save.Decks.FirstOrDefault();
 
         save.EditingDeck = null;
         GameStateManager.Save(save);
 
-        SceneManager.SetActiveScene(SceneType.Decks, new SlideTransition(SlideDirection.Left));
+        SceneManager.SetActiveScene(SceneType.Decks, new SlideTransition(SlideDirection.Up));
     }
 
     public override void Update(GameTime gameTime)
@@ -414,7 +426,8 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         var pressedKeys = ControlState.GetPressedKeys();
         if (pressedKeys.Contains(Keys.Escape))
         {
-            SceneManager.SetActiveScene(SceneType.Decks, new SlideTransition(SlideDirection.Left));
+            AutoSave();
+            SceneManager.SetActiveScene(SceneType.Decks, new SlideTransition(SlideDirection.Up));
             return;
         }
 

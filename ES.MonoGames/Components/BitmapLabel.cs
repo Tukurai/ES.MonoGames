@@ -16,7 +16,7 @@ namespace Components;
 /// resulting in crisp, pixel-perfect text suitable for pixel art games.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class BitmapLabel : BaseComponent, IDisposable
+public class BitmapLabel(string? name = null, Anchor? position = null) : BaseComponent(name, position), IDisposable
 {
     private GraphicsDevice? _graphicsDevice;
     private Texture2D? _texture;
@@ -120,10 +120,6 @@ public class BitmapLabel : BaseComponent, IDisposable
 
     public TextAlignment Alignment { get; set; } = TextAlignment.Left;
     public int MaxWidth { get; set; } = 0;
-
-    public BitmapLabel(string? name = null, Anchor? position = null) : base(name, position)
-    {
-    }
 
     public override void Draw(SpriteBatch spriteBatch)
     {

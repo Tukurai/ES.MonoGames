@@ -85,21 +85,15 @@
                 <Border Thickness="4" Color="Gray"/>
                 <FocusedBorder Thickness="8" Color="CornflowerBlue"/>
               </InputField>
-            </Children>
-          </Panel>
 
-          <Label Name="p1_section_save" Text="Save Data" Font="DefaultFont" Position="630,0,p1_section_buttons" Color="Gray"/>
-          <Panel Name="p1_panel_save" Position="0,56,p1_section_save" Size="570,120" Background="40,45,55">
-            <Border Thickness="4" Color="Gray"/>
-            <Children>
-              <Button Name="p1_delete_save" Text="Delete Save" Font="DefaultFont" Position="20,12,p1_panel_save" Size="530,64" Background="120,40,40" PressDepth="4">
+              <Button Name="p1_delete_save" Text="Delete Save" Font="DefaultFont" Position="0,80,p1_input" Size="530,64" Background="120,40,40" PressDepth="4">
                 <Border Thickness="4" Color="180,60,60"/>
                 <TextBorder Thickness="4" Color="40,40,40"/>
               </Button>
             </Children>
           </Panel>
 
-          <Label Name="p1_section_sliders" Text="Sliders &amp; Dropdowns" Font="DefaultFont" Position="0,160,p1_panel_save" Color="Gray"/>
+          <Label Name="p1_section_sliders" Text="Sliders &amp; Dropdowns" Font="DefaultFont" Position="630,0,p1_section_buttons" Color="Gray"/>
           <Panel Name="p1_panel_sliders" Position="0,56,p1_section_sliders" Size="570,810" Background="40,45,55">
             <Border Thickness="4" Color="Gray"/>
             <Children>

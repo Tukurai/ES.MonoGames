@@ -40,8 +40,8 @@
     <FaceCard SpriteScale="4" BobDistance="8" OffsetY="20" AreaHeight="200" />
     <NameLabel FontSize="32" MaxWidth="228" Y="328" />
     <LevelLabel FontSize="32" BorderWidth="2" X="12" Y="8" />
-    <Types IconScale="4" Spacing="-4" MarginX="12" MarginBottom="64" />
-    <Costs DotScale="4" Spacing="4" GapAboveTypes="8" MarginX="12" />
+    <Types IconScale="4" Spacing="4" MarginX="12" MarginBottom="12" />
+    <Costs DotScale="4" Spacing="4" GapAboveTypes="8" MarginX="-12" />
   </DeckBox>
 
 </CardLayouts>
