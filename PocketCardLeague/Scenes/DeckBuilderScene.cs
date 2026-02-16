@@ -117,9 +117,6 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
 
         // Bind and populate Berry filters
         BindBerryFilters();
-
-        // Initial load
-        ApplyFiltersAndRefresh();
     }
 
     private void BindPokemonFilters()
@@ -156,14 +153,14 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
 
         _filterInnatePower = Bind<Dropdown>("filter_innate");
         var innateItems = new List<string> { "All Innate" };
-        innateItems.AddRange(Enumerable.Range(0, 6).Select(i => $"Innate {i}"));
+        innateItems.AddRange(Enumerable.Range(0, 5).Select(i => $"Innate {i}"));
         _filterInnatePower.Items = innateItems;
         _filterInnatePower.SelectedIndex = 0;
         _filterInnatePower.OnSelectionChanged += _ => ApplyFiltersAndRefresh();
 
         _filterCostTotal = Bind<Dropdown>("filter_cost_total");
         var costTotalItems = new List<string> { "Any Cost" };
-        costTotalItems.AddRange(Enumerable.Range(1, 6).Select(c => $"{c} Cost"));
+        costTotalItems.AddRange(Enumerable.Range(1, 3).Select(c => $"{c} Cost"));
         _filterCostTotal.Items = costTotalItems;
         _filterCostTotal.SelectedIndex = 0;
         _filterCostTotal.OnSelectionChanged += _ => ApplyFiltersAndRefresh();
@@ -283,7 +280,7 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         }
 
         if (_filterMega.IsChecked)
-            result = result.Where(c => c.Card?.BasePokemon?.Mega == true);
+            result = result.Where(c => c.Card?.BasePokemon?.MegaEvolution == true);
 
         if (_filterGmax.IsChecked)
             result = result.Where(c => c.Card?.BasePokemon?.Gigantamax == true);
@@ -418,7 +415,13 @@ public class DeckBuilderScene() : XmlScene<SceneType>(SceneType.DeckBuilder)
         save.EditingDeck = null;
         GameStateManager.Save(save);
 
-        SceneManager.SetActiveScene(SceneType.Decks, new SlideTransition(SlideDirection.Up));
+        SceneManager.SetActiveScene(SceneType.Decks, new SlideTransition(SlideDirection.Down));
+    }
+
+    public override void Stop()
+    {
+        _browser?.ClearCardHandlers();
+        base.Stop();
     }
 
     public override void Update(GameTime gameTime)

@@ -14,6 +14,7 @@ public class GameSave
     public int RouteId { get; set; } = 0;
     public int RouteStep { get; set; } = 0;
     public GameType GameType { get; set; } = GameType.Normal;
+    public ModeType ModeType { get; set; } = ModeType.Classic;
     public List<BadgeType> Badges { get; set; } = [];
     public List<EventType> AvailableEvents { get; set; } = [];
     public Deck? BattleOpponent { get; set; } = null;

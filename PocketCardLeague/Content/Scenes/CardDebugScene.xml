@@ -4,7 +4,10 @@
   <!-- Example Pokemon Cards -->
   <PokemonCard Name="card_charmander" SpriteId="0004_000_mf_n_00000000_n" Level="5"
                Cost="Red,Void" Glyphs="berserk,courage"
-               Position="80,80" Scale="4,4" />
+               Position="76,76" Scale="4,4" />
+  <PokemonCard Name="card_charmander" SpriteId="0004_000_mf_n_00000000_n" Level="5"
+               Cost="Red,Void" Glyphs="berserk,courage"
+               Position="84,84" Scale="4,4" />
 
   <PokemonCard Name="card_squirtle" SpriteId="0007_000_mf_n_00000000_n" Level="5"
                Cost="Blue,Void" Glyphs="bulwark,shield"

@@ -17,6 +17,8 @@ public record LabelLayout(float X, float Y, float FontSize, string Align = "Left
 public record OverlayLayout(string Sprite, float X, float Y,
     string Align = "Left", float ScaleX = 1, float ScaleY = 1, float Opacity = 1f, float Layer = 0);
 public record TypeBackLayout(float X, float Y, float Spacing = 0, float Opacity = 1f, float Layer = 0);
+public record InnateDecorationLayout(float X, float Y, float Spacing = 1, string Align = "Center", float Layer = 0);
+public record ShinyDecorationLayout(float X, float Y, string Align = "Right", float Layer = 0);
 
 public record PokemonCardLayout(
     int Width, int Height,
@@ -33,6 +35,8 @@ public record PokemonCardLayout(
     LabelLayout AtkLabel,
     LabelLayout DefLabel,
     TypeBackLayout TypeBacks,
+    InnateDecorationLayout InnateDecoration,
+    ShinyDecorationLayout ShinyDecoration,
     List<OverlayLayout> Overlays);
 
 public record BerryCardLayout(
@@ -75,6 +79,8 @@ public static class CardLayoutLoader
         new LabelLayout(3, 60, 8, Layer: 53),
         new LabelLayout(3, 60, 8, "Right", Layer: 54),
         new TypeBackLayout(2, 38, Layer: 45),
+        new InnateDecorationLayout(0, 74, 1, "Center", 55),
+        new ShinyDecorationLayout(2, 2, "Right", 56),
         []);
 
     private static BerryCardLayout DefaultBerryLayout => new(
@@ -197,6 +203,27 @@ public static class CardLayoutLoader
             SceneLoader.ParseFloat(el.Attribute("Layer")?.Value) ?? defLayer);
     }
 
+    private static InnateDecorationLayout ParseInnateDecorationLayout(XElement? el, float defX = 0, float defY = 74, float defSpacing = 1, string defAlign = "Center", float defLayer = 55)
+    {
+        if (el is null) return new(defX, defY, defSpacing, defAlign, defLayer);
+        return new(
+            SceneLoader.ParseFloat(el.Attribute("X")?.Value) ?? defX,
+            SceneLoader.ParseFloat(el.Attribute("Y")?.Value) ?? defY,
+            SceneLoader.ParseFloat(el.Attribute("Spacing")?.Value) ?? defSpacing,
+            el.Attribute("Align")?.Value ?? defAlign,
+            SceneLoader.ParseFloat(el.Attribute("Layer")?.Value) ?? defLayer);
+    }
+
+    private static ShinyDecorationLayout ParseShinyDecorationLayout(XElement? el, float defX = 2, float defY = 2, string defAlign = "Right", float defLayer = 56)
+    {
+        if (el is null) return new(defX, defY, defAlign, defLayer);
+        return new(
+            SceneLoader.ParseFloat(el.Attribute("X")?.Value) ?? defX,
+            SceneLoader.ParseFloat(el.Attribute("Y")?.Value) ?? defY,
+            el.Attribute("Align")?.Value ?? defAlign,
+            SceneLoader.ParseFloat(el.Attribute("Layer")?.Value) ?? defLayer);
+    }
+
     private static OverlayLayout ParseOverlayLayout(XElement el)
     {
         return new OverlayLayout(
@@ -238,6 +265,8 @@ public static class CardLayoutLoader
             AtkLabel: ParseLabelLayout(el.Element("AtkLabel"), 3, 60, 8, defLayer: 53),
             DefLabel: ParseLabelLayout(el.Element("DefLabel"), 3, 60, 8, "Right", defLayer: 54),
             TypeBacks: ParseTypeBackLayout(el.Element("TypeBacks"), 2, 38, defLayer: 45),
+            InnateDecoration: ParseInnateDecorationLayout(el.Element("InnateDecoration")),
+            ShinyDecoration: ParseShinyDecorationLayout(el.Element("ShinyDecoration")),
             Overlays: ParseOverlays(el));
     }
 

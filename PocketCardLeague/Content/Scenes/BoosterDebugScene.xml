@@ -2,8 +2,8 @@
 <Scene BackgroundColor="25,25,25" BackgroundSprite="Locations.Hideout_2" BackgroundOpacity="0.25">
 
   <SpriteButton Name="btn_back" Position="30,16" Scale="4"
-                NormalSprite="Arrows.Arrow_left"
-                PressedSprite="Arrows.Arrow_left_active"
+                NormalSprite="Arrows.Arrow_up"
+                PressedSprite="Arrows.Arrow_up_active"
                 Opacity="0.8">
     <Children>
       <Label Name="back_label" Text="Back" Font="HeaderFont"

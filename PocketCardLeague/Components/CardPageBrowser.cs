@@ -268,6 +268,9 @@ public class CardPageBrowser : Panel
     /// </summary>
     public void SetCards(List<CardComponent> cards)
     {
+        // Remove all existing click handlers before rebuilding
+        ClearCardHandlers();
+
         // Group cards: pokemon by dex id, berries by card name
         _cardGroups = cards
             .GroupBy(c => c is PokemonCardComponent pc
@@ -337,18 +340,21 @@ public class CardPageBrowser : Panel
             var cardPos = card.Position.GetVector2();
             _cardAreas[groupIndex] = new Rectangle((int)cardPos.X, (int)cardPos.Y, (int)cardW, (int)cardH);
 
-            // Wire click event — skip if a variant button is hovered (prevents unintended deck-add)
-            var capturedCard = card;
-            if (_clickHandlers.TryGetValue(card, out var oldHandler))
-                card.OnClicked -= oldHandler;
-            Action handler = () =>
+            // Wire click event — only when OnCardClicked has subscribers
+            if (OnCardClicked is not null)
             {
-                if (_variantButtons.Any(b => b.Hovered))
-                    return;
-                OnCardClicked?.Invoke(capturedCard);
-            };
-            card.OnClicked += handler;
-            _clickHandlers[card] = handler;
+                var capturedCard = card;
+                if (_clickHandlers.TryGetValue(card, out var oldHandler))
+                    card.OnClicked -= oldHandler;
+                Action handler = () =>
+                {
+                    if (_variantButtons.Any(b => b.Hovered))
+                        return;
+                    OnCardClicked?.Invoke(capturedCard);
+                };
+                card.OnClicked += handler;
+                _clickHandlers[card] = handler;
+            }
 
             _gridChildren.Add(card);
             _gridPanel.Children.Add(card);
@@ -500,6 +506,17 @@ public class CardPageBrowser : Panel
         }
 
         base.Update(gameTime);
+    }
+
+    /// <summary>
+    /// Returns the topmost hovered card on the current page, or null if none.
+    /// </summary>
+    public CardComponent? GetHoveredCard()
+    {
+        for (int i = _gridChildren.Count - 1; i >= 0; i--)
+            if (_gridChildren[i] is CardComponent card && card.Hovered)
+                return card;
+        return null;
     }
 
     private void UpdateNavButtonState()

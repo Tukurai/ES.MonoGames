@@ -39,7 +39,7 @@ public class DecksScene() : XmlScene<SceneType>(SceneType.Decks)
         btnNewDeck.OnClicked += () =>
         {
             GameStateManager.ActiveSave.EditingDeck = null;
-            SceneManager.SetActiveScene(SceneType.DeckBuilder, new SlideTransition(SlideDirection.Down));
+            SceneManager.SetActiveScene(SceneType.DeckBuilder, new SlideTransition(SlideDirection.Up));
         };
 
         RefreshDecks();

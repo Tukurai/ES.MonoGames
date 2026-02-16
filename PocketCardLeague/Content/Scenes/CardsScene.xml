@@ -2,14 +2,14 @@
 <Scene BackgroundColor="25,25,25" BackgroundSprite="Locations.Cave_10" BackgroundOpacity="0.25" SceneTrack="ms_main">
 
   <!-- Top navigation button (to Decks) -->
-  <SpriteButton Name="btn_up" Position="996,60" Scale="4,4"
+  <SpriteButton Name="btn_up" Position="48,1100" Scale="4,4"
                 NormalSprite="Arrows.Arrow_up"
                 HoveredSprite="Arrows.Arrow_up"
                 PressedSprite="Arrows.Arrow_up_active"
                 Bob="up" Opacity="0.8">
     <Children>
       <Label Name="decks_label" Text="Decks" Font="HeaderFont"
-             Position="24,48,btn_up" Center="true">
+             Position="72,-16,btn_up">
         <Border Thickness="4" Color="25,25,25,170"/>
       </Label>
     </Children>
@@ -17,7 +17,7 @@
 
   <!-- Tab buttons -->
   <Button Name="tab_pokemon" Text="Pokemon" Font="m3Default"
-          Position="32,16" Size="208,48" Centered="true"
+          Position="1548,16" Size="208,48" Centered="true"
           TextColor="White" Background="80,90,120" Padding="10">
     <Border Thickness="4" Color="120,140,180"/>
     <TextBorder Thickness="4" Color="40,40,40"/>
@@ -31,7 +31,7 @@
   </Button>
 
   <!-- Pokemon filter bar (visible by default) -->
-  <Panel Name="pokemon_filter_bar" Position="32,76" Size="1960,60"
+  <Panel Name="pokemon_filter_bar" Position="32,16" Size="1960,60"
          Background="transparent" Show="true">
     <Children>
       <Dropdown Name="filter_type" Position="0,0,pokemon_filter_bar" Size="200,48"
@@ -83,7 +83,7 @@
   </Panel>
 
   <!-- Berry filter bar (hidden by default) -->
-  <Panel Name="berry_filter_bar" Position="32,76" Size="1960,60"
+  <Panel Name="berry_filter_bar" Position="32,16" Size="1960,60"
          Background="Transparent" Show="false">
     <Children>
       <Dropdown Name="filter_berry_color" Position="0,0,berry_filter_bar" Size="180,48"
@@ -96,17 +96,17 @@
   </Panel>
 
   <!-- Full-width card browser -->
-  <CardPageBrowser Name="card_browser" Position="32,148" Size="1960,960"
+  <CardPageBrowser Name="card_browser" Position="32,88" Size="1960,960"
       Columns="8" Rows="3" CardScale="4,4" CardSpacing="16,16"
       NavGap="8" ArrowScale="4" ArrowOpacity="0.8"
       SliderOffset="60,10">
     <Children>
-      <Slider Name="browser_slider" Position="0,916,card_browser" Size="1620,32" TrackColor="60,65,75" TrackFillColor="100,120,160"
+      <Slider Name="browser_slider" Position="244,1016,card_browser" Size="1456,32" TrackColor="60,65,75" TrackFillColor="100,120,160"
               ThumbColor="200,199,197" ThumbHoveredColor="230,230,230" ThumbSize="36,44">
         <TrackBorder Thickness="4" Color="43,44,43"/>
         <ThumbBorder Thickness="4" Color="43,44,43"/>
       </Slider>
-      <SpriteButton Name="browser_prev" Position="1636,-12,browser_slider" NormalSprite="Arrows.Arrow_left" PressedSprite="Arrows.Arrow_left_active" Scale="4" Opacity="0.8"/>
+      <SpriteButton Name="browser_prev" Position="1468,-12,browser_slider" NormalSprite="Arrows.Arrow_left" PressedSprite="Arrows.Arrow_left_active" Scale="4" Opacity="0.8"/>
       <SpriteButton Name="browser_next" Position="196,0,browser_prev" NormalSprite="Arrows.Arrow_right" PressedSprite="Arrows.Arrow_right_active" Scale="4" Opacity="0.8"/>
       <BitmapLabel Name="browser_page_label" Position="56,12,browser_prev" FontFamily="m6x11" FontSize="32" TextColor="White" Alignment="Center">
         <Border Thickness="4" Color="25,25,25,170"/>

@@ -4,6 +4,7 @@ using Components;
 using Helpers;
 using PocketCardLeague.Components;
 using PocketCardLeague.Enums;
+using PocketCardLeague.Consts;
 using PocketCardLeague.Helpers;
 using System;
 using System.Collections.Generic;
@@ -108,14 +109,14 @@ public class CardsScene() : XmlScene<SceneType>(SceneType.Cards)
 
         _filterInnatePower = Bind<Dropdown>("filter_innate");
         var innateItems = new List<string> { "All Innate" };
-        innateItems.AddRange(Enumerable.Range(0, 6).Select(i => $"Innate {i}"));
+        innateItems.AddRange(Enumerable.Range(0, 5).Select(i => $"Innate {i}"));
         _filterInnatePower.Items = innateItems;
         _filterInnatePower.SelectedIndex = 0;
         _filterInnatePower.OnSelectionChanged += _ => ApplyFiltersAndRefresh();
 
         _filterCostTotal = Bind<Dropdown>("filter_cost_total");
         var costTotalItems = new List<string> { "Any Cost" };
-        costTotalItems.AddRange(Enumerable.Range(1, 6).Select(c => $"{c} Cost"));
+        costTotalItems.AddRange(Enumerable.Range(1, 3).Select(c => $"{c} Cost"));
         _filterCostTotal.Items = costTotalItems;
         _filterCostTotal.SelectedIndex = 0;
         _filterCostTotal.OnSelectionChanged += _ => ApplyFiltersAndRefresh();
@@ -211,7 +212,7 @@ public class CardsScene() : XmlScene<SceneType>(SceneType.Cards)
         }
 
         if (_filterMega.IsChecked)
-            result = result.Where(c => c.Card?.BasePokemon?.Mega == true);
+            result = result.Where(c => c.Card?.BasePokemon?.MegaEvolution == true);
 
         if (_filterGmax.IsChecked)
             result = result.Where(c => c.Card?.BasePokemon?.Gigantamax == true);
@@ -259,6 +260,12 @@ public class CardsScene() : XmlScene<SceneType>(SceneType.Cards)
         return result.ToList();
     }
 
+    public override void Stop()
+    {
+        _browser?.ClearCardHandlers();
+        base.Stop();
+    }
+
     public override void Update(GameTime gameTime)
     {
         var pressedKeys = ControlState.GetPressedKeys();
@@ -269,5 +276,54 @@ public class CardsScene() : XmlScene<SceneType>(SceneType.Cards)
         }
 
         base.Update(gameTime);
+
+        // Card editing shortcuts (only for hovered pokemon cards)
+        var heldKeys = ControlState.GetHeldKeys();
+        var ctrl = heldKeys.Contains(Keys.LeftControl) || heldKeys.Contains(Keys.RightControl);
+        var alt = heldKeys.Contains(Keys.LeftAlt) || heldKeys.Contains(Keys.RightAlt);
+
+        if ((ctrl || alt) && _browser.GetHoveredCard() is PokemonCardComponent pc && pc.Card is not null)
+        {
+            var changed = false;
+
+            if (ctrl && pressedKeys.Contains(Keys.Add))
+            {
+                if (pc.Card.Level < 10) { pc.Card.Level++; changed = true; }
+            }
+            else if (ctrl && pressedKeys.Contains(Keys.Subtract))
+            {
+                if (pc.Card.Level > 1) { pc.Card.Level--; changed = true; }
+            }
+            else if (alt && pressedKeys.Contains(Keys.Add))
+            {
+                if (pc.Card.InnatePower < 4) { pc.Card.InnatePower++; changed = true; }
+            }
+            else if (alt && pressedKeys.Contains(Keys.Subtract))
+            {
+                if (pc.Card.InnatePower > 0) { pc.Card.InnatePower--; changed = true; }
+            }
+            else if (alt && pressedKeys.Contains(Keys.Multiply))
+            {
+                var current = pc.Card.BasePokemon;
+                var match = PokeDex.Entries.Find(e =>
+                    e.Id == current.Id &&
+                    e.FormId == current.FormId &&
+                    e.Gender == current.Gender &&
+                    e.Gigantamax == current.Gigantamax &&
+                    e.VariantId == current.VariantId &&
+                    e.Shiny != current.Shiny);
+                if (match is not null)
+                {
+                    pc.Card.BasePokemon = match;
+                    changed = true;
+                }
+            }
+
+            if (changed)
+            {
+                pc.BuildVisuals();
+                GameStateManager.Save(GameStateManager.ActiveSave);
+            }
+        }
     }
 }

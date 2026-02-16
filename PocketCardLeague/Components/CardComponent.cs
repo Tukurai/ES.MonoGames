@@ -15,6 +15,7 @@ public class CardComponent : Panel
     [JsonIgnore] public TextureResult? FrontSprite { get; set; }
     [JsonIgnore] public TextureResult? Image { get; set; }
     [JsonIgnore] public bool FaceUp { get; set; } = true;
+    [JsonIgnore] public Color Tint { get; set; } = Color.White;
 
     /// <summary>
     /// When true, BuildVisuals is called automatically on the first Update.
@@ -47,6 +48,7 @@ public class CardComponent : Panel
     {
         var pos = Position.GetVector2();
         var sprite = FaceUp ? FrontSprite : BackSprite;
+        var tint = FaceUp ? Tint : Color.White; // Only tint the front side, back is always white
 
         if (sprite is not null)
         {
@@ -56,11 +58,11 @@ public class CardComponent : Panel
             if (entry.Rotated)
             {
                 var origin = new Vector2(0, entry.FrameHeight);
-                spriteBatch.Draw(sprite.Texture, pos, sourceRect, ApplyOpacity(Color.White),
+                spriteBatch.Draw(sprite.Texture, pos, sourceRect, ApplyOpacity(tint),
                     MathF.PI / 2f, origin, Scale, SpriteEffects.None, 0f);
             }
             else
-                spriteBatch.Draw(sprite.Texture, pos, sourceRect, ApplyOpacity(Color.White),
+                spriteBatch.Draw(sprite.Texture, pos, sourceRect, ApplyOpacity(tint),
                     0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
         }
 

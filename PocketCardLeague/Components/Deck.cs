@@ -97,6 +97,9 @@ public class Deck : Panel
     /// </summary>
     public void BuildVisuals()
     {
+        // Update name label to reflect current DeckName
+        _deckLabel.Text = DeckName;
+
         // Clear previous overlays
         foreach (var (component, _) in _overlays)
             Children.Remove(component);

@@ -168,11 +168,15 @@ public class DeckPile : Panel
         _cardItems.Clear();
         _faceCardCheckboxes.Clear();
 
-        // Put the face card at the top of the list
+        // Put the face card at the top of the list (only if it belongs to this deck list)
         if (FaceCard is not null)
         {
-            DeckCards.Remove(FaceCard);
-            DeckCards.Insert(0, FaceCard);
+            var existing = DeckCards.FindIndex(c => c.Id == FaceCard.Id);
+            if (existing >= 0)
+            {
+                DeckCards.RemoveAt(existing);
+                DeckCards.Insert(0, FaceCard);
+            }
         }
 
         // Build list items

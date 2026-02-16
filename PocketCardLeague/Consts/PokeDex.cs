@@ -18,8 +18,11 @@ public class PokeDexEntry
     public string VariationName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public bool Shiny { get; set; } = false;
-    public bool Mega { get; set; } = false;
+    public bool Secret { get; set; } = false;
+    public bool Environment { get; set; } = false;
+    public bool Legendary { get; set; } = false;
     public bool Gigantamax { get; set; } = false;
+    public bool MegaEvolution { get; set; } = false;
     public GenderCode Gender { get; set; } = GenderCode.MF;
     public int VariantId { get; set; } = 0;
     public PokemonType Type1 { get; set; } = PokemonType.UNK;
@@ -33,6 +36,7 @@ public class PokeDexEntry
     public int SpecialDefense { get; set; } = 0;
     public int Speed { get; set; } = 0;
     public int Generation { get; set; } = 1;
+
 
     [JsonIgnore]
     public string SpriteIdentifier => $"{Id:D4}_{FormId:D3}_{Gender.ToString().ToLower()}_{(Gigantamax ? 'g' : 'n')}_{VariantId:D8}_{(Shiny ? 'r' : 'n')}";

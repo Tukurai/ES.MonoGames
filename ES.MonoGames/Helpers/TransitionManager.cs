@@ -132,14 +132,20 @@ public static class TransitionManager
             _oldTarget.Width != width || _oldTarget.Height != height)
         {
             _oldTarget?.Dispose();
-            _oldTarget = new RenderTarget2D(_graphicsDevice, width, height);
+            _oldTarget = new RenderTarget2D(
+                _graphicsDevice, width, height, false,
+                SurfaceFormat.Color, DepthFormat.None, 0,
+                RenderTargetUsage.PreserveContents);
         }
 
         if (_newTarget is null || _newTarget.IsDisposed ||
             _newTarget.Width != width || _newTarget.Height != height)
         {
             _newTarget?.Dispose();
-            _newTarget = new RenderTarget2D(_graphicsDevice, width, height);
+            _newTarget = new RenderTarget2D(
+                _graphicsDevice, width, height, false,
+                SurfaceFormat.Color, DepthFormat.None, 0,
+                RenderTargetUsage.PreserveContents);
         }
     }
 

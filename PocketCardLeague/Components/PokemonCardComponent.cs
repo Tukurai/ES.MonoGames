@@ -36,6 +36,7 @@ public class PokemonCardComponent : CardComponent
 
         var layout = CardLayoutLoader.PokemonLayout;
         Size = new Vector2(layout.Width, layout.Height);
+        Tint = Card?.InnatePower == 4 ? TypeColors.Get(Card.BasePokemon.Types[0]) : Color.White;
 
         FrontSprite = SceneLoader.ParseSprite(layout.FrontSprite);
         BackSprite = SceneLoader.ParseSprite(layout.BackSprite);
@@ -81,6 +82,7 @@ public class PokemonCardComponent : CardComponent
             {
                 Scale = s,
             };
+            lvlSprite.Tint = Tint;
             lvlSprite.SetFromAtlas(lvlResult);
 
             float lvlW, lvlH;
@@ -192,7 +194,7 @@ public class PokemonCardComponent : CardComponent
                 var overlaySprite = new Sprite($"card_overlay_{overlay.Sprite}_{CardName}")
                 {
                     Scale = new Vector2(overlay.ScaleX * s.X, overlay.ScaleY * s.Y),
-                    Tint = Color.White * overlay.Opacity,
+                    Tint = Tint * overlay.Opacity,
                 };
                 overlaySprite.SetFromAtlas(overlayResult);
                 overlaySprite.Origin = Vector2.Zero;
@@ -200,6 +202,56 @@ public class PokemonCardComponent : CardComponent
                 var overlayW = overlayResult.AtlasEntry.FrameWidth * overlay.ScaleX;
                 var overlayX = AlignX(overlay.X, (float)overlayW, overlay.Align);
                 layers.Add((overlaySprite, new Vector2(overlayX * s.X, overlay.Y * s.Y), overlay.Layer));
+            }
+        }
+
+        // Innate decoration — show innate_plus or innate_minus sprites centered
+        var innateCount = (Card?.InnatePower ?? 1) - 1;
+        if (innateCount != 0)
+        {
+            var innateName = innateCount > 0 ? "innate_plus" : "innate_minus";
+            var innateResult = ContentHelper.GetTextureResult<CardPartsSpriteAtlas>(innateName);
+            if (innateResult is not null)
+            {
+                var absCount = Math.Abs(innateCount);
+                var innateLayout = layout.InnateDecoration;
+                var spriteW = innateResult.AtlasEntry.FrameWidth;
+                var totalW = absCount * spriteW + (absCount - 1) * innateLayout.Spacing;
+                var startX = AlignX(innateLayout.X, totalW, innateLayout.Align);
+
+                for (int i = 0; i < absCount; i++)
+                {
+                    var innateSprite = new Sprite($"card_innate_{i}_{CardName}")
+                    {
+                        Scale = s,
+                        Tint = Tint,
+                    };
+                    innateSprite.SetFromAtlas(innateResult);
+                    innateSprite.Origin = Vector2.Zero;
+
+                    var x = startX + i * (spriteW + innateLayout.Spacing);
+                    layers.Add((innateSprite, new Vector2(x * s.X, innateLayout.Y * s.Y), innateLayout.Layer));
+                }
+            }
+        }
+
+        // Shiny decoration — show shiny sprite if pokemon is shiny
+        if (Card?.BasePokemon?.Shiny == true)
+        {
+            var shinyResult = ContentHelper.GetTextureResult<CardPartsSpriteAtlas>("shiny");
+            if (shinyResult is not null)
+            {
+                var shinyLayout = layout.ShinyDecoration;
+                var shinySprite = new Sprite($"card_shiny_{CardName}")
+                {
+                    Scale = s,
+                };
+                shinySprite.SetFromAtlas(shinyResult);
+                shinySprite.Origin = Vector2.Zero;
+
+                var shinyW = shinyResult.AtlasEntry.FrameWidth;
+                var shinyX = AlignX(shinyLayout.X, shinyW, shinyLayout.Align);
+                layers.Add((shinySprite, new Vector2(shinyX * s.X, shinyLayout.Y * s.Y), shinyLayout.Layer));
             }
         }
 

@@ -27,7 +27,7 @@ public class BoosterDebugScene() : XmlScene<SceneType>(SceneType.BoosterDebug)
         var btnBack = TryBind<SpriteButton>("btn_back");
         if (btnBack is not null)
         {
-            btnBack.OnClicked += () => SceneManager.SetActiveScene(SceneType.Cards, new SlideTransition(SlideDirection.Left));
+            btnBack.OnClicked += () => SceneManager.SetActiveScene(SceneType.Cards, new SlideTransition(SlideDirection.Down));
             btnBack.OnHoveredEnter += () => btnBack.Opacity = 1f;
             btnBack.OnHoveredExit += () => btnBack.Opacity = 0.8f;
         }
@@ -61,7 +61,7 @@ public class BoosterDebugScene() : XmlScene<SceneType>(SceneType.BoosterDebug)
         ClearDisplayedCards();
 
         var entries = PokeDex.Entries
-            .Where(e => !e.Mega && !e.Gigantamax && !e.Shiny);
+            .Where(e => !e.MegaEvolution && !e.Gigantamax && !e.Shiny);
 
         if (_filterGen.SelectedIndex > 0)
         {
@@ -192,9 +192,9 @@ public class BoosterDebugScene() : XmlScene<SceneType>(SceneType.BoosterDebug)
     public override void Update(GameTime gameTime)
     {
         var pressedKeys = ControlState.GetPressedKeys();
-        if (pressedKeys.Contains(Keys.Escape))
+        if (pressedKeys.Contains(Keys.Up))
         {
-            SceneManager.SetActiveScene(SceneType.Debug, new SlideTransition(SlideDirection.Left));
+            SceneManager.SetActiveScene(SceneType.Main, new SlideTransition(SlideDirection.Down));
             return;
         }
 

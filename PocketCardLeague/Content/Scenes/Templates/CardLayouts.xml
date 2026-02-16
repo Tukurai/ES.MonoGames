@@ -22,8 +22,10 @@
               TextColor="White" BorderColor="60,60,60" BorderWidth="4" />
     <DefLabel X="5" Y="65" FontSize="16" Align="Right" Layer="54"
               TextColor="White" BorderColor="60,60,60" BorderWidth="4" />
+    <InnateDecoration Y="3" Spacing="1" Layer="55" />
+    <ShinyDecoration X="25" Y="33" Layer="56" />
     <!-- Example: custom decorative overlay sprite -->
-    <Overlay Sprite="Berries.jam_yellow_white" X="26" Y="36" Opacity="0.8" Layer="44" />
+    <!-- <Overlay Sprite="Berries.jam_yellow_white" X="26" Y="36" Opacity="0.8" Layer="44" /> -->
   </PokemonCard>
 
   <BerryCard Width="57" Height="80"
@@ -41,7 +43,7 @@
     <NameLabel FontSize="32" MaxWidth="228" Y="328" />
     <LevelLabel FontSize="32" BorderWidth="2" X="12" Y="8" />
     <Types IconScale="4" Spacing="4" MarginX="12" MarginBottom="12" />
-    <Costs DotScale="4" Spacing="4" GapAboveTypes="8" MarginX="-12" />
+    <Costs DotScale="4" Spacing="4" GapAboveTypes="8" MarginX="12" />
   </DeckBox>
 
 </CardLayouts>

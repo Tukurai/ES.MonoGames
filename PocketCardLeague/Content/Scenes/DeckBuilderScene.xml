@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Scene BackgroundColor="25,25,25" BackgroundSprite="Locations.Hideout_2" BackgroundOpacity="0.25" SceneTrack="ms_league">
+<Scene BackgroundColor="25,25,25" BackgroundSprite="Locations.Cave_10" BackgroundOpacity="0.25" SceneTrack="ms_league">
 
   <Button Name="tab_pokemon" Text="Pokemon" Font="m3Default"
           Position="1596,16" Size="208,48" Centered="true"
